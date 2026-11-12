@@ -17,8 +17,11 @@ test('sensitive request records are omitted before writing, including split chun
     const text = readdirSync(directory).map(name => readFileSync(join(directory, name), 'utf8')).join('')
     assert.ok(text.includes('healthy request completed'))
     assert.ok(!text.includes(secret)); assert.doesNotMatch(text, /Authorization|Bearer|eyJ|api_key|private/)
-    assert.equal(statSync(directory).mode & 0o777, 0o700)
-    for (const name of readdirSync(directory)) assert.equal(statSync(join(directory, name)).mode & 0o777, 0o600)
+    // Node's Windows stat mode does not express ACL isolation. Redaction is tested on every OS.
+    if (process.platform !== 'win32') {
+      assert.equal(statSync(directory).mode & 0o777, 0o700)
+      for (const name of readdirSync(directory)) assert.equal(statSync(join(directory, name)).mode & 0o777, 0o600)
+    }
   } finally { rmSync(directory, { recursive: true, force: true }) }
 })
 test('rotation enforces size, retention affects only owned new log filenames', () => {

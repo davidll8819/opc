@@ -32,7 +32,8 @@ test('durable queue: duplicate requests allocate once; restart resumes without r
     await restarted.enqueue(id, { retry: true }); await restarted.runOnce()
     assert.equal(count, 1)
     const info = await stat(join(h.root, '.local/video-provisioning', id + '.json'))
-    assert.equal(info.mode & 0o777, 0o600)
+    // Windows ACLs are not represented by POSIX mode bits; retain this check on Unix.
+    if (process.platform !== 'win32') assert.equal(info.mode & 0o777, 0o600)
     await restarted.close()
   } finally { await h.close() }
 })
@@ -84,8 +85,8 @@ test('separate ports, keys, Mongo scopes, storage and agent working directories 
   assert.notEqual(first.infrastructure.assets.endpoint, second.infrastructure.assets.endpoint)
   assert.notEqual(first.infrastructure.assets.secretAccessKey, second.infrastructure.assets.secretAccessKey)
   const launch = operationsLaunch('/tmp/office-root', a, 'ai', first, {})
-  assert.ok(launch.cwd.endsWith(`${a}/work/ai`))
-  assert.ok(launch.args[0].endsWith('aitoearn-backend/dist/apps/aitoearn-ai/src/main.js'))
+  assert.ok(launch.cwd.endsWith(join(a, 'work', 'ai')))
+  assert.ok(launch.args[0].endsWith(join('aitoearn-backend', 'dist', 'apps', 'aitoearn-ai', 'src', 'main.js')))
   assert.ok(launch.env.OFFICE_SECURE_LOG_DIR.includes(a))
   await assert.rejects(allocatePorts({}, { start: 21000, end: 21005 }, async () => false), /provisioning failed/)
 })
@@ -124,7 +125,7 @@ test('new runtime bootstrap config is valid before model setup and contains no u
       assert.ok(config.officeBridge.revision > 0)
       assert.equal(config.officeBridge.tenantId, id)
       assert.equal(config.officeBridge.secret, '${OFFICE_BRIDGE_SECRET}')
-      assert.equal((await stat(path)).mode & 0o777, 0o600)
+      if (process.platform !== 'win32') assert.equal((await stat(path)).mode & 0o777, 0o600)
       if (service === 'ai') {
         assert.equal(config.agent.routerPort, 21004)
         assert.equal(config.agent.apiKey, '${OFFICE_MODEL_GATEWAY_TOKEN}')

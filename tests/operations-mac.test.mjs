@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { spawn } from 'node:child_process'
 import { matchingProcess } from '../scripts/operations-mac.mjs'
-test('native runtime process checks require both executable and service identity', async () => {
+test('native runtime process checks require both executable and service identity', { skip: process.platform === 'win32' ? 'Native Mac lifecycle uses POSIX ps; Windows lifecycle is tested separately' : false }, async () => {
   assert.equal(await matchingProcess(0, process.execPath, []), false)
   const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)', 'office-runtime-identity-fixture'], { stdio: 'ignore' })
   await new Promise((ok, no) => { child.once('spawn', ok); child.once('error', no) })

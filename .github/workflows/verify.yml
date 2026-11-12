@@ -24,6 +24,9 @@ jobs:
       - run: npm test
       - run: npm run lint
       - run: npm run build
+      - name: Build production container (Linux)
+        if: runner.os == 'Linux'
+        run: docker build --tag wishtaday:ci .
       - name: Fresh PostgreSQL and Redis startup (Linux)
         if: runner.os == 'Linux'
         run: |
