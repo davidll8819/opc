@@ -87,6 +87,16 @@ describe('fourYiVideoService', () => {
     expect(aiLogRepo.create.mock.calls[0][0].request).toMatchObject({ aspect_ratio: '9:16', resolution: '720p' })
   })
 
+  it('maps Wan 3 resolution to the provider uppercase enum and preserves failure details', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ id: 'wan3-job' })))
+    aiLogRepo.create.mockResolvedValue({ id: 'wan3-log' })
+    await service.createFromRequest({ userId: 'user-1', userType: UserType.User, model: 'wan3.0-video-prime', prompt: 'A scene', ratio: '9:16', resolution: '1080p', duration: 5 })
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(body.resolution).toBe('1080P')
+    expect(body.extra_body.resolution).toBe('1080P')
+    expect(service.getTaskResult({ status: 'failed', failure_message: 'parameters.resolution rejected' }).error?.message).toBe('parameters.resolution rejected')
+  })
+
   it('requires an image for reference-only models', async () => {
     await expect(service.createFromRequest({ userId: 'user-1', userType: UserType.User, model: 'happyhorse-1.1-r2v', prompt: 'A scene' })).rejects.toThrow()
     expect(fetchMock).not.toHaveBeenCalled()
@@ -109,6 +119,19 @@ describe('fourYiVideoService', () => {
   })
 
   const task = () => ({ id: 'local-1', taskId: 'remote-1', userId: 'user-1', model: 'seedance-2.0', status: AiLogStatus.Generating, startedAt: new Date(), channel: AiLogChannel.FourYi })
+
+  it('polls a restored Office job with its persisted owner without request-local context', async () => {
+    const original=config.officeBridge
+    config.officeBridge={tenantId:'synthetic-tenant',secret:'synthetic-bridge',officeOrigin:'https://office.test',revision:1}
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({status:'running'})))
+    try{
+      const owner='aaaaaaaaaaaaaaaaaaaaaaaa'
+      await service.poll({...task(),userId:owner} as never)
+      const init=fetchMock.mock.calls[0][1] as RequestInit
+      const token=new Headers(init.headers).get('authorization')!.replace('Bearer ','')
+      expect(JSON.parse(Buffer.from(token.split('.')[1],'base64url').toString()).sub).toBe(owner)
+    }finally{config.officeBridge=original}
+  })
 
   it('reuses a saved video after repeated transient probe failures', async () => {
     fetchMock.mockImplementation(async () => new Response(JSON.stringify({ status: 'completed', video_url: 'https://upstream.example/video.mp4' })))

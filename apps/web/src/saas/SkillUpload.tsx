@@ -114,7 +114,11 @@ export function SkillUpload({
       )}
       <div className="skill-upload-boundary">
         <strong>{t('安装到当前企业')}</strong>
-        <p>{t('安装后可在我的技能中分配给部门，技能说明会用于对话和文字任务；上传不会执行脚本。')}</p>
+        <p>
+          {t(
+            '安装后可在我的技能中绑定给指定员工，后续对话和新任务会使用该员工的技能；上传不会执行脚本。',
+          )}
+        </p>
       </div>
       <details className="skill-upload-example">
         <summary>{t('查看文件格式')}</summary>

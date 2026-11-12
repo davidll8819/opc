@@ -1,8 +1,11 @@
-import { DEPARTMENT_NAMES } from '../../../../packages/employees/registry.mjs'
+import {PersonalKey} from './PersonalKey'
+import { VideoProvisioningStatus } from './operations/VideoProvisioningStatus'
+import { OrganizationManager } from './Organization'
 import { useEffect, useState } from 'react'
 import { t } from '@/i18n'
 import { api } from './api'
 import './operations/operations.css'
+import { EmployeeSelfCheck } from './EmployeeSelfCheck'
 
 type Tier = 'strong' | 'fast' | 'cheap'
 type Capability = 'image' | 'video' | 'search'
@@ -38,14 +41,14 @@ type Configuration = {
   secretNames: { ai: string; relay: string }
   budget: { used: number; reserved: number; available: number; day: string }
 }
-const departments = DEPARTMENT_NAMES
 const tiers: Record<Tier, string> = { strong: '强推理', fast: '快速', cheap: '低成本' }
 const slots: Record<ModelSlot, string> = { ...tiers, image: '图片', video: '视频', search: '搜索' }
 export function Settings({ base, canEdit }: { base: string; canEdit: boolean }) {
+  const [section,setSection]=useState<'organization'|'models'|'personal'|'video'>('organization')
+  const sections=<div className="settings-sections" role="group" aria-label="设置分类"><button aria-pressed={section==='personal'} onClick={()=>setSection('personal')}>我的 4yi Key</button><button aria-pressed={section==='organization'} onClick={()=>setSection('organization')}>部门与岗位</button><button aria-pressed={section==='models'} onClick={()=>setSection('models')}>公司模型与连接</button><button aria-pressed={section==='video'} onClick={()=>setSection('video')}>视频服务</button></div>
   const [config, setConfig] = useState<Configuration | null>(null),
     [policy, setPolicy] = useState<Policy | null>(null)
-  const [aiKey, setAiKey] = useState(''),
-    [relayKey, setRelayKey] = useState('')
+  const [relayKey, setRelayKey] = useState('')
   const [models, setModels] = useState<ModelEntry[]>([])
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
@@ -84,7 +87,6 @@ export function Settings({ base, canEdit }: { base: string; canEdit: boolean }) 
               ]),
             ),
           },
-          ...(aiKey.trim() ? { aiKey: aiKey.trim() } : {}),
           ...(relayKey.trim() ? { relayKey: relayKey.trim() } : {}),
         },
         'PUT',
@@ -92,7 +94,6 @@ export function Settings({ base, canEdit }: { base: string; canEdit: boolean }) 
       const data = await api<Configuration>(`${base}/operations/settings`)
       setConfig(data)
       setPolicy(data.policy)
-      setAiKey('')
       setRelayKey('')
       setNotice('配置已保存，已部署的运行服务会自动使用最新密钥和档位。')
       return true
@@ -122,22 +123,20 @@ export function Settings({ base, canEdit }: { base: string; canEdit: boolean }) 
       setBusy(false)
     }
   }
-  function department(id: string, patch: Partial<Department>) {
-    if (policy)
-      setPolicy({
-        ...policy,
-        departments: { ...policy.departments, [id]: { ...policy.departments[id], ...patch } },
-      })
-  }
+  if(section==='video')return <><div className="page-heading organization-settings-heading"><h1>视频服务</h1><p>创建工作空间后自动开通，生成时使用你自己的个人 Key。</p></div>{sections}<VideoProvisioningStatus key={base} root={`${base}/operations`} canEdit={canEdit}/><p>服务开通后，请在“我的 4yi Key”保存个人 Key，并在“公司模型与连接”选择文字和视频模型。</p></>
+  if(section==='personal')return <><div className="page-heading organization-settings-heading"><h1>个人模型连接</h1></div>{sections}<PersonalKey base={base}/></>
+  if(section==='organization')return <><div className="page-heading organization-settings-heading"><h1>设置</h1><p>管理团队的部门、岗位和模型继承关系。</p></div>{sections}<OrganizationManager base={base} canEdit={canEdit}/></>
   return (
     <>
-      <div className="page-heading">
+      <div className="page-heading organization-settings-heading">
         <p className="eyebrow">SETTINGS</p>
         <h1>{t('设置')}</h1>
         <p className="muted">
           {t('每个企业一个模型入口，各部门按工作步骤调用文字、图片、视频和搜索能力。')}
         </p>
       </div>
+      {sections}
+      {canEdit && <EmployeeSelfCheck base={base} key={base} />}
       <section className="builder-card ops-settings">
         <div className="heading-row">
           <h2>{t('企业模型与部门配置')}</h2>
@@ -170,27 +169,7 @@ export function Settings({ base, canEdit }: { base: string; canEdit: boolean }) 
                   }
                 />
               </label>
-              <label>
-                {t('企业 AI API Key')}
-                <input
-                  type="password"
-                  autoComplete="new-password"
-                  spellCheck={false}
-                  value={aiKey}
-                  onChange={(e) => setAiKey(e.target.value)}
-                  placeholder={t(
-                    config.aiKeySet ? '已配置，留空保持原密钥' : '填写当前企业的 API Key',
-                  )}
-                />
-              </label>
-              <p className="muted">
-                {t(
-                  '密钥仅用于当前企业，加密保存在服务器，保存后不回显。填写新密钥可替换，留空保留原值。',
-                )}
-              </p>
-              <p className="ops-notice">
-                {t('AI 密钥状态')}：{t(config.aiKeySet ? '已配置' : '尚未配置')}
-              </p>
+              <p className="ops-notice">模型调用使用「我的 4yi Key」中保存的个人凭据。原企业凭据保留存储，已不作为模型调用的备用 Key。</p>
               <button type="button" onClick={() => void discover()}>
                 {t('读取模型列表')}
               </button>
@@ -275,166 +254,7 @@ export function Settings({ base, canEdit }: { base: string; canEdit: boolean }) 
                 )}
               </p>
             </fieldset>
-            <fieldset disabled={busy}>
-              <legend>{t('第三层 · 按部门选择模型')}</legend>
-              <p className="muted">
-                {t('公司模型作为默认值；需要专用模型的部门可单独覆盖。市场调研和拓客可在搜索能力中选择联网搜索模型。')}
-              </p>
-              <div className="ops-department-list">
-                {Object.entries(departments).map(([id, name]) => {
-                  const d = policy.departments[id]
-                  return (
-                    <article className="ops-department" key={id}>
-                      <div className="heading-row">
-                        <strong>{t(name)}</strong>
-                        <label className="ops-toggle">
-                          <input
-                            type="checkbox"
-                            checked={d.enabled}
-                            onChange={(e) =>
-                              department(id, {
-                                enabled: e.target.checked,
-                                ...(!d.tier && e.target.checked ? { tier: 'fast' as Tier } : {}),
-                              })
-                            }
-                          />
-                          {t(d.enabled ? '已启用' : '未启用')}
-                        </label>
-                      </div>
-                      <div className="ops-tier-grid">
-                        <label>
-                          {t('文字模型档位')}
-                          <select
-                            aria-label={`${t(name)} ${t('文字模型档位')}`}
-                            value={d.tier || ''}
-                            onChange={(e) => department(id, { tier: e.target.value as Tier })}
-                            disabled={!d.enabled}
-                          >
-                            <option value="" disabled>
-                              {t('待配置')}
-                            </option>
-                            {(Object.keys(tiers) as Tier[]).map((key) => (
-                              <option key={key} value={key}>
-                                {key} · {t(tiers[key])}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                        <label>
-                          {t('文字模型（可选覆盖）')}
-                          <select
-                            aria-label={`${t(name)} ${t('文字模型')}`}
-                            value={d.model || ''}
-                            onChange={(e) => department(id, { model: e.target.value })}
-                            disabled={!d.enabled}
-                          >
-                            <option value="">{t('继承公司档位')} · {policy.tiers[d.tier || 'fast'] || t('待配置')}</option>
-                            {d.model && !models.some((m) => m.id === d.model) && (
-                              <option value={d.model}>{d.model} · {t('已保存，待核对')}</option>
-                            )}
-                            {models.filter((m) => m.kinds.includes('text') || m.kinds.includes('unknown')).map((m) => (
-                              <option key={m.id} value={m.id}>{m.id}</option>
-                            ))}
-                          </select>
-                        </label>
-                        <label>
-                          {t('文字备用模型')}
-                          <select
-                            aria-label={`${t(name)} ${t('文字备用模型')}`}
-                            value={d.fallback || ''}
-                            onChange={(e) =>
-                              department(id, {
-                                fallback: (e.target.value || undefined) as Tier | undefined,
-                              })
-                            }
-                            disabled={!d.enabled}
-                          >
-                            <option value="">{t('不自动切换')}</option>
-                            {(Object.keys(tiers) as Tier[]).map((key) => (
-                              <option key={key} value={key}>
-                                {key} · {t(tiers[key])}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                        <label>
-                          {t('技能引用')}
-                          <input
-                            value={d.skills.join(', ')}
-                            onChange={(e) =>
-                              department(id, {
-                                skills: e.target.value.split(',').map((s) => s.trim()),
-                              })
-                            }
-                          />
-                        </label>
-                      </div>
-                      <div className="ops-capability-grid">
-                        {(['image', 'video', 'search'] as Capability[]).map((kind) => {
-                          const c = d.capabilities?.[kind] || {
-                            enabled: {
-                              image: ['content_ops', 'design'],
-                              video: ['content_ops'],
-                              search: ['secretary', 'market_research', 'outreach'],
-                            }[kind].includes(id),
-                            model: '',
-                          }
-                          const patch = (value: Partial<typeof c>) =>
-                            department(id, {
-                              capabilities: {
-                                ...d.capabilities,
-                                [kind]: { ...c, ...value },
-                              } as Department['capabilities'],
-                            })
-                          const options = models.filter((m) =>
-                            kind === 'search' ? m.searchVerified : m.kinds.includes(kind),
-                          )
-                          return (
-                            <div key={kind} className={kind === 'search' && ['market_research', 'outreach'].includes(id) ? 'ops-priority-capability' : undefined}>
-                              <label className="ops-toggle">
-                                <input
-                                  type="checkbox"
-                                  checked={c.enabled}
-                                  disabled={!d.enabled}
-                                  onChange={(e) => patch({ enabled: e.target.checked })}
-                                />
-                                {t(kind === 'search' && ['market_research', 'outreach'].includes(id) ? '联网搜索（建议启用）' : slots[kind])}
-                              </label>
-                              <select
-                                aria-label={`${t(name)} ${t(slots[kind])}`}
-                                value={c.model}
-                                disabled={!d.enabled || !c.enabled}
-                                onChange={(e) => patch({ model: e.target.value })}
-                              >
-                                <option value="">
-                                  {t('继承公司配置')} · {policy.tiers[kind] || t('待配置')}
-                                </option>
-                                {c.model && !options.some((m) => m.id === c.model) && (
-                                  <option value={c.model}>{c.model}</option>
-                                )}
-                                {options.map((m) => (
-                                  <option key={m.id} value={m.id}>
-                                    {m.id}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          )
-                        })}
-                      </div>
-                      {id === 'content_ops' && (
-                        <p className="ops-notice">{t('自动制作，所有对外发布须先确认')}</p>
-                      )}
-                    </article>
-                  )
-                })}
-              </div>
-              <p className="muted">
-                {t(
-                  '技能引用用于关联技能目录；填写名称不会自动安装或执行技能。文字备用模型仅在明确的服务错误后尝试，不重跑整个制作流程。',
-                )}
-              </p>
-            </fieldset>
+
             <fieldset disabled={busy}>
               <legend>{t('每日用量上限')}</legend>
               <label>

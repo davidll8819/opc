@@ -1,6 +1,7 @@
 import { Login, type Config } from './Login'
 import { CreateTenant, Invitation } from './Onboarding'
 import { Workspace } from './Workspace'
+import { WorkspaceErrorBoundary } from './WorkspaceErrorBoundary'
 import { t, useLanguage, setLanguage } from '@/i18n'
 import { useEffect, useState } from 'react'
 import { api, setCsrf, type Me } from './api'
@@ -13,11 +14,14 @@ export default function SaasApp() {
     [loading, setLoading] = useState(true),
     [error, setError] = useState(''),
     [tenantId, setTenantId] = useState('')
-  async function refresh() {
+  async function refresh(preferredTenantId?: string) {
     const data = await api<Me>('/api/me')
     setCsrf(data.csrf)
     setMe(data)
-    setTenantId((id) => (data.tenants.some((t) => t.id === id) ? id : data.tenants[0]?.id || ''))
+    setTenantId((id) => {
+      const wanted = preferredTenantId || id
+      return data.tenants.some((t) => t.id === wanted) ? wanted : data.tenants[0]?.id || ''
+    })
   }
   useEffect(() => {
     const invite = new URLSearchParams(location.search).get('invite')
@@ -98,7 +102,7 @@ export default function SaasApp() {
         <button onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}>
           {language === 'zh' ? 'English' : '中文'}
         </button>
-        <span className="user-email">{me.user.email}</span>
+        <span className="user-email">{config?.authMode === '4yi' ? `4yi 用户 · ${me.user.id.slice(0, 8)}` : me.user.email}</span>
         <button
           onClick={async () => {
             try {
@@ -111,7 +115,7 @@ export default function SaasApp() {
             }
           }}
         >
-          {t('退出')}
+          {t(config?.authMode === '4yi' ? '返回 4yi' : '退出')}
         </button>
       </header>
       {error && (
@@ -122,17 +126,21 @@ export default function SaasApp() {
       {config?.agentsReady === false && (
         <div className="connection-note">
           {t(
-            '本地工作空间：在设置中配置企业 API Key 和模型后，即可使用秘书与部门对话。',
+            config?.authMode === '4yi'
+              ? '先在“设置 → 我的 4yi Key”保存个人 Key，再选择公司或部门模型，即可使用秘书与部门对话。'
+              : '本地工作空间：先在“设置 → 我的 4yi Key”保存个人 Key，再选择公司或部门模型，即可使用秘书与部门对话。',
           )}
         </div>
       )}
       <Invitation onAccepted={refresh} />
       {active ? (
-        <Workspace key={active.id} tenant={active} />
+        <WorkspaceErrorBoundary key={active.id} tenantId={active.id}>
+          <Workspace tenant={active} privateOrigin={config?.privateOrigin} />
+        </WorkspaceErrorBoundary>
       ) : (
         <CreateTenant
-          onCreated={async () => {
-            await refresh()
+          onCreated={async (id) => {
+            await refresh(id)
           }}
         />
       )}

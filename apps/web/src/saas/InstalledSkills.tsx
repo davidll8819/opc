@@ -20,10 +20,14 @@ export function InstalledSkills({
   base,
   revision,
   canEdit,
+  employeeId,
+  onBound,
 }: {
   base: string
   revision: number
   canEdit: boolean
+  employeeId?: string
+  onBound?: () => void
 }) {
   const language = useLanguage()
   const [selected, setSelected] = useState('')
@@ -63,7 +67,7 @@ export function InstalledSkills({
         <span className="plan-tag">{t('当前企业')}</span>
       </div>
       <p className="muted small">
-        {t('查看技能内容并分配给部门，后续对话会使用已启用的技能说明。')}
+        {t('查看技能内容，并单独绑定给指定员工；该员工后续对话和新任务会使用这些技能。')}
       </p>
       {!!result.items.length && (
         <label>
@@ -118,6 +122,9 @@ export function InstalledSkills({
               </button>
               {selected === item.id && (
                 <SkillAssignment
+                  key={`${item.id}/${employeeId || 'all'}`}
+                  employeeId={employeeId}
+                  onBound={onBound}
                   base={base}
                   id={item.id}
                   canEdit={canEdit}

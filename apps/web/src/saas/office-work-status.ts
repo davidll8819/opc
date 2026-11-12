@@ -7,19 +7,33 @@ export type OfficeWorkState =
   'working' | 'pending' | 'queued' | 'idle' | 'unconfigured' | 'disabled' | 'unknown'
 
 export type OfficeWorkStatus = {
+  employeeName?:string
+  avatarId?:string
+  custom?:boolean
   status: OfficeWorkState
   label: string
   labelEn: string
   color: number
+  seat?: number | null
+  jobTitle?: string
+  responsibility?: string
   taskId?: string
   taskTitle?: string
 }
 
 export type OfficeDepartmentStatus = {
+  employeeId?:string
+  employeeName?:string
+  avatarId?:string
+  custom?:boolean
   id: string
   ready: boolean
   enabled?: boolean
   active?: boolean
+  busy?: boolean
+  seat?: number | null
+  jobTitle?: string
+  responsibility?: string
 }
 
 type StatusDefinition = Omit<OfficeWorkStatus, 'taskId' | 'taskTitle'>
@@ -76,9 +90,9 @@ export function deriveOfficeWorkStatuses(
     (workspaceStatus?.departments || []).map((department) => [department.id, department]),
   )
 
-  return Object.fromEntries(
-    TEAM_ROSTER.map((member) => {
-      const configuration = configurations.get(departmentIds[member.id])
+  const statuses: Record<string, OfficeWorkStatus> = Object.fromEntries(
+    [...TEAM_ROSTER,...(workspaceStatus?.departments||[]).filter(d=>d.custom).map(d=>({id:d.employeeId||d.id}))].map((member) => {
+      const configuration = configurations.get(departmentIds[member.id] || member.id)
       const task = board.tasks
         .filter((candidate) => candidate.dept === member.id && taskPriority(candidate) > 0)
         .sort(
@@ -86,7 +100,7 @@ export function deriveOfficeWorkStatuses(
         )[0]
 
       // A direct department/secretary request is real work even without a Task.
-      if (configuration?.active) {
+      if (configuration?.active || configuration?.busy) {
         return [
           member.id,
           {
@@ -149,4 +163,19 @@ export function deriveOfficeWorkStatuses(
       ]
     }),
   )
+  for (const member of TEAM_ROSTER) {
+    const configuration = configurations.get(departmentIds[member.id] || member.id)
+    if (configuration && Object.hasOwn(configuration, 'seat')) statuses[member.id].seat = configuration.seat
+    if(configuration?.jobTitle) statuses[member.id].jobTitle=configuration.jobTitle
+    if(configuration?.responsibility) statuses[member.id].responsibility=configuration.responsibility
+  }
+  for(const d of workspaceStatus?.departments||[]){if(d.custom&&statuses[d.employeeId||d.id])Object.assign(statuses[d.employeeId||d.id],{employeeName:d.employeeName,avatarId:d.avatarId,custom:true})}
+  return statuses
+}
+
+/** Keep detailed capability instructions in the profile, not in a canvas label over a desk. */
+export function officeRoleLabel(status: Pick<OfficeWorkStatus, 'jobTitle' | 'responsibility'>) {
+  const text = `${status.jobTitle || ''}：${status.responsibility || ''}`.replace(/\s+/g, ' ').trim()
+  const chars = Array.from(text)
+  return chars.length > 36 ? chars.slice(0, 36).join('') + '…' : text
 }

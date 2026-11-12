@@ -1,3 +1,5 @@
+import { AppException, ResponseCode } from '@yikart/common'
+import axios from 'axios'
 import { describe, expect, it, vi } from 'vitest'
 import { RelayClientService } from './relay-client.service'
 
@@ -28,5 +30,27 @@ describe('relay media preparation', () => {
     const body = { media: [{ url: 'https://other.example.test/video.mp4' }] }
     expect(await client.replaceLocalUrls(body)).toEqual(body)
     expect(upload).not.toHaveBeenCalled()
+  })
+})
+
+
+describe('relay upload error contract', () => {
+  it('rejects an invalid upload signature with a business error and never uploads or confirms', async () => {
+    const client = new RelayClientService()
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: new ArrayBuffer(4), headers: { 'content-type': 'video/mp4' } })
+    const put = vi.spyOn(axios, 'put')
+    const post = vi.spyOn(client, 'post').mockResolvedValue({ id: 'test-asset' })
+    try {
+      const result = client.uploadFileFromLocalUrl('http://storage:9000/aitoearn/test.mp4')
+      await expect(result).rejects.toBeInstanceOf(AppException)
+      await expect(result).rejects.toMatchObject({ code: ResponseCode.RelayServerUnavailable })
+      expect(post).toHaveBeenCalledTimes(1)
+      expect(put).not.toHaveBeenCalled()
+    }
+    finally {
+      get.mockRestore()
+      put.mockRestore()
+      post.mockRestore()
+    }
   })
 })

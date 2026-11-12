@@ -4,6 +4,7 @@ import { FileUtil, ResponseCode, UserType } from '@yikart/common'
 import { AiLogChannel, AiLogStatus, AiLogType, MediaType } from '@yikart/mongodb'
 import { vi } from 'vitest'
 import { TaskStatus } from '../../../common'
+import { VideoPreflightException } from './video-preflight.exception'
 import { VideoService } from './video.service'
 
 describe('videoService', () => {
@@ -122,7 +123,7 @@ describe('videoService', () => {
     service = new VideoService(
       {} as UserRepository,
       mockAiLogRepo as unknown as AiLogRepository,
-      { config: { video: { generation: generationModels } } } as never,
+      { config: { video: { generation: generationModels } },forUser:async()=>({video:{generation:generationModels}}) } as never,
       mockAssetsService as unknown as AssetsService,
       mockVideoMetadataService as unknown as VideoMetadataService,
       mockMaterialGroupRepository as unknown as MaterialGroupRepository,
@@ -133,6 +134,50 @@ describe('videoService', () => {
       mockDashscopeVideoService as never,
       mockFourYiVideoService as never,
     )
+  })
+
+  it('does not disclose another user video job',async()=>{
+    mockAiLogRepo.getById.mockResolvedValue({id:'private-video',userId:'owner',type:AiLogType.Video,channel:AiLogChannel.FourYi,status:AiLogStatus.Success})
+    await expect(service.getVideoTaskStatus({userId:'other',userType:UserType.User,taskId:'private-video'})).rejects.toThrow()
+  })
+
+  it('routes a single 4YI image reference using the model reference-image capability', async () => {
+    vi.spyOn(service, 'getVideoGenerationModelParams').mockResolvedValue([{
+      name: 'wan3.0-video-prime',
+      channel: AiLogChannel.FourYi,
+      modes: ['text2video', 'multi-image2video'],
+      maxInputImages: 1,
+    }] as never)
+    mockFourYiVideoService.createFromRequest.mockResolvedValue({ id: 'reference-video' })
+    const request = {
+      userId: 'user-1',
+      userType: UserType.User,
+      model: 'wan3.0-video-prime',
+      prompt: 'Fixture',
+      mode: 'image2video' as const,
+      images: ['https://example.test/reference.png'],
+    }
+    await expect(service.userVideoGeneration(request)).resolves.toMatchObject({ id: 'reference-video' })
+    expect(mockFourYiVideoService.createFromRequest).toHaveBeenCalledWith({ ...request, mode: 'multi-image2video' })
+    expect(request.mode).toBe('image2video')
+    // A missing image or multiple images are not silently reinterpreted.
+    for (const images of [[], ['https://example.test/a.png', 'https://example.test/b.png']])
+      await expect(service.userVideoGeneration({ ...request, images })).rejects.toBeInstanceOf(VideoPreflightException)
+    expect(mockFourYiVideoService.createFromRequest).toHaveBeenCalledOnce()
+  })
+
+  it('marks only pre-dispatch model validation failures as safe to correct', async () => {
+    for (const request of [
+      { model: 'unavailable-model' },
+      { model: 'mode-fallback-model', mode: 'image2video' as const },
+    ]) {
+      await expect(service.userVideoGeneration({ userId: 'user-1', userType: UserType.User, prompt: 'Fixture', ...request })).rejects.toBeInstanceOf(VideoPreflightException)
+    }
+    expect(mockGrokVideoService.createFromRequest).not.toHaveBeenCalled()
+    expect(mockVolcengineVideoService.createFromRequest).not.toHaveBeenCalled()
+    expect(mockFourYiVideoService.createFromRequest).not.toHaveBeenCalled()
+    mockGrokVideoService.createFromRequest.mockRejectedValueOnce(new Error('Transport timed out'))
+    await expect(service.userVideoGeneration({ userId: 'user-1', userType: UserType.User, model: 'grok-imagine-video', prompt: 'Fixture' })).rejects.not.toBeInstanceOf(VideoPreflightException)
   })
 
   it('groupId 非法时在提交阶段直接报错', async () => {

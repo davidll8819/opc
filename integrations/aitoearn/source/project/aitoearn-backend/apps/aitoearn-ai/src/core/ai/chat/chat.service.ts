@@ -5,7 +5,7 @@ import { BaseMessage, ChatMessage } from '@langchain/core/messages'
 import { OpenAIClient } from '@langchain/openai'
 import { Injectable, Logger, Optional } from '@nestjs/common'
 import { AssetsService } from '@yikart/assets'
-import { AppException, getErrorMessage, getErrorStack, ResponseCode, UserType } from '@yikart/common'
+import { officeModelToken, AppException, getErrorMessage, getErrorStack, ResponseCode, UserType } from '@yikart/common'
 import { AiLogChannel, AiLogRepository, AiLogStatus, AiLogType, AssetType } from '@yikart/mongodb'
 import OpenAI from 'openai'
 import { from, merge, Observable } from 'rxjs'
@@ -338,7 +338,13 @@ export class ChatService {
     const startedAt = new Date()
 
     const resolvedBody = await this.resolveRelayJson(body)
-    const stream = this.anthropic.messages.stream(resolvedBody as Anthropic.MessageStreamParams)
+    const client = config.officeBridge ? new Anthropic({
+      apiKey: null,
+      authToken: officeModelToken(config.officeBridge, userId),
+      baseURL: `${config.officeBridge.officeOrigin}/integrations/model-gateway/${config.officeBridge.tenantId}/api/anthropic`,
+      maxRetries: 0,
+    }) : this.anthropic
+    const stream = client.messages.stream(resolvedBody as Anthropic.MessageStreamParams)
 
     const stream$ = from(stream).pipe(
       share(),

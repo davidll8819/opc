@@ -1,0 +1,5414 @@
+{
+  "summary": {
+    "date": "2026-10-19",
+    "originalCount": 600,
+    "counts": {
+      "visible": 192,
+      "hidden": 252,
+      "merged": 52,
+      "removed": 104
+    }
+  },
+  "entries": [
+    {
+      "id": "62c41aec21fcebaf1cc21981",
+      "number": 1,
+      "name": "find-skills",
+      "source": "vercel-labs/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "547660211cba3562ca24055c",
+      "number": 2,
+      "name": "grill-me",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "d7329561feb40e5a1842cc33",
+      "number": 3,
+      "name": "grill-with-docs",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "0f5b69b8c35b9c4a916a68df",
+      "number": 4,
+      "name": "improve-codebase-architecture",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "84fc6293976a9db00370070c",
+      "number": 5,
+      "name": "agent-browser",
+      "source": "vercel-labs/agent-browser",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "c5568e81619fa83ea7e90fb9",
+      "number": 6,
+      "name": "tdd",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "06ee39bef44d101489f419f3",
+      "number": 7,
+      "name": "setup-matt-pocock-skills",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "为 Matt 工程技能配置特定仓库流程，非普通员工工作入口。"
+    },
+    {
+      "id": "ee9bbaf891769713557cccb3",
+      "number": 8,
+      "name": "frontend-design",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "c09678c810846886f8aad9ff",
+      "number": 9,
+      "name": "handoff",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "9a27d1374ec8b99254c0d19a",
+      "number": 10,
+      "name": "hyperframes-cli",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "c48cae734c8ecdec4f6da627",
+      "number": 11,
+      "name": "triage",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "0e460fedb6ab136ac14a6ef3",
+      "number": 12,
+      "name": "prototype",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0aa811bfdf1d52df016f2a0f",
+      "number": 13,
+      "name": "hyperframes",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "68d62f9e3ae435c395e0eb03",
+      "number": 14,
+      "name": "reddit-automation",
+      "source": "flowkit-labs/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "262c647bb014c805f5a4b480",
+      "number": 15,
+      "name": "grilling",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "7cc9aaeeab9eb898d5fd737a",
+      "number": 16,
+      "name": "media-use",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "61e8377b4d96ce9516679b4f",
+      "number": 17,
+      "name": "domain-modeling",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "f89c554b5874015026399f26",
+      "number": 18,
+      "name": "hyperframes-registry",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "42b2a1296c1146cca0cdd008",
+      "number": 19,
+      "name": "teach",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "6e9cfb33f9f92af403ef61ee",
+      "number": 20,
+      "name": "vercel-react-best-practices",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "95073bc061ad3edf12bfba72",
+      "number": 21,
+      "name": "hyperframes-animation",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5b2debee7eb3478ad22a6fdf",
+      "number": 22,
+      "name": "codebase-design",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "8128a0e12d52adf094ad71e7",
+      "number": 23,
+      "name": "lark-doc",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 99,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #99 一致，保留一个入口即可。"
+    },
+    {
+      "id": "39ad1d1f389732384a2d3308",
+      "number": 24,
+      "name": "lark-base",
+      "source": "open.feishu.cn",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "e043d50ec66025b29838ad37",
+      "number": 25,
+      "name": "diagnosing-bugs",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "67a692f456475773f1f22c3b",
+      "number": 26,
+      "name": "lark-drive",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 103,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #103 一致，保留一个入口即可。"
+    },
+    {
+      "id": "7abfd5fad84dcf4d0fea07d6",
+      "number": 27,
+      "name": "lark-shared",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 101,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #101 一致，保留一个入口即可。"
+    },
+    {
+      "id": "4479d288d4c840963d071712",
+      "number": 28,
+      "name": "lark-im",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 102,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #102 一致，保留一个入口即可。"
+    },
+    {
+      "id": "3591d91a6aa2bca03ad410d9",
+      "number": 29,
+      "name": "lark-calendar",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 108,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #108 一致，保留一个入口即可。"
+    },
+    {
+      "id": "c255a443eb52dd7745c4c818",
+      "number": 30,
+      "name": "lark-approval",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 143,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #143 一致，保留一个入口即可。"
+    },
+    {
+      "id": "5d63d61f8dbca83c65b8f7a9",
+      "number": 31,
+      "name": "lark-sheets",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 104,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #104 一致，保留一个入口即可。"
+    },
+    {
+      "id": "2a895db840211d26f3f4a174",
+      "number": 32,
+      "name": "lark-wiki",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 105,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #105 一致，保留一个入口即可。"
+    },
+    {
+      "id": "b38aef42360f0be5e640faae",
+      "number": 33,
+      "name": "lark-contact",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 113,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #113 一致，保留一个入口即可。"
+    },
+    {
+      "id": "a767ee194b41870bfd8e9c64",
+      "number": 34,
+      "name": "lark-task",
+      "source": "open.feishu.cn",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "178f66ccd135c68def887caf",
+      "number": 35,
+      "name": "lark-slides",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 160,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #160 一致，保留一个入口即可。"
+    },
+    {
+      "id": "df4d019509adea511c97835c",
+      "number": 36,
+      "name": "lark-mail",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 109,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #109 一致，保留一个入口即可。"
+    },
+    {
+      "id": "f54e34ab290eb09718002f49",
+      "number": 37,
+      "name": "lark-whiteboard",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 106,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #106 一致，保留一个入口即可。"
+    },
+    {
+      "id": "54c25a7472962cb31a5c43eb",
+      "number": 38,
+      "name": "lark-event",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 112,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #112 一致，保留一个入口即可。"
+    },
+    {
+      "id": "ac663807ace76e3fc1d2301b",
+      "number": 39,
+      "name": "lark-openapi-explorer",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 117,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #117 一致，保留一个入口即可。"
+    },
+    {
+      "id": "0be0d5fd17fbff57202ae26e",
+      "number": 40,
+      "name": "lark-attendance",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 162,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #162 一致，保留一个入口即可。"
+    },
+    {
+      "id": "924b160f7e6886ef1371f445",
+      "number": 41,
+      "name": "lark-minutes",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 110,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #110 一致，保留一个入口即可。"
+    },
+    {
+      "id": "b227389fb3b31e0005af2902",
+      "number": 42,
+      "name": "lark-skill-maker",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 118,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #118 一致，保留一个入口即可。"
+    },
+    {
+      "id": "be2c8623166cabe00e14a4f1",
+      "number": 43,
+      "name": "lark-workflow-meeting-summary",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 114,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #114 一致，保留一个入口即可。"
+    },
+    {
+      "id": "79412b524a1df1eb19da6302",
+      "number": 44,
+      "name": "lark-workflow-standup-report",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 116,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #116 一致，保留一个入口即可。"
+    },
+    {
+      "id": "abd71887e732cbfa6b7276df",
+      "number": 45,
+      "name": "hyperframes-core",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "aa0a91d59f4ca491385dba5a",
+      "number": 46,
+      "name": "lark-vc",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 111,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #111 一致，保留一个入口即可。"
+    },
+    {
+      "id": "c444718f2ede47a3a82d910f",
+      "number": 47,
+      "name": "design-mobile-apps",
+      "source": "designed-by-ai/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "02c47532cea3c726d16a3453",
+      "number": 48,
+      "name": "lark-okr",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 172,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #172 一致，保留一个入口即可。"
+    },
+    {
+      "id": "a1de446fd7dd9ea133b72471",
+      "number": 49,
+      "name": "ai-video-generation",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "2b7178913589686e067a4e84",
+      "number": 50,
+      "name": "ai-image-generation",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "596c634cdc8553a558f59679",
+      "number": 51,
+      "name": "twitter-automation",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "aabfb0823198326ecd31dbb8",
+      "number": 52,
+      "name": "ai-avatar-video",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "400bef79cce1bb2bb1613bf7",
+      "number": 53,
+      "name": "hyperframes-creative",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f4803e220cf6694026d6ce3b",
+      "number": 54,
+      "name": "lark-markdown",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 182,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #182 一致，保留一个入口即可。"
+    },
+    {
+      "id": "0163c9ad54e67df12fe83432",
+      "number": 55,
+      "name": "web-design-guidelines",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "f10bb291f0fc8c1254c51ba9",
+      "number": 56,
+      "name": "code-review",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "5b03149180991d2629925e4e",
+      "number": 57,
+      "name": "implement",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "98b37852560ab4826cde3b09",
+      "number": 58,
+      "name": "lark-vc-agent",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 214,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #214 一致，保留一个入口即可。"
+    },
+    {
+      "id": "26afc8699e695c5984f46dc0",
+      "number": 59,
+      "name": "ask-matt",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "只是在该作者技能集合内做路由，已有技能目录可承担入口。"
+    },
+    {
+      "id": "253946667d10a6dac7727327",
+      "number": 60,
+      "name": "lark-apps",
+      "source": "open.feishu.cn",
+      "action": "removed",
+      "duplicateOf": 240,
+      "reason": "正文与 #240 一致，但配套文件或许可证不同，不建议直接删包。"
+    },
+    {
+      "id": "26090fb0bd60ec78b92eb1d2",
+      "number": 61,
+      "name": "wayfinder",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "5261ee3506a5cc35bd5f6389",
+      "number": 62,
+      "name": "to-spec",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "9999b5993614cf049f2972d4",
+      "number": 63,
+      "name": "research",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "8a70f52bbef96cd6cdf90530",
+      "number": 64,
+      "name": "to-tickets",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "ff92714da4b2b6d3fde163c9",
+      "number": 65,
+      "name": "hyperframes-keyframes",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "89464ecc91fda0d8a98a1e09",
+      "number": 66,
+      "name": "remotion-best-practices",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "ddc08b194070f454ec5b905b",
+      "number": 67,
+      "name": "design-taste-frontend",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "3fdaa63e49be90871599ba16",
+      "number": 68,
+      "name": "caveman",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "全会话压缩语气会影响正常中文交付，不建议默认启用。"
+    },
+    {
+      "id": "e5ef38b3bc5ea07d7d78ab1b",
+      "number": 69,
+      "name": "microsoft-foundry",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b96c5badb148a787636b843d",
+      "number": 70,
+      "name": "azure-diagnostics",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "bddf758d5aca983f0fc1a06c",
+      "number": 71,
+      "name": "resolving-merge-conflicts",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "0574d3e6e9dfa6593a4ab88c",
+      "number": 72,
+      "name": "azure-prepare",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "07eb6d6b703492fc204e2f24",
+      "number": 73,
+      "name": "azure-ai",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "054b809b52211674b0bdd5e6",
+      "number": 74,
+      "name": "azure-deploy",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b236950f6472164337684810",
+      "number": 75,
+      "name": "azure-validate",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "f3ac2896ca63bf78eeb19922",
+      "number": 76,
+      "name": "azure-storage",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "973c2a907ac9b7657286ce92",
+      "number": 77,
+      "name": "entra-app-registration",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8b687f14dcb1a2ed6ab8380e",
+      "number": 78,
+      "name": "azure-compliance",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "08b323140c7d63d79df89d96",
+      "number": 79,
+      "name": "azure-resource-lookup",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "ba27ed7a752704828d7e2eb4",
+      "number": 80,
+      "name": "appinsights-instrumentation",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "323e67770c294df02986a819",
+      "number": 81,
+      "name": "azure-resource-visualizer",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "fdc7b1b36d386765fbb96ec6",
+      "number": 82,
+      "name": "azure-aigateway",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "2ed64186f8130cf85aaa8906",
+      "number": 83,
+      "name": "azure-kusto",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b61a02b6d8317b3832550d91",
+      "number": 84,
+      "name": "azure-messaging",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "ba6df093efc6694bf6907089",
+      "number": 85,
+      "name": "lark-note",
+      "source": "open.feishu.cn",
+      "action": "merged",
+      "duplicateOf": 271,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #271 一致，保留一个入口即可。"
+    },
+    {
+      "id": "e412e573d269d1bfe8b6f7eb",
+      "number": 86,
+      "name": "ui-taste",
+      "source": "uizze.sh",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "9a27878860b90d8b2ae9f00b",
+      "number": 87,
+      "name": "general-video",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "65bfc94261b5a22fbeb67b43",
+      "number": 88,
+      "name": "azure-compute",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "709ff290195008fc0508a557",
+      "number": 89,
+      "name": "azure-cloud-migrate",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "302b7ea0d303b150792ae362",
+      "number": 90,
+      "name": "google-agents-cli-adk-code",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "3584e6814f7726cd17f34f53",
+      "number": 91,
+      "name": "google-agents-cli-deploy",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "84d36c0b51cf3aa5aa5cbaeb",
+      "number": 92,
+      "name": "wizard",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0c0bfe6322d120ee1b330896",
+      "number": 93,
+      "name": "google-agents-cli-publish",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "50f0006a53f304e571b7cfec",
+      "number": 94,
+      "name": "google-agents-cli-workflow",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "4f6f5664cf790c112f144176",
+      "number": 95,
+      "name": "google-agents-cli-eval",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "e35d133f7910bd694818cf7c",
+      "number": 96,
+      "name": "google-agents-cli-scaffold",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "63c7d7b20796cf31206e5663",
+      "number": 97,
+      "name": "google-agents-cli-observability",
+      "source": "google/agents-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "10ac5db660148bed7ccf766c",
+      "number": 98,
+      "name": "hyperframes-audio",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5fd1bd835d548dfa57e179f9",
+      "number": 99,
+      "name": "lark-doc",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "b0c4ad90838a93966651ef80",
+      "number": 100,
+      "name": "lark-base",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "45a5d8a00e6d48bf205eea5d",
+      "number": 101,
+      "name": "lark-shared",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "1566046cc479a74565caad59",
+      "number": 102,
+      "name": "lark-im",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "dfda7e35805a139d84600ac4",
+      "number": 103,
+      "name": "lark-drive",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "a1d740e5ac1a6e1fd2ea55cf",
+      "number": 104,
+      "name": "lark-sheets",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f7eb7f216793e16093c4ba52",
+      "number": 105,
+      "name": "lark-wiki",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "011557f6e50e0e5e029b8968",
+      "number": 106,
+      "name": "lark-whiteboard",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "d7dc8ba0d80d06ecf2659bf7",
+      "number": 107,
+      "name": "lark-task",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "6c1dbacbc31e3d07cc8584de",
+      "number": 108,
+      "name": "lark-calendar",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "9cfb54321e49abb4fe3b53ab",
+      "number": 109,
+      "name": "lark-mail",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "45c39d5d62c9d72308ab4570",
+      "number": 110,
+      "name": "lark-minutes",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7f0115407b3b5fadf89797e9",
+      "number": 111,
+      "name": "lark-vc",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "05fedfba1c6c62465b26c55e",
+      "number": 112,
+      "name": "lark-event",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "9826f7ac418c174a3cd0c7e2",
+      "number": 113,
+      "name": "lark-contact",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "8ed156922ca2abf0ae3a5558",
+      "number": 114,
+      "name": "lark-workflow-meeting-summary",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "6bcedc62cff20472bc68146c",
+      "number": 115,
+      "name": "paper-context-resolver",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "2a77df251befbb0333d88f21",
+      "number": 116,
+      "name": "lark-workflow-standup-report",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "171c6db9847d55d00dba38f8",
+      "number": 117,
+      "name": "lark-openapi-explorer",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7c4d8c0427000538d467b512",
+      "number": 118,
+      "name": "lark-skill-maker",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "1bb363c92306949342d9376e",
+      "number": 119,
+      "name": "repo-intake-and-plan",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "c16bb18dbad70c745eefdefb",
+      "number": 120,
+      "name": "minimal-run-and-audit",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "68a6f869d5176151f3a79956",
+      "number": 121,
+      "name": "env-and-assets-bootstrap",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "d80ddef1aaf7aa58963978dd",
+      "number": 122,
+      "name": "azure-quotas",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8488983c5b49527d816be98f",
+      "number": 123,
+      "name": "git-guardrails-claude-code",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "依赖 Claude Code hooks，Wishtaday 不会执行这些宿主钩子。"
+    },
+    {
+      "id": "7a941803199fe082e6d70e7e",
+      "number": 124,
+      "name": "azure-upgrade",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "016b67128cd0997c34a2be02",
+      "number": 125,
+      "name": "setup-pre-commit",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "65aefdb66343fa6afccaf443",
+      "number": 126,
+      "name": "supabase-postgres-best-practices",
+      "source": "supabase/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "eb4b410730492890ca3aaf11",
+      "number": 127,
+      "name": "writing-beats",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "03b2496d3ff2d1f851c214b7",
+      "number": 128,
+      "name": "writing-shape",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "66a7eb6c782df26deab7edfe",
+      "number": 129,
+      "name": "writing-fragments",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "1e3b20ec269d6530015877bf",
+      "number": 130,
+      "name": "to-questionnaire",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "c891b473356741f708c4040b",
+      "number": 131,
+      "name": "scaffold-exercises",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于课程练习目录，当前不是培训产品。"
+    },
+    {
+      "id": "69f891a4e0e7676a7e04f8f9",
+      "number": 132,
+      "name": "video-edit",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "4f045d3946e0608114047ea8",
+      "number": 133,
+      "name": "image-to-video",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "2287353b684aa14f7e718e24",
+      "number": 134,
+      "name": "nano-banana-2",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "52148a9c141cc2d9ab0a6d51",
+      "number": 135,
+      "name": "image-edit",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "cef6c9f2c65477d91a916c8f",
+      "number": 136,
+      "name": "migrate-to-shoehorn",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于迁移到 shoehorn 测试库，当前技术栈未采用。"
+    },
+    {
+      "id": "8e22d463e3b2c05f91831204",
+      "number": 137,
+      "name": "nano-banana-edit",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7b544dd459cf3bd319c3e038",
+      "number": 138,
+      "name": "flux-kontext",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "b680ca9a33e22946d772ee73",
+      "number": 139,
+      "name": "wan-2-7",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "dbe1584cd1ff56d78c8001f4",
+      "number": 140,
+      "name": "gpt-image-edit",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "0b05d192715be51180487fbc",
+      "number": 141,
+      "name": "seedance-v2",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "83bc03a9db179a3bc04253e5",
+      "number": 142,
+      "name": "happyhorse-1-0",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "cdb66d906061076a1be15123",
+      "number": 143,
+      "name": "lark-approval",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7ccfefdc12d26b3872e0b490",
+      "number": 144,
+      "name": "flux-2-klein",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7e2fdf4ea4577d53a306983d",
+      "number": 145,
+      "name": "high-end-visual-design",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "e5a24bff9ac8d5722ac4d2c2",
+      "number": 146,
+      "name": "product-launch-video",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5aab69f18c2e3ce58c888f8d",
+      "number": 147,
+      "name": "redesign-existing-projects",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "a21e0ab11d808ff7cbcffb72",
+      "number": 148,
+      "name": "remotion-to-hyperframes",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "0d1105d41ad1bd8c520d1027",
+      "number": 149,
+      "name": "azure-enterprise-infra-planner",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "5537b8a5948730cc2472f117",
+      "number": 150,
+      "name": "ai-image-generation",
+      "source": "magentosh/superpowers",
+      "action": "merged",
+      "duplicateOf": 50,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #50 一致，保留一个入口即可。"
+    },
+    {
+      "id": "696d5db642c576559da151bd",
+      "number": 151,
+      "name": "ai-video-generation",
+      "source": "magentosh/superpowers",
+      "action": "merged",
+      "duplicateOf": 49,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #49 一致，保留一个入口即可。"
+    },
+    {
+      "id": "0d4562113d5e54956a7eae09",
+      "number": 152,
+      "name": "ai-avatar-video",
+      "source": "magentosh/superpowers",
+      "action": "merged",
+      "duplicateOf": 52,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #52 一致，保留一个入口即可。"
+    },
+    {
+      "id": "87163e5c7414606cd93438e1",
+      "number": 153,
+      "name": "twitter-automation",
+      "source": "magentosh/superpowers",
+      "action": "merged",
+      "duplicateOf": 51,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #51 一致，保留一个入口即可。"
+    },
+    {
+      "id": "aa06c1fab5e966936bcfdb6a",
+      "number": 154,
+      "name": "azure-kubernetes",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "ba3202930a55dbd5345f4a57",
+      "number": 155,
+      "name": "faceless-explainer",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f4032961a9ccddce217da704",
+      "number": 156,
+      "name": "ai-avatar-video",
+      "source": "qu-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 52,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #52 一致，保留一个入口即可。"
+    },
+    {
+      "id": "6897412aa82a5cd10c7bd3e9",
+      "number": 157,
+      "name": "twitter-automation",
+      "source": "qu-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 51,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #51 一致，保留一个入口即可。"
+    },
+    {
+      "id": "bf79072417380646badbf2a1",
+      "number": 158,
+      "name": "ai-video-generation",
+      "source": "qu-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 49,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #49 一致，保留一个入口即可。"
+    },
+    {
+      "id": "c4797b197b36a4746497638f",
+      "number": 159,
+      "name": "ai-image-generation",
+      "source": "qu-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 50,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #50 一致，保留一个入口即可。"
+    },
+    {
+      "id": "066f8f09bfa447937f92f50d",
+      "number": 160,
+      "name": "lark-slides",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "6edaf25a57fc991d75d21abd",
+      "number": 161,
+      "name": "motion-graphics",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "0480609000007986098dec5b",
+      "number": 162,
+      "name": "lark-attendance",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "bde969c4a547a227435eb1f5",
+      "number": 163,
+      "name": "kling-3-0",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "335a8ba51d6d6a381516403f",
+      "number": 164,
+      "name": "skill-creator",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "14de4f18b7b85957a9f78e5b",
+      "number": 165,
+      "name": "caveman-commit",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "Caveman 特定提交语气/流程，缺少当前业务需求。"
+    },
+    {
+      "id": "0586c176b479d903e9e7af97",
+      "number": 166,
+      "name": "writing-for-agents",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "b33d4d6897dd06e5a9f0d4ec",
+      "number": 167,
+      "name": "azure-rbac",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "c76452623f4d970cf395c3a7",
+      "number": 168,
+      "name": "minimalist-ui",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0c7edfc4598b864691db85f7",
+      "number": 169,
+      "name": "caveman-review",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "Caveman 专属评审流程，默认采用统一代码评审即可。"
+    },
+    {
+      "id": "28b355bdbbe33a4191feb563",
+      "number": 170,
+      "name": "codex-pet",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "生成 Codex 桌面宠物，不是 Wishtaday 员工工作能力。"
+    },
+    {
+      "id": "c497239a55e50b80bc282758",
+      "number": 171,
+      "name": "caveman-compress",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "Caveman 专用压缩模式，默认输出应保持清楚。"
+    },
+    {
+      "id": "3af85d2136dad236c1a3a9e2",
+      "number": 172,
+      "name": "lark-okr",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "a95cf4a8157fec49e513f1d7",
+      "number": 173,
+      "name": "loop-me",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "c36781817a6854bc67459744",
+      "number": 174,
+      "name": "ui-ux-pro-max",
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "78878e0a5fa61026c65fb0f6",
+      "number": 175,
+      "name": "brainstorming",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "f55736675c1129da27a20805",
+      "number": 176,
+      "name": "caveman-help",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "Caveman 帮助命令，不是独立业务能力。"
+    },
+    {
+      "id": "f04e88b3ce3a76deb002f52d",
+      "number": 177,
+      "name": "vercel-composition-patterns",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "060e84be3d58a4b6e481a0a3",
+      "number": 178,
+      "name": "wait-what",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "94031bb5ee0c005b035d07be",
+      "number": 179,
+      "name": "full-output-enforcement",
+      "source": "leonxlnx/taste-skill",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "强制完整输出的全局规则不宜覆盖任务需要，保留为写作参考。"
+    },
+    {
+      "id": "289b0c2bb26b1cc9932ec360",
+      "number": 180,
+      "name": "ai-video-generation",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "69276f407615b71057c331d6",
+      "number": 181,
+      "name": "ai-image-generation",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "64843179370ecf0302effbd8",
+      "number": 182,
+      "name": "lark-markdown",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f9801484dc9fcbcd169c0f59",
+      "number": 183,
+      "name": "runcomfy-cli",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "ec9f1161441d982471b175db",
+      "number": 184,
+      "name": "ai-avatar-video",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "efb26487eac9fc2179b9a073",
+      "number": 185,
+      "name": "face-swap",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5ba5540a9495abe8778b2595",
+      "number": 186,
+      "name": "claude-handoff",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "514f339cb0cff40352088c1c",
+      "number": 187,
+      "name": "video-inpainting",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "b2436cd803b32657d7bb07c6",
+      "number": 188,
+      "name": "gpt-taste",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "5117fdfbb651d48fcc7d79b6",
+      "number": 189,
+      "name": "image-inpainting",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "c840210f71065b6a82be9b85",
+      "number": 190,
+      "name": "controlnet-pose",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "61c38c800af81ab5c2cc1455",
+      "number": 191,
+      "name": "lipsync",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "20907fffb1dc99849cdfc331",
+      "number": 192,
+      "name": "video-extend",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "46a283cc3cc04e702c8a1d9a",
+      "number": 193,
+      "name": "elevenlabs-music-generation",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "721462a474e6f2c4aad45758",
+      "number": 194,
+      "name": "image-outpainting",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "416c74551d995519685aec2a",
+      "number": 195,
+      "name": "industrial-brutalist-ui",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "fbae2c24e5146baed90ab90d",
+      "number": 196,
+      "name": "relight",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "fc915bcd7ef0d96a12c049ed",
+      "number": 197,
+      "name": "video-outpainting",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "9337ab264598fb1b16e14ff5",
+      "number": 198,
+      "name": "stitch-design-taste",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "c75d7d08b4938b9ea9781b7d",
+      "number": 199,
+      "name": "embedded-captions",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "9fe811c8976e1c9a80f24929",
+      "number": 200,
+      "name": "azure-cost",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "e31b65b4248bdc2a92712f89",
+      "number": 201,
+      "name": "ai-music",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "3464646e3be30ae1e12fc001",
+      "number": 202,
+      "name": "brandkit",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "c8a7db21a50e9cd327a21b38",
+      "number": 203,
+      "name": "ace-step",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "868feb0d3dd29a880ad842fa",
+      "number": 204,
+      "name": "pr-to-video",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "b7e8a719602e1e509705b11e",
+      "number": 205,
+      "name": "image-to-code",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "507add308be0fcd95abb3ea0",
+      "number": 206,
+      "name": "azure-hosted-copilot-sdk",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "dcdc296c7abf3cb87a3bb82d",
+      "number": 207,
+      "name": "prisma-client-api",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "2652970d6dc3c8b3d1bebc3e",
+      "number": 208,
+      "name": "imagegen-frontend-web",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "910b8bb9b0bfebc83e3b892c",
+      "number": 209,
+      "name": "prisma-database-setup",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "c71a376e5478cf9d5c4d4573",
+      "number": 210,
+      "name": "to-prd",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "1a4ffcb604d003d0227fb5e4",
+      "number": 211,
+      "name": "prisma-cli",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "6b9b29d6f92069a9896e8087",
+      "number": 212,
+      "name": "imagegen-frontend-mobile",
+      "source": "leonxlnx/taste-skill",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "77ded01c90e818792591c751",
+      "number": 213,
+      "name": "prisma-postgres",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "3e88b75b429df75c18b7e458",
+      "number": 214,
+      "name": "lark-vc-agent",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "815de887cbce1969a38c382e",
+      "number": 215,
+      "name": "cavecrew",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "依赖 Caveman 特定协作环境，非现有部门运行模式。"
+    },
+    {
+      "id": "c4c43957055fcacc227997d7",
+      "number": 216,
+      "name": "airunway-aks-setup",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "ba70662d292a7195055fc3f8",
+      "number": 217,
+      "name": "music-to-video",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "b83773320551298fca9776a8",
+      "number": 218,
+      "name": "caveman-stats",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "统计 Caveman 自身的使用情况，不是当前产品指标。"
+    },
+    {
+      "id": "b1c31ad3eb1080c8f81dc169",
+      "number": 219,
+      "name": "emil-design-eng",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "df96dc23d707c8c80258165d",
+      "number": 220,
+      "name": "prisma-driver-adapter-implementation",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b889d17b9924140d48ff8962",
+      "number": 221,
+      "name": "prisma-upgrade-v7",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "89d2b1ba17238b6caa72c16b",
+      "number": 222,
+      "name": "prisma-postgres-setup",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b8d5bc6fadd68721a0f6fd07",
+      "number": 223,
+      "name": "to-issues",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "039ce228f27c8006d46e1356",
+      "number": 224,
+      "name": "prisma-compute",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "44f7e1300aa6bc446c00b948",
+      "number": 225,
+      "name": "prisma-mongodb-upgrade",
+      "source": "prisma/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "207626955f238495d3ebd48d",
+      "number": 226,
+      "name": "impeccable",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "c20b524198c80d5e706ee488",
+      "number": 227,
+      "name": "slideshow",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "c5d36c8bad4164cc3ce11847",
+      "number": 228,
+      "name": "talking-head-recut",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "74ba3601f3263ffcca6ff58c",
+      "number": 229,
+      "name": "setup-ts-deep-modules",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "ac0135f1b5e11784765bb7f5",
+      "number": 230,
+      "name": "supabase",
+      "source": "supabase/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "a7b5fd6f8cd6480adb3aab99",
+      "number": 231,
+      "name": "entra-agent-id",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "ec68b774d89cfc526b5eac4e",
+      "number": 232,
+      "name": "ai-research-explore",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "ff63a6154e190e118de6b5e7",
+      "number": 233,
+      "name": "analyze-project",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "d6e54641c83eeb16416f1920",
+      "number": 234,
+      "name": "ai-research-reproduction",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "d5f61f76e74c26601926865a",
+      "number": 235,
+      "name": "explore-code",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "56f11e9a5d7ccb48ed185d0c",
+      "number": 236,
+      "name": "safe-debug",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "3836cedeb78aa86c2e1579e2",
+      "number": 237,
+      "name": "run-train",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "5752ae196fdd1beaa6c6d5b1",
+      "number": 238,
+      "name": "explore-run",
+      "source": "lllllllama/rigorpilot-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于深度学习论文复现、训练与实验，当前办公/内容交付场景未覆盖。"
+    },
+    {
+      "id": "a03330d66bddebed49cf0dca",
+      "number": 239,
+      "name": "writing-great-skills",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "67c2660b695766bc822460a0",
+      "number": 240,
+      "name": "lark-apps",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "06ee7891384c4354fd7a1a33",
+      "number": 241,
+      "name": "design-taste-frontend-v1",
+      "source": "leonxlnx/taste-skill",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "明确为 v1 向后兼容版本；没有旧版依赖时不作默认。"
+    },
+    {
+      "id": "99065f42901bd48bb3473e09",
+      "number": 242,
+      "name": "orca-cli",
+      "source": "stablyai/orca",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于 Orca 宿主，当前员工运行时没有 orca CLI。"
+    },
+    {
+      "id": "b67c1b35a9a0301d1b530fe8",
+      "number": 243,
+      "name": "systematic-debugging",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "209a13e9b3d22a68240aad8f",
+      "number": 244,
+      "name": "azure-reliability",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "96b78d065dca69c4aa721fe3",
+      "number": 245,
+      "name": "orchestration",
+      "source": "stablyai/orca",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于 Orca worker 编排，非现有任务引擎接口。"
+    },
+    {
+      "id": "d59ed840916143c9436d2ce4",
+      "number": 246,
+      "name": "ios-design",
+      "source": "uizze.sh",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "c62ed89fd42acfad3e52889c",
+      "number": 247,
+      "name": "shadcn",
+      "source": "shadcn/ui",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "ffab2655508435399d281de6",
+      "number": 248,
+      "name": "hyperframes-studio",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "d5d8c3355ede4f53904a9359",
+      "number": 249,
+      "name": "writing-plans",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "e25ef3e07b6ecae5b75ba457",
+      "number": 250,
+      "name": "ai-video-generation",
+      "source": "skills-shell/superpowers",
+      "action": "merged",
+      "duplicateOf": 49,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #49 一致，保留一个入口即可。"
+    },
+    {
+      "id": "cee600f713c2cfb9634ddca7",
+      "number": 251,
+      "name": "twitter-automation",
+      "source": "skills-shell/superpowers",
+      "action": "merged",
+      "duplicateOf": 51,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #51 一致，保留一个入口即可。"
+    },
+    {
+      "id": "505d2bcdf090726301aaf05f",
+      "number": 252,
+      "name": "ai-image-generation",
+      "source": "skills-shell/superpowers",
+      "action": "merged",
+      "duplicateOf": 50,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #50 一致，保留一个入口即可。"
+    },
+    {
+      "id": "b2541756103b45c43fee199f",
+      "number": 253,
+      "name": "ai-avatar-video",
+      "source": "skills-shell/superpowers",
+      "action": "merged",
+      "duplicateOf": 52,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #52 一致，保留一个入口即可。"
+    },
+    {
+      "id": "8c3a1ef49e29068c677fdc27",
+      "number": 254,
+      "name": "using-superpowers",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "1dc29e6dd8df105df04ad389",
+      "number": 255,
+      "name": "ai-image-generation",
+      "source": "its-a-skill-issue/superpowers",
+      "action": "merged",
+      "duplicateOf": 50,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #50 一致，保留一个入口即可。"
+    },
+    {
+      "id": "ecaf550bc0453be6041cd99f",
+      "number": 256,
+      "name": "twitter-automation",
+      "source": "its-a-skill-issue/superpowers",
+      "action": "merged",
+      "duplicateOf": 51,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #51 一致，保留一个入口即可。"
+    },
+    {
+      "id": "144d6a839adf6f63d705a297",
+      "number": 257,
+      "name": "ai-avatar-video",
+      "source": "its-a-skill-issue/superpowers",
+      "action": "merged",
+      "duplicateOf": 52,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #52 一致，保留一个入口即可。"
+    },
+    {
+      "id": "a4472f9b420ec058bfc835e5",
+      "number": 258,
+      "name": "ai-video-generation",
+      "source": "its-a-skill-issue/superpowers",
+      "action": "merged",
+      "duplicateOf": 49,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #49 一致，保留一个入口即可。"
+    },
+    {
+      "id": "f57af86fb4bc0e21d7831dd3",
+      "number": 259,
+      "name": "figma",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f11e5934c61399527d5b680e",
+      "number": 260,
+      "name": "requesting-code-review",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "13996368146b59f31b3cdabe",
+      "number": 261,
+      "name": "test-driven-development",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "6d4280ad172c8c23644ab4a5",
+      "number": 262,
+      "name": "just-scrape",
+      "source": "scrapegraphai/just-scrape",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "71b790ce01fb632d71e72f71",
+      "number": 263,
+      "name": "ai-image-generation",
+      "source": "bankai-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 50,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #50 一致，保留一个入口即可。"
+    },
+    {
+      "id": "57b02c654c049bf996788009",
+      "number": 264,
+      "name": "ai-avatar-video",
+      "source": "bankai-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 52,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #52 一致，保留一个入口即可。"
+    },
+    {
+      "id": "57d1605f529a73d02598ae64",
+      "number": 265,
+      "name": "twitter-automation",
+      "source": "bankai-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 51,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #51 一致，保留一个入口即可。"
+    },
+    {
+      "id": "00804257f4b404240c298f52",
+      "number": 266,
+      "name": "ai-video-generation",
+      "source": "bankai-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 49,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #49 一致，保留一个入口即可。"
+    },
+    {
+      "id": "47630977f4037078f35cfa95",
+      "number": 267,
+      "name": "vercel-react-native-skills",
+      "source": "vercel-labs/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "d1def041a840bbfe713fd6f0",
+      "number": 268,
+      "name": "neon-postgres",
+      "source": "neondatabase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b227f14cdde83b0bd511d599",
+      "number": 269,
+      "name": "verification-before-completion",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "1c7a0289a2e62434e8057879",
+      "number": 270,
+      "name": "pptx",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "936d0af7e0b83936b55561e7",
+      "number": 271,
+      "name": "lark-note",
+      "source": "larksuite/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "58adb65409e9abd4b4786c6d",
+      "number": 272,
+      "name": "executing-plans",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "37bf7705567275b5202a75be",
+      "number": 273,
+      "name": "diagnose",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "49e5c1e5060d24031bdb7120",
+      "number": 274,
+      "name": "seo-audit",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "f97e2dbebdc3030b27ee4fc8",
+      "number": 275,
+      "name": "subagent-driven-development",
+      "source": "obra/superpowers",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "292d13111e0af2baf10495ca",
+      "number": 276,
+      "name": "copywriting",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "76c6532aaf832c9308aaab6f",
+      "number": 277,
+      "name": "write-a-skill",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "8d6a6fa0b257fa743cf1fb5e",
+      "number": 278,
+      "name": "zoom-out",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "4a7b1a0e8226152e1d7991ec",
+      "number": 279,
+      "name": "implement-spec",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "419d31873c08d9a2a5ff0247",
+      "number": 280,
+      "name": "review-animations",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "2873b72e477e33d66666fa5b",
+      "number": 281,
+      "name": "caveman",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "全会话压缩语气模式，与标准中文交付易冲突。"
+    },
+    {
+      "id": "68c783fe089629df958e23ab",
+      "number": 282,
+      "name": "python-appservice-deploy",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "c386fa30b9411c5e101572df",
+      "number": 283,
+      "name": "receiving-code-review",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "0b003eb3ab3e05bda35c3953",
+      "number": 284,
+      "name": "design-an-interface",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "77ba7243c772e482a6156512",
+      "number": 285,
+      "name": "pdf",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "3276bfd0d1205d51b3604b15",
+      "number": 286,
+      "name": "retro",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0f3896102c2b375fce2f41a0",
+      "number": 287,
+      "name": "dispatching-parallel-agents",
+      "source": "obra/superpowers",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "aeed9bbaf937512bb28fe966",
+      "number": 288,
+      "name": "writing-skills",
+      "source": "obra/superpowers",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "38413ad21982819bbc6ee6a0",
+      "number": 289,
+      "name": "using-git-worktrees",
+      "source": "obra/superpowers",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "b7631e52eb979eac8f9455cd",
+      "number": 290,
+      "name": "finishing-a-development-branch",
+      "source": "obra/superpowers",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "4c04dd861dd25158df5af53e",
+      "number": 291,
+      "name": "request-refactor-plan",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "49648c8c096cf0028b4304d4",
+      "number": 292,
+      "name": "animation-vocabulary",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "42740eb369f6e11ef13a4a2a",
+      "number": 293,
+      "name": "apple-design",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "ac06556f95e82786d3bb1f09",
+      "number": 294,
+      "name": "docx",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "8a71c619227d8c39c1ab3e74",
+      "number": 295,
+      "name": "qa",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "4c6acfb8cb62e015568d8b7a",
+      "number": 296,
+      "name": "higgsfield-generate",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5f10ce5d586e2a7f767d45da",
+      "number": 297,
+      "name": "computer-use",
+      "source": "stablyai/orca",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "92c4cf8afb35fa9e43c5a667",
+      "number": 298,
+      "name": "ubiquitous-language",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "b23e77b6656e730b32053f18",
+      "number": 299,
+      "name": "wind-mcp-skill",
+      "source": "wind-alice/alicemarket",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专用于 Wind 金融数据，暂无金融业务与对应服务接入。"
+    },
+    {
+      "id": "deb1b13c4446485536b5e01b",
+      "number": 300,
+      "name": "obsidian-vault",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b9863ab43510831aead0d066",
+      "number": 301,
+      "name": "edit-article",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "722503676d5ec40bc2695285",
+      "number": 302,
+      "name": "neon",
+      "source": "neondatabase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "50b9439492d8dbb4cf3d47b7",
+      "number": 303,
+      "name": "improve-animations",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "4b46536c736b3f44de54af71",
+      "number": 304,
+      "name": "playwright-cli",
+      "source": "microsoft/playwright-cli",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "704468fd67ffa5257b873860",
+      "number": 305,
+      "name": "xlsx",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "749e02537d598a4022cfbb5c",
+      "number": 306,
+      "name": "higgsfield-product-photoshoot",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "de1254ff3dc23602d6d1b08d",
+      "number": 307,
+      "name": "higgsfield-soul-id",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "cdee138da7cb9848ea70693f",
+      "number": 308,
+      "name": "webapp-testing",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "9d9096c91980f985f0f5a534",
+      "number": 309,
+      "name": "higgsfield-marketplace-cards",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "953f82ea0970917726af5de9",
+      "number": 310,
+      "name": "find-animation-opportunities",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "4d74377e9fabf624ad49a721",
+      "number": 311,
+      "name": "firebase-basics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "fffa78b9458cb1e908e80824",
+      "number": 312,
+      "name": "firebase-auth-basics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "307c8a21c1b2fb1c1aeec948",
+      "number": 313,
+      "name": "firebase-hosting-basics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8a687554a44202b6cec4a52f",
+      "number": 314,
+      "name": "firebase-app-hosting-basics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "fd444278feae95021d7569fc",
+      "number": 315,
+      "name": "firebase-data-connect",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "d2683e1517f8538dc02d4d82",
+      "number": 316,
+      "name": "sentry-cli",
+      "source": "sentry/dev",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "3668d214589acf32f1afb00c",
+      "number": 317,
+      "name": "lark-meeting",
+      "source": "open.feishu.cn",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "44c1077b74699929a747a36c",
+      "number": 318,
+      "name": "marketing-psychology",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "ba4a058b0edf0be46d5b790a",
+      "number": 319,
+      "name": "azure-cost-optimization",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "3bedc6e8bdd53152e277473e",
+      "number": 320,
+      "name": "content-strategy",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "c7256532d7d8626d614d32ff",
+      "number": 321,
+      "name": "deploy-to-vercel",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "83e027b2a23a134f3c046ac4",
+      "number": 322,
+      "name": "pick-ui-library",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "de308baa1b07982ed49d1e88",
+      "number": 323,
+      "name": "vercel-react-view-transitions",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "9ea96b1c5530eb6e17ce85d0",
+      "number": 324,
+      "name": "remotion-render",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5d66dd8e4f03d74bdf6f0575",
+      "number": 325,
+      "name": "archify",
+      "source": "tt-a1i/archify",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "6a2affee9d85341a4159ee56",
+      "number": 326,
+      "name": "remotion-create",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "c2db1f46e12e5b4d2ee01f5e",
+      "number": 327,
+      "name": "remotion-captions",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "607762e1325cf57b5d66fec1",
+      "number": 328,
+      "name": "programmatic-seo",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "59667bb11fd4b0a2015591da",
+      "number": 329,
+      "name": "hyperframes-media",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "e79dcfbc3dbf576664727b26",
+      "number": 330,
+      "name": "ai-seo",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "34ce3484781a1c5611d2e49a",
+      "number": 331,
+      "name": "remotion-markup",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "88928988022fcdba7047d8af",
+      "number": 332,
+      "name": "copy-editing",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "4126be8e1b8f3716dc391c00",
+      "number": 333,
+      "name": "marketing-ideas",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "09a5eaf23f7cb21974f691af",
+      "number": 334,
+      "name": "prototype",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "940f581a3303d50c286bb3f0",
+      "number": 335,
+      "name": "agent-browser",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "10c03acff23dc353c57922ca",
+      "number": 336,
+      "name": "remotion-interactivity",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "cfd3d42f38a3a3d7dfc0328a",
+      "number": 337,
+      "name": "azure-app-onboard",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "895aa80dbfd2bf0d39dc6771",
+      "number": 338,
+      "name": "azure-app-onboard-prereq",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "d15b17ff30aecab370cfd484",
+      "number": 339,
+      "name": "remotion-saas",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "b1afb7a3e5dad6477153a62a",
+      "number": 340,
+      "name": "remotion-docs",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "56873241c3a7db4479a90b20",
+      "number": 341,
+      "name": "animate",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "d3193c63ad6194fb680189ce",
+      "number": 342,
+      "name": "firebase-security-rules-auditor",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "cd0ac788e872f2b8563d8025",
+      "number": 343,
+      "name": "extract-design-system",
+      "source": "arvindrk/extract-design-system",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0fc242dce57c75408e13c8a1",
+      "number": 344,
+      "name": "firebase-ai-logic-basics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "d51b2f25248360745ebd0d7c",
+      "number": 345,
+      "name": "firebase-firestore",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "6e26695c901a669bfa999eac",
+      "number": 346,
+      "name": "convex-quickstart",
+      "source": "get-convex/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "5ec9b8611bcc37074f3628c2",
+      "number": 347,
+      "name": "remotion-upgrade",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "304099d20e4a407c96fa3014",
+      "number": 348,
+      "name": "convex-create-component",
+      "source": "get-convex/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "da7e211612852eb52cbbb6d5",
+      "number": 349,
+      "name": "ad-creative",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "f7e5122484c8ef9f9af9a9cb",
+      "number": 350,
+      "name": "mcp-builder",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "04257ef1b792d6a3cadeee1d",
+      "number": 351,
+      "name": "firebase-crashlytics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "7eb2f22f18d933d19905af9a",
+      "number": 352,
+      "name": "xcode-project-setup",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "def42c39acee2047f5e56567",
+      "number": 353,
+      "name": "better-auth-best-practices",
+      "source": "better-auth/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "dff5cdf1e19c219d476c49c3",
+      "number": 354,
+      "name": "vercel-cli-with-tokens",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "167e6b41cdd286e397f5c33b",
+      "number": 355,
+      "name": "cold-email",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0ad2d17323bffbadce1c7555",
+      "number": 356,
+      "name": "remotion-multimedia",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "d3fd893cbf5f52769cc61554",
+      "number": 357,
+      "name": "remotion-maps",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "d7eb425ee9396a1b5b63ebe6",
+      "number": 358,
+      "name": "anti-detect-browser",
+      "source": "antibrow/anti-detect-browser-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "e3c30bb889438f87e1ec12e4",
+      "number": 359,
+      "name": "cloudflare",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8ce942dffa13665ea1bf4070",
+      "number": 360,
+      "name": "higgsfield-websites",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "1001d90b047b19f6e372124a",
+      "number": 361,
+      "name": "canvas-design",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "1d3879805b908c430de84f83",
+      "number": 362,
+      "name": "site-architecture",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "fcc10b9ad8f2f2471ab6af7c",
+      "number": 363,
+      "name": "churn-prevention",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "e8cf0a3da10570dd8d783f80",
+      "number": 364,
+      "name": "firebase-remote-config-basics",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "518832ad095ae5db1c92f65b",
+      "number": 365,
+      "name": "wrangler",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "953c0a5667fbe4d3f3b245a3",
+      "number": 366,
+      "name": "sales-enablement",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "e07410aead1145deeef8b70f",
+      "number": 367,
+      "name": "remotion-studio",
+      "source": "remotion-dev/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "c0e677167a195e7085b3c3e2",
+      "number": 368,
+      "name": "workers-best-practices",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "6c5cfd9bd5fdf63e70f7d456",
+      "number": 369,
+      "name": "browser-act",
+      "source": "browser-act/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "bf2c8246979cdd0329dc7b33",
+      "number": 370,
+      "name": "web-artifacts-builder",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "9cd665c7dcb4f03f0115fe21",
+      "number": 371,
+      "name": "customer-research",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "1aaa93a1c7c7003d6c6fb23d",
+      "number": 372,
+      "name": "revops",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "84c5ccb119237fae522321d5",
+      "number": 373,
+      "name": "ask-sonner",
+      "source": "emilkowalski/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "4453a4134549dd7d47bc72c5",
+      "number": 374,
+      "name": "lead-magnets",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "b2f210e421d57f6fcbaf98c6",
+      "number": 375,
+      "name": "higgsfield-video-explainer",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f1cae10adeb274a1767145e1",
+      "number": 376,
+      "name": "pr",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "bcc4548b2cee6ec6f7a52a09",
+      "number": 377,
+      "name": "convex",
+      "source": "get-convex/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "bddc9b6ef7c691fde3fce66a",
+      "number": 378,
+      "name": "brand-guidelines",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "这是 Anthropic 的品牌色和字体，不是通用品牌建设方法。"
+    },
+    {
+      "id": "008fd784548a298332dd7be5",
+      "number": 379,
+      "name": "firecrawl",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "4b8886e04ea6af301d891f26",
+      "number": 380,
+      "name": "shadcn",
+      "source": "shadcn-ui/ui",
+      "action": "merged",
+      "duplicateOf": 247,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #247 一致，保留一个入口即可。"
+    },
+    {
+      "id": "954feaedaa726723a777f7ff",
+      "number": 381,
+      "name": "animate-expo",
+      "source": "emilkowalski/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "0a1fc27ded17e658b207240f",
+      "number": 382,
+      "name": "website-to-video",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "8600b01a6a50673ee45189a7",
+      "number": 383,
+      "name": "browser-use",
+      "source": "browser-use/browser-use",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "ada874eee9dfb8b75be1a388",
+      "number": 384,
+      "name": "durable-objects",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "6c9e2af42984eca1a45ac5de",
+      "number": 385,
+      "name": "web-perf",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "9bd8fc89608e3d1203e387d3",
+      "number": 386,
+      "name": "review-loop",
+      "source": "2dmurali/review-loop-skill",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "e6363eca79446242b8d16244",
+      "number": 387,
+      "name": "vercel-optimize",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "d765c7ec53315f889fdf1305",
+      "number": 388,
+      "name": "convex-performance-audit",
+      "source": "get-convex/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "4eceaab5c5f8f5fd5f62fb29",
+      "number": 389,
+      "name": "convex-setup-auth",
+      "source": "get-convex/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "1fd5989d219668a98100e8c0",
+      "number": 390,
+      "name": "convex-migration-helper",
+      "source": "get-convex/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "eb8f35bc4602f66aa0b7a72a",
+      "number": 391,
+      "name": "stripe-best-practices",
+      "source": "stripe/ai",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b5cc0a69e9d51c4a4a64ad77",
+      "number": 392,
+      "name": "agents-sdk",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "a10d8d32b0c5f603b717c8d9",
+      "number": 393,
+      "name": "playwright-best-practices",
+      "source": "currents-dev/playwright-best-practices-skill",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "256d88973457ea46eaaf937b",
+      "number": 394,
+      "name": "gsap",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "8af26b8f99784adcb0850510",
+      "number": 395,
+      "name": "caveman-explore",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "fc024dd69f70001467e4a309",
+      "number": 396,
+      "name": "web-search",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7878cefcb4473eccf3f70301",
+      "number": 397,
+      "name": "remotion-render",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7224a04273bf3b275eec72a7",
+      "number": 398,
+      "name": "infsh-cli",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "6e2cc6045d83342984e87727",
+      "number": 399,
+      "name": "agent-tools",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "a1c50e2d99d970dbce799cee",
+      "number": 400,
+      "name": "python-executor",
+      "source": "101-skills/superpowers",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "2aa61d24c4aba5454a10258d",
+      "number": 401,
+      "name": "safe-refactor",
+      "source": "juliusbrussee/caveman",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "4070c44999d815df50f13f00",
+      "number": 402,
+      "name": "theme-factory",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "2e3153a60d4d8a97384472e3",
+      "number": 403,
+      "name": "caveman-learn",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "依赖 Caveman Cloud 成本报告，当前没有对应观测服务。"
+    },
+    {
+      "id": "756cdba96f4f7dc984b7b2bf",
+      "number": 404,
+      "name": "caveman-optimize",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "依赖 Caveman Cloud 实验与报告，当前没有对应观测服务。"
+    },
+    {
+      "id": "fe70d3aa8be87af5a9b74016",
+      "number": 405,
+      "name": "writing-guidelines",
+      "source": "vercel-labs/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0cdc5aa9a4792a493405b041",
+      "number": 406,
+      "name": "review",
+      "source": "mattpocock/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "方法有价值，但完整流程依赖 Git/GitHub、子智能体或特定宿主工具。"
+    },
+    {
+      "id": "66893e5d3c15bb0ffd7e702e",
+      "number": 407,
+      "name": "investigate-first",
+      "source": "juliusbrussee/caveman",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "1979d408ebfadd966bfcbb5e",
+      "number": 408,
+      "name": "doc-coauthoring",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "3d5ec532baa67fdc3e46fb9b",
+      "number": 409,
+      "name": "obsidian-markdown",
+      "source": "kepano/obsidian-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "658655d0381ba9335b574909",
+      "number": 410,
+      "name": "typesafe-ai",
+      "source": "typesafe-ai/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8c89ff2ce93d584f95795e33",
+      "number": 411,
+      "name": "verify-and-stop",
+      "source": "juliusbrussee/caveman",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "170c5b50b169af55c8758ecd",
+      "number": 412,
+      "name": "website-to-hyperframes",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "6ce1531d61e7e2f47220dc5c",
+      "number": 413,
+      "name": "surgical-patch",
+      "source": "juliusbrussee/caveman",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "430d9d52b5adcde2c8d78b2d",
+      "number": 414,
+      "name": "caveman-evidence-review",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专读 Caveman Cloud 证据，不适合作为通用评审技能。"
+    },
+    {
+      "id": "d43d614c977eae608d7440e4",
+      "number": 415,
+      "name": "lean-build",
+      "source": "juliusbrussee/caveman",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "6e38179c2749d46ea27900fb",
+      "number": 416,
+      "name": "caveman-discover",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专为 Caveman Cloud 标注工作流，当前没有对应服务。"
+    },
+    {
+      "id": "54b49189ffbc1cf3ed4c54fe",
+      "number": 417,
+      "name": "caveman-manage",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "专为 Caveman Cloud 管理实验，当前没有对应服务。"
+    },
+    {
+      "id": "cb7de159dd7fecbebd273a25",
+      "number": 418,
+      "name": "browser-mcp-agent",
+      "source": "antibrow/anti-detect-browser-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "9d412094d4e2fae7cc8fc9bb",
+      "number": 419,
+      "name": "multi-account-isolation",
+      "source": "antibrow/anti-detect-browser-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "7df76eb52f293c0f4300dd0c",
+      "number": 420,
+      "name": "cloudflare-email-service",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "0812f07e2690a3217005a3b3",
+      "number": 421,
+      "name": "migration",
+      "source": "juliusbrussee/caveman",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "4a2dfd618e41c72cb483a92d",
+      "number": 422,
+      "name": "caveman-setup",
+      "source": "juliusbrussee/caveman",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "会接入 Caveman Cloud 网关，不应替代现有企业模型网关。"
+    },
+    {
+      "id": "df34f30b955a7f7a90495535",
+      "number": 423,
+      "name": "solana-dev",
+      "source": "solana-foundation/solana-dev-skill",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "901fae7b34ceed8e24567347",
+      "number": 424,
+      "name": "competitor-profiling",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "1282fb192c1daa368029ebd7",
+      "number": 425,
+      "name": "landing-page-conversion-audit",
+      "source": "autonnel/autonnel-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "eb2c1a81806aca346c85f9c7",
+      "number": 426,
+      "name": "azure-observability",
+      "source": "microsoft/azure-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "7d239db97d1f371b1c76c604",
+      "number": 427,
+      "name": "write-swift",
+      "source": "emilkowalski/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "71ac5ac961ee1a810b4a36b9",
+      "number": 428,
+      "name": "typescript-advanced-types",
+      "source": "wshobson/agents",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "305eb47b7e48aee752ffb71d",
+      "number": 429,
+      "name": "notion-api",
+      "source": "intellectronica/agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "d6293a98a8677149b4af5a2a",
+      "number": 430,
+      "name": "algorithmic-art",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "be8bdfdf9b879990b8723b20",
+      "number": 431,
+      "name": "sales-funnel-blueprint",
+      "source": "autonnel/autonnel-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "8f10b2b666c335454974afe3",
+      "number": 432,
+      "name": "polish",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "8b24c871c8f3797940d5efef",
+      "number": 433,
+      "name": "server-side-conversion-tracking",
+      "source": "autonnel/autonnel-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "5a465baac715b32f68f4c99a",
+      "number": 434,
+      "name": "browser-act-skill-forge",
+      "source": "browser-act/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "a064e11fd5e15e672d1418ab",
+      "number": 435,
+      "name": "post-purchase-upsell-flow",
+      "source": "autonnel/autonnel-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "ca7a2a5e47defef165289cb3",
+      "number": 436,
+      "name": "browser-fingerprint-audit",
+      "source": "liarjsdev/liarjs-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "2b061e598d542658141d0076",
+      "number": 437,
+      "name": "funnel-platform-picker",
+      "source": "autonnel/autonnel-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "76ccb047e7aec2eb3a06a443",
+      "number": 438,
+      "name": "fingerprint-ci-gate",
+      "source": "liarjsdev/liarjs-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "eeb8991f15d27281bf4edbb8",
+      "number": 439,
+      "name": "self-hosted-funnel-launch",
+      "source": "autonnel/autonnel-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "3a68ec0494f8caa3cbe5604d",
+      "number": 440,
+      "name": "playwright-stealth-verify",
+      "source": "liarjsdev/liarjs-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "9de5f1af248743ffb1322fb8",
+      "number": 441,
+      "name": "fingerprint-failure-triage",
+      "source": "liarjsdev/liarjs-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "2321fae3080c6edb140ae4a7",
+      "number": 442,
+      "name": "firecrawl-search",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "2d01d222e34ce5ec316b4693",
+      "number": 443,
+      "name": "community-marketing",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "e3c0a8efb3fc3362c1fa363b",
+      "number": 444,
+      "name": "firecrawl-scrape",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "875c35fcff75176b5574dfe2",
+      "number": 445,
+      "name": "critique",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "a0c996a9c40cf14654e7be36",
+      "number": 446,
+      "name": "higgsfield-brandkit",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "3ff9af5e931a76e75118e907",
+      "number": 447,
+      "name": "higgsfield-youtube-thumbnail",
+      "source": "higgsfield-ai/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "0315f141876629117d0d162b",
+      "number": 448,
+      "name": "audit",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "e55829215d9a659b4e04e30e",
+      "number": 449,
+      "name": "animate",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "79118d94dc8b358348ef21d5",
+      "number": 450,
+      "name": "adapt",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "243be4450fd660c5273fd844",
+      "number": 451,
+      "name": "clarify",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "a4ca3f92a182f388caa5b115",
+      "number": 452,
+      "name": "cro",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "2a89c541120c084703734285",
+      "number": 453,
+      "name": "optimize",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "bd7291ba6480ddb585777a90",
+      "number": 454,
+      "name": "colorize",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "b6f7fb7aa40df02b15302659",
+      "number": 455,
+      "name": "image",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "862058d50a23cfd797fba3e7",
+      "number": 456,
+      "name": "firecrawl-agent",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "34de9f5ad33891490aed9bf5",
+      "number": 457,
+      "name": "ponytail",
+      "source": "dietrichgebert/ponytail",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "全局回复风格模式与已有工程规范重叠，专家按需选择。"
+    },
+    {
+      "id": "cffa6bfdc632e5092d3e317e",
+      "number": 458,
+      "name": "turborepo",
+      "source": "vercel/turborepo",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "b19324ebb1fbe17458b7c73e",
+      "number": 459,
+      "name": "firecrawl-crawl",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "2e7dc9aa94653277dfdf03db",
+      "number": 460,
+      "name": "bolder",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "667f900d1602acf083d20eb7",
+      "number": 461,
+      "name": "delight",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "c007aa877cfb775b85310b3f",
+      "number": 462,
+      "name": "firecrawl-map",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "f2e350bb85282811c405d71e",
+      "number": 463,
+      "name": "gws-gmail",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "373ea3e960d984d38c79bd4a",
+      "number": 464,
+      "name": "distill",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "63bb65e5fad06478335a7a6a",
+      "number": 465,
+      "name": "turnstile-spin",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "a09cb77283b7310af690d391",
+      "number": 466,
+      "name": "firecrawl-download",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "cd52d079519f523276551c6e",
+      "number": 467,
+      "name": "agent-browser",
+      "source": "magentosh/superpowers",
+      "action": "merged",
+      "duplicateOf": 335,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #335 一致，保留一个入口即可。"
+    },
+    {
+      "id": "2f9fd5dd7c71a3544bd275f9",
+      "number": 468,
+      "name": "directory-submissions",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "76df5cbacd426feff70f4f6a",
+      "number": 469,
+      "name": "video",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "5154a86e97295b77daa20cf0",
+      "number": 470,
+      "name": "quieter",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "adfa5719ea98c7b15f54171b",
+      "number": 471,
+      "name": "cloudflare-one",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "a55e1d4b47f89ad426e6c966",
+      "number": 472,
+      "name": "obsidian-cli",
+      "source": "kepano/obsidian-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "2a9f595553cfa52e16b50344",
+      "number": 473,
+      "name": "amazon-product-research",
+      "source": "nexscope-ai/amazon-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "65e55d7be5924049ec9f6319",
+      "number": 474,
+      "name": "agent-browser",
+      "source": "qu-skills/superpowers",
+      "action": "merged",
+      "duplicateOf": 335,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #335 一致，保留一个入口即可。"
+    },
+    {
+      "id": "91d5e78cabd182096270ce7f",
+      "number": 475,
+      "name": "obsidian-bases",
+      "source": "kepano/obsidian-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5259d366b897a615d085110c",
+      "number": 476,
+      "name": "gpt-image-2",
+      "source": "prime-skills/runcomfy-agent-skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "bf677876e4304380ebd9ebd0",
+      "number": 477,
+      "name": "internal-comms",
+      "source": "anthropics/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "4c46e810cb5b78b3f7dfca26",
+      "number": 478,
+      "name": "cloudflare-one-migrations",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "140c6195ff49a8cb4ef7a673",
+      "number": 479,
+      "name": "analytics",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "923265cd2c5cd8db578b610e",
+      "number": 480,
+      "name": "product-marketing",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "8dac6ce9e50a921f4433803c",
+      "number": 481,
+      "name": "social",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "08f9292f18974ea133adf7be",
+      "number": 482,
+      "name": "ads",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "8eaaa1bc81f4c428551b4b66",
+      "number": 483,
+      "name": "wonda-cli",
+      "source": "degausai/wonda",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "eb5576e0fea24b9a0b07a425",
+      "number": 484,
+      "name": "co-marketing",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "9db2e16a7fc361f5a5ead2f6",
+      "number": 485,
+      "name": "gws-gmail-send",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "3d8ddfd32233193b8057b044",
+      "number": 486,
+      "name": "gws-drive",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "448e90202c3671ead83fd473",
+      "number": 487,
+      "name": "css-animations",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "f0ca951a20d151bb8b38c7ba",
+      "number": 488,
+      "name": "audit-website",
+      "source": "squirrelscan/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "80a078c96cbe09d6c09c5002",
+      "number": 489,
+      "name": "slack-gif-creator",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "文件制作方法值得保留，实际生成依赖脚本、库、字体或渲染环境。"
+    },
+    {
+      "id": "bb462782c0000a96674f549b",
+      "number": 490,
+      "name": "json-canvas",
+      "source": "kepano/obsidian-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "a2fa9103c70e941d4ddbadb3",
+      "number": 491,
+      "name": "competitors",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "6ee56f02b9e5de97dac7407d",
+      "number": 492,
+      "name": "defuddle",
+      "source": "kepano/obsidian-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "bae51d04216c40881a11e355",
+      "number": 493,
+      "name": "pricing",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "17ba3eef2ce8bdd92a043b62",
+      "number": 494,
+      "name": "emails",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "2bbe859d69c184098dde09d2",
+      "number": 495,
+      "name": "launch",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "d10d63260e382b6edbf540d1",
+      "number": 496,
+      "name": "upgrade-stripe",
+      "source": "stripe/ai",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "05b56d4cdc43f53f980191d5",
+      "number": 497,
+      "name": "tailwind",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "3c48af5aba1c909e195ff45c",
+      "number": 498,
+      "name": "claude-api",
+      "source": "anthropics/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "29f7b30c3d6c02c90427af86",
+      "number": 499,
+      "name": "schema",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "b5c277d27a43b9eda2e37a7d",
+      "number": 500,
+      "name": "mastra",
+      "source": "mastra-ai/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "222611ef50e781995e0bf4b6",
+      "number": 501,
+      "name": "ab-testing",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "f46690e0ba034c3d73b13a37",
+      "number": 502,
+      "name": "animejs",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "2a4a5020cec770f6befcdc00",
+      "number": 503,
+      "name": "fastify-best-practices",
+      "source": "mcollina/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "477addaa7591d2aefd639804",
+      "number": 504,
+      "name": "three",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "246c1768ad174f3cdb8ba70c",
+      "number": 505,
+      "name": "lottie",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "7f76cfc10741e209e927e892",
+      "number": 506,
+      "name": "design-doc-mermaid",
+      "source": "spillwavesolutions/design-doc-mermaid",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "5ee9587fcaa481effbbc9206",
+      "number": 507,
+      "name": "waapi",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "522aa454df2262c6bb371161",
+      "number": 508,
+      "name": "aso",
+      "source": "coreyhaines31/marketingskills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "2a97b02f39edd80ecd342eed",
+      "number": 509,
+      "name": "template-skill",
+      "source": "anthropics/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "正文只有占位描述与“Insert instructions below”，没有实际业务指令。"
+    },
+    {
+      "id": "2e92d5182554e9b5b8fe4281",
+      "number": 510,
+      "name": "tailwind-design-system",
+      "source": "wshobson/agents",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "e01411af85be3c896cc94a8c",
+      "number": 511,
+      "name": "stripe-projects",
+      "source": "stripe/ai",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "898dcfb42a7d323658d99555",
+      "number": 512,
+      "name": "free-tools",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "cee077e677734c094b690ee2",
+      "number": 513,
+      "name": "social-content",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "cdedebabc0b3a0422d40307a",
+      "number": 514,
+      "name": "onboarding",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "0027fb6bf503aec55c2e92aa",
+      "number": 515,
+      "name": "agentix-ceo",
+      "source": "agentix-cloud/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "依赖 Agentix/Modal 的另一套员工平台，非 Wishtaday 部门接口。"
+    },
+    {
+      "id": "07b9ba74fc18bf189677811f",
+      "number": 516,
+      "name": "expo-dev-client",
+      "source": "expo/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "90f68dbc505eea5da3357e33",
+      "number": 517,
+      "name": "gsap-core",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "354861d15408027a847758c2",
+      "number": 518,
+      "name": "referrals",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "db2cbeb9d627fe1d01b8b421",
+      "number": 519,
+      "name": "signup",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "81e588577608aaefac46ddae",
+      "number": 520,
+      "name": "agently-mail",
+      "source": "agent.qq.com",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "8919482b37b7a966f7df59d5",
+      "number": 521,
+      "name": "herdr",
+      "source": "herdrdev/herdr",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "要求 Herdr 管理的终端环境，当前部门运行时不具备。"
+    },
+    {
+      "id": "0a3e5d43e5dab3ca18dd4ee1",
+      "number": 522,
+      "name": "typeset",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "701a78ea3bfbc245e4ddd85b",
+      "number": 523,
+      "name": "make-interfaces-feel-better",
+      "source": "jakubkrehel/make-interfaces-feel-better",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "4be78d7d8d7da5831220003a",
+      "number": 524,
+      "name": "firecrawl-interact",
+      "source": "firecrawl/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "14538c9d214c1f0621d4b6bf",
+      "number": 525,
+      "name": "nx-workspace",
+      "source": "nrwl/nx-ai-agents-config",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "5b4f21b050b5fec211ac0502",
+      "number": 526,
+      "name": "popups",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "2adb03944facbf487f14fe38",
+      "number": 527,
+      "name": "paywalls",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "d40a6956b09190b4842dd600",
+      "number": 528,
+      "name": "gws-shared",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "e27353eb9c634cd7d8694e18",
+      "number": 529,
+      "name": "gsap-scrolltrigger",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "15a58716cda3f8e74666b1d4",
+      "number": 530,
+      "name": "design-md",
+      "source": "google-labs-code/stitch-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "1d9ae1aa6d995646627873d8",
+      "number": 531,
+      "name": "overdrive",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "9c27ac5ada461f1735cab16c",
+      "number": 532,
+      "name": "ai-sdk",
+      "source": "vercel/ai",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "12a04caada070d5f0f757912",
+      "number": 533,
+      "name": "cross-border-ecommerce",
+      "source": "nexscope-ai/ecommerce-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "c4ecbb8489b11f8d8a44bf0a",
+      "number": 534,
+      "name": "developing-genkit-js",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "3f3e17483ced3196558871cf",
+      "number": 535,
+      "name": "ai-music",
+      "source": "gencraft-labs/skills",
+      "action": "merged",
+      "duplicateOf": 201,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #201 一致，保留一个入口即可。"
+    },
+    {
+      "id": "8c1ffb74f2e4e61c5137c121",
+      "number": 536,
+      "name": "video-edit",
+      "source": "gencraft-labs/skills",
+      "action": "merged",
+      "duplicateOf": 132,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #132 一致，保留一个入口即可。"
+    },
+    {
+      "id": "ab07f8b6d1e0d711777ce217",
+      "number": 537,
+      "name": "developing-genkit-dart",
+      "source": "firebase/agent-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "44203f08011a9ad5cdcf1ac9",
+      "number": 538,
+      "name": "ai-image-generation",
+      "source": "gencraft-labs/skills",
+      "action": "merged",
+      "duplicateOf": 181,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #181 一致，保留一个入口即可。"
+    },
+    {
+      "id": "39eed446604ba98a683854c7",
+      "number": 539,
+      "name": "frontend-design",
+      "source": "anthropics/claude-code",
+      "action": "hidden",
+      "duplicateOf": 8,
+      "reason": "正文与 #8 一致，但配套文件或许可证不同，不建议直接删包。"
+    },
+    {
+      "id": "5770fa1aa599c32f94867489",
+      "number": 540,
+      "name": "image-to-video",
+      "source": "gencraft-labs/skills",
+      "action": "merged",
+      "duplicateOf": 133,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #133 一致，保留一个入口即可。"
+    },
+    {
+      "id": "00524b63efbaf95841146f00",
+      "number": 541,
+      "name": "ai-video-generation",
+      "source": "gencraft-labs/skills",
+      "action": "merged",
+      "duplicateOf": 180,
+      "reason": "所选技能目录的相对路径与内容哈希均与 #180 一致，保留一个入口即可。"
+    },
+    {
+      "id": "89f3d02a037ab50d820d13b8",
+      "number": 542,
+      "name": "batch-grill-me",
+      "source": "mattpocock/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "95cbe44b2ac7966112a628b0",
+      "number": 543,
+      "name": "product-marketing-context",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "d0aad88c6712ac02baa569e5",
+      "number": 544,
+      "name": "hallmark",
+      "source": "nutlope/hallmark",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "14344eae1bc4e13df3dad2d1",
+      "number": 545,
+      "name": "pricing-strategy",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "12ad218c4dc92c09722c935f",
+      "number": 546,
+      "name": "momentic-test",
+      "source": "momentic-ai/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "7fa1f97f225246d89de7da72",
+      "number": 547,
+      "name": "momentic-result-classification",
+      "source": "momentic-ai/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "8dddf10232a323f6a2ee1f7d",
+      "number": 548,
+      "name": "gsap-performance",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "aa12bff8717b60856e137197",
+      "number": 549,
+      "name": "marketing-plan",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "099ecf2853d41cde30ef6570",
+      "number": 550,
+      "name": "gsap-timeline",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "98691820ee9a182f904015ad",
+      "number": 551,
+      "name": "firecrawl-build-scrape",
+      "source": "firecrawl/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "c2f61289c6956c0eb04d2ecc",
+      "number": 552,
+      "name": "firecrawl-build-search",
+      "source": "firecrawl/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "a73ba63bc14f75f9f9f5aabb",
+      "number": 553,
+      "name": "firecrawl-build-interact",
+      "source": "firecrawl/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "cf0f22349524a0ab5d69b1a4",
+      "number": 554,
+      "name": "firecrawl-build-onboarding",
+      "source": "firecrawl/skills",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "0a157b55d22bda561c50f3df",
+      "number": 555,
+      "name": "accessibility",
+      "source": "addyosmani/web-quality-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "50fb588ca7129dd435370e99",
+      "number": 556,
+      "name": "code-review-and-quality",
+      "source": "addyosmani/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "573990fe37c57eb015ecad4e",
+      "number": 557,
+      "name": "motion-doctrine",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "3cfcd32bdafe222931b5c216",
+      "number": 558,
+      "name": "captions-overlay",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "62e1a9faf967a81e0db0e354",
+      "number": 559,
+      "name": "cut-the-curve",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "a37c2c6310bb6ea9f9b6868c",
+      "number": 560,
+      "name": "gsap-plugins",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "f7f610b3cf2626277ca0eb15",
+      "number": 561,
+      "name": "gws-calendar",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "a1a60af42bb8957bbb419074",
+      "number": 562,
+      "name": "developing-genkit-js",
+      "source": "genkit-ai/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "4a05e54b33c17ea7d2cab7dd",
+      "number": 563,
+      "name": "seam-craft",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "d72b6c81d8f55946392fb20e",
+      "number": 564,
+      "name": "changelog-video",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "5819e6395e9ffab92cc82385",
+      "number": 565,
+      "name": "oversized-cursor",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "16117b38b1abc9d0ead1603e",
+      "number": 566,
+      "name": "prospecting",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "1d66124a483137a789cb9b48",
+      "number": 567,
+      "name": "gsap-react",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "885ae55d752842bf6cd70604",
+      "number": 568,
+      "name": "is-this-photo-real",
+      "source": "useosint/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "bdac83c61559ba2a3068ac50",
+      "number": 569,
+      "name": "investigate-without-getting-made",
+      "source": "useosint/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "隐蔽调查身份管理不属于当前常规办公工作。"
+    },
+    {
+      "id": "e58fb9ab75df452f722e88ce",
+      "number": 570,
+      "name": "opentui",
+      "source": "msmps/opentui-skill",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "419884f7a8d247659a0f11a4",
+      "number": 571,
+      "name": "building-native-ui",
+      "source": "expo/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8def44a6f7de23d837d7692a",
+      "number": 572,
+      "name": "sms",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "63ec96b08426048d708d059b",
+      "number": 573,
+      "name": "analytics-tracking",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "d3865140a29868b994ca83f2",
+      "number": 574,
+      "name": "what-leaked-about-you",
+      "source": "useosint/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "泄露信息调查属于专项安全业务，非通用员工默认能力。"
+    },
+    {
+      "id": "41f019203332a8a97c5a8a8c",
+      "number": 575,
+      "name": "gsap-utils",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "35d5938457479978ec5d5330",
+      "number": 576,
+      "name": "page-cro",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "ad34cc39d99fda3c4d14a540",
+      "number": 577,
+      "name": "enhance-prompt",
+      "source": "google-labs-code/stitch-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "e9658b2d1e2d07e0eca641a7",
+      "number": 578,
+      "name": "gws-sheets",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "bc414ebff8f6b4a3ed6482a3",
+      "number": 579,
+      "name": "find-the-original-image",
+      "source": "useosint/skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "d5de657091a0a6ef0cf22f5b",
+      "number": 580,
+      "name": "security-and-hardening",
+      "source": "addyosmani/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "cbb936b302c05cc2d2e73109",
+      "number": 581,
+      "name": "gws-docs",
+      "source": "googleworkspace/cli",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "内容有场景价值，但本技能指定的工具链或服务尚未在员工运行时接通。"
+    },
+    {
+      "id": "4a02d595b2218ffe9d6637f0",
+      "number": 582,
+      "name": "launch-strategy",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "1ac558a1d6063fff315b275d",
+      "number": 583,
+      "name": "nia",
+      "source": "nozomio-labs/nia-skill",
+      "action": "removed",
+      "duplicateOf": null,
+      "reason": "需浏览器、联网 CLI、MCP 或特定外部工具，当前不能仅靠技能说明完成。"
+    },
+    {
+      "id": "251f9a3bc8730d7c1629c7cb",
+      "number": 584,
+      "name": "contribute-catalog",
+      "source": "heygen-com/hyperframes",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "为 Hyperframes 公共目录贡献 PR，非制作客户内容所必需。"
+    },
+    {
+      "id": "f4a6a515e91beebf6768d50f",
+      "number": 585,
+      "name": "schema-markup",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "75ee337e39e7c6bc175cb751",
+      "number": 586,
+      "name": "sandbox-stable",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "3f1af3119f47a159a60173f2",
+      "number": 587,
+      "name": "gsap-frameworks",
+      "source": "greensock/gsap-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "01309a0ac3019e1b9c737d27",
+      "number": 588,
+      "name": "stitch-loop",
+      "source": "google-labs-code/stitch-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "ff1dce8b3fb75afd40c9e7e4",
+      "number": 589,
+      "name": "email-sequence",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "8acb837be9b8cc8c4bc725ce",
+      "number": 590,
+      "name": "sandbox-next",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "49f919015c2c932edf0a5215",
+      "number": 591,
+      "name": "sandbox-migrate-to-next",
+      "source": "cloudflare/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "026287d403d3530a587e2779",
+      "number": 592,
+      "name": "paid-ads",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "4872f5f7dfd586ecda420f5b",
+      "number": 593,
+      "name": "frontend-ui-engineering",
+      "source": "addyosmani/agent-skills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "与现有开发质量、需求澄清、内容策划或文档工作直接相关。"
+    },
+    {
+      "id": "5191a19dc7dded8892c03c7e",
+      "number": 594,
+      "name": "normalize",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "695cb4a883bebf9698d48243",
+      "number": 595,
+      "name": "competitor-alternatives",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "49aba89a1636f5556ee4eaea",
+      "number": 596,
+      "name": "onboarding-cro",
+      "source": "coreyhaines31/marketingskills",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    },
+    {
+      "id": "7d64de410dd7fb2112e1309c",
+      "number": 597,
+      "name": "insforge",
+      "source": "insforge/insforge-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "fd3bcf724acd3c4462b88537",
+      "number": 598,
+      "name": "expo-tailwind-setup",
+      "source": "expo/skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "8cb0e37702ba0dfcfe9593f1",
+      "number": 599,
+      "name": "insforge-cli",
+      "source": "insforge/insforge-skills",
+      "action": "hidden",
+      "duplicateOf": null,
+      "reason": "适用特定厂商、技术栈或垂直项目，当前默认办公流程不依赖。"
+    },
+    {
+      "id": "c42b37cadeda91c41fd3a9af",
+      "number": 600,
+      "name": "extract",
+      "source": "pbakaus/impeccable",
+      "action": "visible",
+      "duplicateOf": null,
+      "reason": "具备可用方法或专项参考价值，按具体任务选择，避免全量绑定。"
+    }
+  ]
+}

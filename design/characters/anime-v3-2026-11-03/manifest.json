@@ -1,0 +1,761 @@
+{
+  "version": 3,
+  "roleBindingPolicy": "visual-only; 12 named characters matched to stable employee IDs; intern retains original animated wardrobe",
+  "characters": [
+    {
+      "id": "01-li-waner",
+      "name": "李婉儿",
+      "role": "私人秘书",
+      "theme": "优雅干练",
+      "look": "深棕盘发、香槟白衬衫、黑包臀裙与黑丝袜",
+      "design": "Elegant executive secretary, adult woman age 30. Delicate long oval face, softly lifted narrow almond champagne-brown eyes, arched fine eyebrows, small defined nose, muted rose lips, warm composed closed smile. DEEP CHESTNUT hair in a polished LOW CHIGNON with two curved face-framing strands, pearl and gold teardrop earrings. Champagne ivory silk long-sleeve blouse with sculptural bow neckline, close-fitting BLACK knee-length PENCIL SKIRT, sheer BLACK TIGHTS over full legs and black closed modest heels, slim gold watch. NO blazer, no rose suit. Professional polished feminine silhouette. Recognizable back silhouette: low chignon + ivory bow blouse + black skirt.",
+      "ref": 1,
+      "gender": "女",
+      "characterId": "li-waner",
+      "assetGroupId": "li-waner-anime-v3",
+      "concept": {
+        "file": "concepts/01-li-waner.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-25805cac-3119-4a19-9c9d-1f8e02af40fb.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "li-waner/portrait-hd-transparent.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-d0dcb856-d754-4921-98bb-ad5e0cd3d069.png",
+        "usage": "未来个人对话框/档案高清形象",
+        "status": "draft-review",
+        "transparent": true
+      },
+      "office": {
+        "file": "li-waner/compact-slim-transparent.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-3c0a6987-d0e0-4c47-85e3-b5355becad66.png",
+        "usage": "办公室小人静态样板",
+        "status": "draft-review",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ],
+        "animationReady": false
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "marvis",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "li-waner-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "li-waner/motion/sit-back.png",
+          "walk": "li-waner/motion/walk.png",
+          "turn": "li-waner/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/li-waner-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "02-xu-zhining",
+      "name": "许知宁",
+      "role": "拓客部备选",
+      "theme": "自信明艳",
+      "look": "黑色长卷发、宝石红连衣裙、金色长耳饰",
+      "design": "Confident charismatic client development professional, adult woman age 29. Heart-shaped face with defined high cheekbones, elongated slightly upturned grey-violet eyes, bold softly angled brows, fuller berry-red lips and an open confident smile. LONG glossy JET BLACK HAIR in broad asymmetrical waves to mid-back, swept to one side, distinctive geometric long GOLD earrings. JEWEL CRIMSON tailored short-sleeve business midi dress with an asymmetrical folded neckline, narrow gold belt, elegant closed black pumps. No blouse-and-black-skirt combination, NO blazer, no bob, no bun. Warm bold grown-up glamour with tasteful full coverage. Recognizable back: long cascading black waves + single deep red dress.",
+      "ref": 0,
+      "gender": "女",
+      "characterId": "xu-zhining",
+      "assetGroupId": "xu-zhining-anime-v3",
+      "concept": {
+        "file": "concepts/02-xu-zhining.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-82b9c323-6a94-4506-b506-a48951c26525.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "xu-zhining/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-265ad913-9d63-4259-9b13-e33c76dcdda5.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "xu-zhining/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-eabacb8e-5a1f-4077-95b5-e99f1b5d8cf4.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "availability": "active-office-visual",
+      "scenePreview": {
+        "employeeId": "xu-zhining",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-11",
+        "assetGroupId": "xu-zhining-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "combined": "/assets/characters/xu-zhining-library-v3/motion.png"
+        },
+        "publicAssetBase": "/assets/characters/xu-zhining-library-v3",
+        "framesPerAtlas": 24,
+        "grid": {
+          "columns": 4,
+          "rows": 6
+        },
+        "status": "installed",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-1f162750-8f75-4ec0-a108-34d69e5499ed.png",
+        "backup": ".local/backups/reserve-visuals-20261111/source-before.tgz"
+      }
+    },
+    {
+      "id": "03-cheng-zhiyao",
+      "name": "程知遥",
+      "role": "程序部备选",
+      "theme": "冷静利落",
+      "look": "蓝黑不对称短发、冰蓝上衣、墨蓝九分裤",
+      "design": "Cool sophisticated female software architect, adult woman age 28. Slightly angular diamond face, narrow observant steel-blue eyes, straight brows, subtle sharp nose, natural mauve lips and subtle wry smile. ASYMMETRICAL JAW-LENGTH BLUE-BLACK BOB with undercut tucked behind one ear, a single silver ear cuff, NO glasses. Ice-blue high-neck fine-knit fitted top with elbow-length sleeves, high-waisted midnight navy tailored cropped trousers with silver belt buckle, dark low ankle boots. Minimal geometric fashion. NO skirt, blazer, bun or long waves. Distinct angular short hair and cool blue tonal silhouette.",
+      "ref": 1,
+      "gender": "女",
+      "characterId": "cheng-zhiyao",
+      "assetGroupId": "cheng-zhiyao-anime-v3",
+      "concept": {
+        "file": "concepts/03-cheng-zhiyao.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-2ecb6a00-aeda-4591-a1f9-d4d9b8bd035f.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "cheng-zhiyao/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-fb93158d-bef1-43fe-adad-7dd8f5032ab3.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "cheng-zhiyao/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-3c586266-97a1-4ad0-a202-f6ec36794e99.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "availability": "active-office-visual",
+      "scenePreview": {
+        "employeeId": "cheng-zhiyao",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-11",
+        "assetGroupId": "cheng-zhiyao-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "combined": "/assets/characters/cheng-zhiyao-library-v3/motion.png"
+        },
+        "publicAssetBase": "/assets/characters/cheng-zhiyao-library-v3",
+        "framesPerAtlas": 24,
+        "grid": {
+          "columns": 4,
+          "rows": 6
+        },
+        "status": "installed",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-4ab25f27-c5f6-43c4-9018-0fd5d5c91f9f.png",
+        "backup": ".local/backups/reserve-visuals-20261111/source-before.tgz"
+      }
+    },
+    {
+      "id": "04-zhao-yameng",
+      "name": "赵雅梦",
+      "role": "资料室",
+      "theme": "知性温柔",
+      "look": "栗色侧辫、细金眼镜、紫灰针织与百褶裙",
+      "design": "Refined female knowledge archivist, adult woman age 31. Soft oval face with gently rounded cheeks, softly downturned hazel almond eyes, small beauty mark below left eye, fine gold oval reading glasses, soft apricot lips, thoughtful tender smile. CHESTNUT HAIR in a LONG SINGLE SIDE BRAID resting over shoulder, simple lavender ribbon at end. Dusty lavender fitted fine-knit cardigan with round neckline over ivory top, long soft plum midi pleated skirt, opaque charcoal tights, plum Mary Jane flats. No blazer, no bob, no chignon. Distinct braid and flowing pleat silhouette, quietly literary adult elegance.",
+      "ref": 2,
+      "gender": "女",
+      "characterId": "zhao-yameng",
+      "assetGroupId": "zhao-yameng-anime-v3",
+      "concept": {
+        "file": "concepts/04-zhao-yameng.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-13b371b3-30b8-4959-828b-cd716787eeb7.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "zhao-yameng/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-2c7b927f-d3da-4a4c-a2db-bd61bb7a72ac.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "zhao-yameng/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-93cb33b0-7b42-436f-b165-2baac7abce1f.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "file-agent",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "zhao-yameng-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "zhao-yameng/motion/sit-back.png",
+          "walk": "zhao-yameng/motion/walk.png",
+          "turn": "zhao-yameng/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/zhao-yameng-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "05-su-ying",
+      "name": "苏映",
+      "role": "运营部备选",
+      "theme": "时髦有活力",
+      "look": "铜红高马尾、奶油短外套、炭灰阔腿裤",
+      "design": "Fashionable female video creative producer, adult woman age 27. Slightly square soft face, bright almond amber eyes, lively expressive straight brows, a few subtle freckles over bridge of nose, coral lips, lively asymmetric smile. COPPER RED HAIR in HIGH SWINGING PONYTAIL with a sculptural black tie, small black hoop earrings. Cream cropped structured short-sleeve jacket over black high-neck top, charcoal very wide-leg high-waisted trousers, thin copper belt, dark trainers with clean silhouette. Compact dark headphones around neck. No skirt, no formal blazer, no dark long loose hair. Bold creative adult energy, distinguish high ponytail and wide-leg silhouette.",
+      "ref": 2,
+      "gender": "女",
+      "characterId": "su-ying",
+      "assetGroupId": "su-ying-anime-v3",
+      "concept": {
+        "file": "concepts/05-su-ying.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-3a9d25d2-3ad0-4d21-9ee8-35d36532f968.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "su-ying/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-5c3d097d-548f-4773-98d6-d4cbbc714a59.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "su-ying/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-74cd2a18-e9a6-43a4-9564-044d857a02da.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "availability": "active-office-visual",
+      "scenePreview": {
+        "employeeId": "su-ying",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-11",
+        "assetGroupId": "su-ying-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "combined": "/assets/characters/su-ying-library-v3/motion.png"
+        },
+        "publicAssetBase": "/assets/characters/su-ying-library-v3",
+        "framesPerAtlas": 24,
+        "grid": {
+          "columns": 4,
+          "rows": 6
+        },
+        "status": "installed",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-27c16e21-50e8-4c38-b956-1520cb6ea86b.png",
+        "backup": ".local/backups/reserve-visuals-20261111/source-before.tgz"
+      }
+    },
+    {
+      "id": "06-lin-youwei",
+      "name": "林幼薇",
+      "role": "设计部",
+      "theme": "文艺清新",
+      "look": "亚麻棕卷发、青绿裹身裙、珊瑚耳饰",
+      "design": "Elegant artistic female visual designer, adult woman age 28. Distinct softly rounded face but adult proportions, large almond olive-green eyes rather than round baby eyes, naturally full straight brows, peach lips, gentle curious smile. HONEY ASH-BROWN CURLY SHOULDER-LENGTH HAIR with a clearly visible wispy curtain fringe, single turquoise hairpin. Deep sage/TEAL wrap midi dress with three-quarter relaxed sleeves, asymmetrical draped hem, coral sculptural stud earrings, cream low block-heel shoes. No blazer, no blouse/pencil skirt. Airy draped silhouette and textured curls, editorial creative elegance.",
+      "ref": 2,
+      "gender": "女",
+      "characterId": "lin-youwei",
+      "assetGroupId": "lin-youwei-anime-v3",
+      "concept": {
+        "file": "concepts/06-lin-youwei.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-82b11dae-d76b-4554-98b6-1a4b41991dce.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "lin-youwei/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-50917685-39b8-4d5d-8f80-c67cf5db7d3e.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "lin-youwei/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-b8792e9b-c24a-4f74-9d42-618cf6f867c7.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "new-agent-7",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "lin-youwei-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "lin-youwei/motion/sit-back.png",
+          "walk": "lin-youwei/motion/walk.png",
+          "turn": "lin-youwei/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/lin-youwei-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "07-pai-aqi",
+      "name": "派阿奇",
+      "role": "合规部",
+      "theme": "成熟坚定",
+      "look": "黑发高髻、墨绿双排扣长马甲、直筒裤",
+      "design": "Authoritative female compliance lead, adult woman age 35. Long rectangular elegant face, defined jaw, narrow deep green almond eyes, firm straight brows, well-defined nose, muted burgundy lips, calm serious expression, not smiling. JET BLACK HAIR in HIGH SLEEK TOPKNOT, minimal gold bar earrings. Forest green sleeveless double-breasted long tailored waistcoat over ivory high-collar shirt, dark green straight-leg trousers, polished dark brown loafers. No low chignon, no loose waves, no skirt, no pastel cardigan. Strong vertical tailored silhouette, mature confident stylish office leader.",
+      "ref": 1,
+      "gender": "女",
+      "characterId": "pai-aqi",
+      "assetGroupId": "pai-aqi-anime-v3",
+      "concept": {
+        "file": "concepts/07-pai-aqi.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-3f7e4bc1-be3c-468c-8ed4-0305abaec832.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "pai-aqi/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-0b53d9d0-7adc-4867-a7b3-72815af232e8.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "pai-aqi/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-9a67e945-e0c3-4e80-a0ff-bac3549448ff.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "data-agent",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "pai-aqi-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "pai-aqi/motion/sit-back.png",
+          "walk": "pai-aqi/motion/walk.png",
+          "turn": "pai-aqi/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/pai-aqi-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "08-shen-qinglan",
+      "name": "沈清岚",
+      "role": "市场调研备选",
+      "theme": "睿智从容",
+      "look": "烟棕齐肩直发、藏蓝衬衣、焦糖中长裙",
+      "design": "Sophisticated female market strategy researcher, adult woman age 32. Gently triangular face with wide cheekbones and tapered chin, narrow warm grey almond eyes, subtly arched brows, small thin rectangular translucent brown glasses, natural rose-brown lips and composed intelligent expression. SMOKY TAUPE-BROWN straight shoulder-length hair with BLUNT FULL FRINGE ending above eyebrows, one side tucked behind ear. Midnight blue silk collared blouse with sleeves rolled neatly to forearms, high-waisted caramel brown A-line midi skirt, thin dark belt, brown elegant heeled loafers, small amber pendant. No blazer, no bob with sidepart, no ponytail, no pearl earrings. Distinct blunt fringe + navy/caramel palette.",
+      "ref": 1,
+      "gender": "女",
+      "characterId": "shen-qinglan",
+      "assetGroupId": "shen-qinglan-anime-v3",
+      "concept": {
+        "file": "concepts/08-shen-qinglan.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-fbb711e0-3f7d-43eb-88f3-18cc44c64453.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "shen-qinglan/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-10e9ec7b-968b-4a3f-8b30-bb72533e7dae.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "shen-qinglan/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-52e29280-e6c1-4639-b84a-21e9131747a3.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "availability": "active-office-visual",
+      "scenePreview": {
+        "employeeId": "shen-qinglan",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-11",
+        "assetGroupId": "shen-qinglan-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "combined": "/assets/characters/shen-qinglan-library-v3/motion.png"
+        },
+        "publicAssetBase": "/assets/characters/shen-qinglan-library-v3",
+        "framesPerAtlas": 24,
+        "grid": {
+          "columns": 4,
+          "rows": 6
+        },
+        "status": "installed",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-e57fcdbd-0289-4e21-b606-b04d1fc72c87.png",
+        "backup": ".local/backups/reserve-visuals-20261111/source-before.tgz"
+      }
+    },
+    {
+      "id": "09-long-aotian",
+      "name": "龙傲天",
+      "role": "程序部",
+      "theme": "冷静技术型",
+      "look": "蓝黑侧分短发、冰蓝衬衫、石墨灰长裤",
+      "design": "A strikingly handsome ADULT East Asian male software architect, age 30. Slim angular diamond face, sharp but elegant jawline, narrow cool steel-blue eyes, long straight brows, defined straight nose, composed closed lips with faint intelligent smile. Blue-black short hair swept in an asymmetrical side-part with a clean tapered nape, subtle blue highlights. Ice-blue fitted collared shirt with sleeves rolled to forearms, slim dark navy tie loosened just slightly, graphite tailored trousers, black leather belt with brushed silver buckle, polished black ankle shoes, minimalist black watch. No glasses, no headphones, no jacket, no jewelry, no props. Tall lean build, distinctly adult masculine face, quietly confident technical expert.",
+      "gender": "男",
+      "characterId": "long-aotian",
+      "assetGroupId": "long-aotian-anime-v3",
+      "concept": {
+        "file": "concepts/09-long-aotian.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-b195bae8-84c3-49ae-8d8b-3a9acde8e154.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "long-aotian/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-6cc1a9ba-5972-4258-a365-ed73deb846b1.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "long-aotian/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-711b919d-fe2b-42ae-a142-7e71bc494996.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "code-agent",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "long-aotian-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "long-aotian/motion/sit-back.png",
+          "walk": "long-aotian/motion/walk.png",
+          "turn": "long-aotian/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/long-aotian-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "10-ye-fan",
+      "name": "叶凡",
+      "role": "运营部",
+      "theme": "时髦创作型",
+      "look": "铜棕蓬松发、奶油短夹克、黑色阔腿裤与耳机",
+      "design": "A charismatic handsome ADULT East Asian male video and content producer, age 27. Slightly square face with a clear jaw, expressive almond amber eyes, thick naturally arched eyebrows, subtly broad nose, warm lively asymmetrical grin showing a little tooth. Tousled COPPER BROWN medium-short hair with textured fringe and warm highlights. Cream cropped casual bomber jacket open over black crewneck T-shirt, charcoal wide-leg smart casual trousers, clean off-white sneakers, compact black over-ear headphones around neck, a single very small silver stud earring. Athletic lean adult silhouette, playful creative star energy. No formal tie, no glasses, no suit, no slick sidepart.",
+      "gender": "男",
+      "characterId": "ye-fan",
+      "assetGroupId": "ye-fan-anime-v3",
+      "concept": {
+        "file": "concepts/10-ye-fan.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-a696bebc-aa8f-49c2-9d65-74f3783a6c23.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "ye-fan/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-890a996e-1093-4159-85d8-8efcddbacfaa.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "ye-fan/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-3d5339be-8e86-4744-8fcf-3beb245f7867.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "app-agent",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "ye-fan-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "ye-fan/motion/sit-back.png",
+          "walk": "ye-fan/motion/walk.png",
+          "turn": "ye-fan/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/ye-fan-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "11-liu-shi",
+      "name": "刘市",
+      "role": "市场调研",
+      "theme": "知性研究型",
+      "look": "深棕微卷发、金属细框眼镜、烟棕马甲与米白衬衫",
+      "design": "A refined very handsome ADULT East Asian male market strategist, age 34. Long oval face with defined cheekbones, contemplative hazel almond eyes, softly angled brows, elegant defined nose, subtle warm closed-mouth smile, thin oval brushed-bronze spectacles. Deep chocolate brown gently wavy hair with a relaxed middle part, tidy nape. Smoky warm-brown fine tailored waistcoat over ivory long-sleeve shirt with sleeves neatly buttoned, taupe tailored trousers, dark chocolate loafers, understated bronze watch. Slim mature adult build, thoughtful composed intellectual presence. No blazer, no tie, no headphones, no props, no beard. Different from a young round-faced boy.",
+      "gender": "男",
+      "characterId": "liu-shi",
+      "assetGroupId": "liu-shi-anime-v3",
+      "concept": {
+        "file": "concepts/11-liu-shi.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-672d70d6-d1a8-4c0a-88cf-261ab2dc6ccd.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "liu-shi/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-36b05317-d322-4991-9c75-056e22a632bc.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "liu-shi/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-f63d8f0d-d1f9-47d2-94c8-cc3d75cbaa0d.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "review-agent",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "liu-shi-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "liu-shi/motion/sit-back.png",
+          "walk": "liu-shi/motion/walk.png",
+          "turn": "liu-shi/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/liu-shi-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    },
+    {
+      "id": "12-xi-luo",
+      "name": "西罗",
+      "role": "拓客部",
+      "theme": "自信商务型",
+      "look": "黑色后梳短发、海军蓝双排扣西装、酒红领带",
+      "design": "A magnetic handsome ADULT East Asian male business development lead, age 33. Strong broad angular face, prominent squared jaw and cheekbones, confident slightly upturned deep dark brown almond eyes, bold angled eyebrows, strong straight nose, subtle knowing half-smile. JET BLACK neatly slicked-back short hair with a clean tapered side, no floppy fringe. Deep NAVY double-breasted impeccably tailored suit, white shirt, rich burgundy silk tie, small burgundy pocket square, polished dark brown leather dress shoes, gold minimalist watch. Broad shoulders athletic adult masculine build, polished assertive but approachable charm. No rose blazer, no glasses, no headphones, no beard, no props.",
+      "gender": "男",
+      "characterId": "xi-luo",
+      "assetGroupId": "xi-luo-anime-v3",
+      "concept": {
+        "file": "concepts/12-xi-luo.png",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-bc127dd0-3ec5-4691-afd4-7694bc69a7ae.png",
+        "usage": "美术与服装参考；带背景；非场景素材"
+      },
+      "portrait": {
+        "file": "xi-luo/portrait-hd-transparent.png",
+        "status": "created-for-review",
+        "usage": "未来个人对话框/档案高清形象",
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-eae16557-900e-44e7-b35e-df0f9201503c.png",
+        "transparent": true
+      },
+      "office": {
+        "file": "xi-luo/compact-slim-transparent.png",
+        "status": "created-for-review",
+        "usage": "办公室卡通三视图；静态设计素材",
+        "animationReady": false,
+        "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-f03533a8-2074-435f-8cae-716f776da96f.png",
+        "transparent": true,
+        "views": [
+          "front-standing",
+          "back-standing",
+          "back-seated"
+        ]
+      },
+      "runtimeEmployeeBinding": null,
+      "runtimeInstalled": true,
+      "pairStatus": "static-pair-created",
+      "scenePreview": {
+        "employeeId": "new-agent-8",
+        "scope": "office-visual-only",
+        "installedAt": "2026-11-04",
+        "assetGroupId": "xi-luo-anime-v3",
+        "portraitInstalled": false,
+        "motionAssets": {
+          "sit-back": "xi-luo/motion/sit-back.png",
+          "walk": "xi-luo/motion/walk.png",
+          "turn": "xi-luo/motion/turn.png"
+        },
+        "publicAssetBase": "/assets/characters/xi-luo-library-v3",
+        "framesPerAtlas": 8,
+        "grid": {
+          "columns": 4,
+          "rows": 2
+        },
+        "status": "installed",
+        "fallback": "Office selector: 员工形象 → 原版（恢复）",
+        "backup": ".local/backups/roster-library-20261104-130359",
+        "limitations": "Special expression actions still use the original Spine character; toggle the selector to return to the library."
+      },
+      "availability": "active-office-visual"
+    }
+  ],
+  "history": [
+    {
+      "file": "li-waner/history/compact-warm-background.png",
+      "source": "/Users/david/.codex/generated_images/01a152ea-9387-7c51-be9a-34f9c62bb0ec/exec-a71ff894-8116-44e4-92d8-a5eb40646cb9.png",
+      "status": "superseded",
+      "reason": "用户要求透明背景、脸型更精致；保留旧稿，不用于应用"
+    }
+  ],
+  "productionBatch": {
+    "requested": "全部都开始制作吧",
+    "newFiles": 22,
+    "totalPairs": 12,
+    "totalTransparentFiles": 24,
+    "runtimeChanges": false
+  }
+}

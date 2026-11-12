@@ -1,0 +1,9 @@
+.chat-request-status {
+  border: 1px solid #dce3db;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #f6f8f4;
+  color: #354236;
+  font-size: 13px;
+}
+.chat-request-status p { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; }

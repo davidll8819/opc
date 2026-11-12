@@ -11,13 +11,13 @@ const day = z
   )
 
 // Strip display-only metadata. Never infer missing business fields or repair their values.
-const draftSchema = z.object({
+const draftSchema = (employeeIds) => z.object({
   reply: z.string().trim().min(1).max(30000),
   tasks: z
     .array(
       z.object({
         title: z.string().trim().min(1).max(120),
-        dept: z.enum(departments.map((department) => department.id)),
+        dept: z.enum(employeeIds),
         due: day,
         brief: z.string().trim().min(1).max(12000).optional(),
         dependsOn: z
@@ -242,7 +242,7 @@ function validateDependencies(tasks) {
 }
 
 /** Parse one secretary reply without additional model calls or guessed task data. */
-export function parseSecretaryReply(text, { finishReason } = {}) {
+export function parseSecretaryReply(text, { finishReason, employeeIds=departments.map(d=>d.id) } = {}) {
   if (['length', 'max_tokens', 'max_output_tokens'].includes(finishReason))
     throw invalid('模型输出已被截断，任务清单尚未完整返回')
   if (typeof text !== 'string' || !text.trim()) throw invalid('模型没有返回有效回复')
@@ -284,7 +284,7 @@ export function parseSecretaryReply(text, { finishReason } = {}) {
       throw invalid('检测到任务字段，但没有完整的 reply 与 tasks 对象')
     return { reply: clean, tasks: [], repaired: false, repairs: [] }
   }
-  const parsed = draftSchema.safeParse(candidates[0].value)
+  const parsed = draftSchema(employeeIds).safeParse(candidates[0].value)
   if (!parsed.success) throw invalid(explain(parsed.error.issues[0]))
   validateDependencies(parsed.data.tasks)
   return {

@@ -36,3 +36,10 @@ skills/packages/*.part
 *.aof
 *.pid
 coverage/
+
+# Local generated outputs and private acceptance evidence are not release source.
+outputs/
+.taste-skill/
+docs/*-evidence-*/
+docs/verification/
+design/characters/*.zip

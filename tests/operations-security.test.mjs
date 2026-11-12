@@ -6,7 +6,10 @@ import { stripTypeScriptTypes } from 'node:module'
 import { SignJWT } from 'jose'
 import { encryptConfig, decryptConfig, signBridge, verifyBridge } from '../apps/api/src/operations/security.mjs'
 const source = await readFile(new URL('../integrations/aitoearn/source/project/aitoearn-backend/libs/common/src/office-bridge.ts', import.meta.url), 'utf8')
-const { officeBridge, bridgeHeaders, officeRelayCredentials } = await import(`data:text/javascript;base64,${Buffer.from(stripTypeScriptTypes(source)).toString('base64')}`)
+const contextSource=await readFile(new URL('../integrations/aitoearn/source/project/aitoearn-backend/libs/common/src/office-user-context.ts',import.meta.url),'utf8')
+const contextUrl=`data:text/javascript;base64,${Buffer.from(stripTypeScriptTypes(contextSource)).toString('base64')}`
+const { officeBridge, bridgeHeaders, officeRelayCredentials } = await import(`data:text/javascript;base64,${Buffer.from(stripTypeScriptTypes(source.replace("'./office-user-context'",JSON.stringify(contextUrl)))).toString('base64')}`)
+
 const config = { tenantId: 'bbbbbbbb-bbbb-4bbb-abbb-bbbbbbbbbbbb', secret: 'bridge-test-secret-at-least-32-characters', revision: 3, officeOrigin: 'https://office.test' }
 const jwtSecret = 'another-only-test-secret-at-least-32-characters'
 async function run(req, jwtTenant = config.tenantId) {
@@ -69,7 +72,7 @@ test('MCP publication returns pending approval status through the authenticated 
 test('runtime handshake is tenant-bound and signed; native login is disabled', async () => {
   assert.equal((await run({method:'GET',path:'/office-bridge/status'})).status,403)
   const result=await run({method:'GET',path:'/office-bridge/status',headers:signBridge(config.secret,'GET','/office-bridge/status',null)})
-  assert.deepEqual(result.body,{version:4,tenantId:config.tenantId,revision:3,publishMode:'manual',draining:false})
+  assert.deepEqual(result.body,{version:5,tenantId:config.tenantId,revision:3,publishMode:'manual',draining:false})
   assert.equal((await run({method:'POST',path:'/user/register',body:{}})).status,403)
 })
 
@@ -77,7 +80,9 @@ test('signed runtime drain blocks new tasks while existing status reads stay ava
  const middleware=officeBridge(config,jwtSecret)
  async function invoke(method,path,body,signed=false){
   let status=200,result,next=false
+  const token=await new SignJWT({id:'0123456789abcdef01234567',officeTenantId:config.tenantId}).setProtectedHeader({alg:'HS256'}).setExpirationTime('5m').sign(new TextEncoder().encode(jwtSecret))
   const req={method,path,body,headers:signed?bridgeHeaders(config.secret,method,path,body??null):{}}
+  req.headers.authorization=`Bearer ${token}`
   await middleware(req,{status(n){status=n;return this},json(v){result=v;return this}},()=>{next=true})
   return {status,result,next}
  }

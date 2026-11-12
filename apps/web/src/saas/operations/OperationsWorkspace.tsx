@@ -1,5 +1,9 @@
+import { taskHeadline } from './models'
 import { PlatformAccounts } from './PlatformAccounts'
 import { VideoPreview } from './VideoPreview'
+import { PrivateVideoLink } from './PrivateVideo'
+import { VideoEditor } from './VideoEditor'
+import { VideoProvisioningStatus } from './VideoProvisioningStatus'
 import { useCallback, useEffect, useRef, useState, type ComponentProps } from 'react'
 import { useOperationsTask } from './useOperationsTask'
 import type { OperationsHandoff } from './models'
@@ -113,6 +117,7 @@ function OperationsSession({
       {handoff && prompt === handoff.text && (
         <p className="ops-notice">{t('工作要求已带入，核对或修改后点击开始制作才会执行。')}</p>
       )}
+      <VideoProvisioningStatus root={root} canEdit={canEdit} onReady={refresh} />
       <section className="ops-readiness">
         <span className={`ops-dot ${status?.ready ? 'ready' : ''}`} />
         <div>
@@ -160,6 +165,7 @@ function OperationsSession({
         </div>
         <p className="muted">
           {t('使用当前企业的 AI 配置自动制作；对外发布需你确认，模型生成会产生服务商费用。')}
+          文字 token 额度与视频金额分别计算。当前通道未提供可靠的实时视频价格，实际金额以服务商账单为准；生成失败后不会自动重新付费生成。
         </p>
         {task.brief && (
           <section className="ops-brief-source">
@@ -177,7 +183,19 @@ function OperationsSession({
         )}
         {task.phase && (
           <div className="ops-task-status" role="status">
-            <strong>{t(task.phase)}</strong>
+            <strong>
+              {t(
+                taskHeadline(
+                  task.phase,
+                  media.some((m) => m.type === 'VIDEO'),
+                ),
+              )}
+            </strong>
+            {taskHeadline(
+              task.phase,
+              media.some((m) => m.type === 'VIDEO'),
+            ) !== task.phase &&
+              /中断|额度不足/.test(task.phase) && <p>{task.phase}</p>}
             {(taskId || task.unresolved) && (
               <button disabled={busy} onClick={() => void task.recover()}>
                 {t('核对提交记录')}
@@ -194,7 +212,7 @@ function OperationsSession({
             {media.map((item, i) => (
               <figure key={item.url}>
                 {item.type === 'VIDEO' ? (
-                  <VideoPreview item={item} />
+                  <VideoPreview item={item} accessContext={taskId ? { root, taskId } : undefined} />
                 ) : (
                   <img
                     loading="lazy"
@@ -204,13 +222,29 @@ function OperationsSession({
                   />
                 )}
                 <figcaption>
-                  <a href={item.url} target="_blank" rel="noopener noreferrer">
-                    {t(item.type === 'VIDEO' ? '打开视频' : '打开图片')} {i + 1} ↗
-                  </a>
+                  {item.type === 'VIDEO' && taskId ? <PrivateVideoLink src={item.url} accessContext={{ root, taskId }}>{t('打开视频')} {i + 1} ↗</PrivateVideoLink> : <a href={item.url} target="_blank" rel="noopener noreferrer">{t('打开图片')} {i + 1} ↗</a>}
+                  {item.type === 'VIDEO' && taskId && (
+                    <>
+                      {' '}
+                      ·{' '}
+                      <PrivateVideoLink src={item.url} accessContext={{ root, taskId }} download>
+                        {t('下载视频')} {i + 1}
+                      </PrivateVideoLink>
+                    </>
+                  )}
                 </figcaption>
               </figure>
             ))}
           </section>
+        )}
+        {taskId && media.some((item) => item.type === 'VIDEO') && (
+          <VideoEditor
+            key={taskId}
+            root={root}
+            taskId={taskId}
+            videos={media.filter((item) => item.type === 'VIDEO')}
+            canEdit={canEdit}
+          />
         )}
         <div className="ops-output" aria-live="polite">
           {output.length ? (

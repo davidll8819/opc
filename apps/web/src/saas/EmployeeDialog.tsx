@@ -26,7 +26,7 @@ type ModelRoute = {
   configured: boolean
   model: string
   fallback: string
-  source: 'company' | 'department'
+  source: 'company' | 'department' | 'employee'
 }
 type EmployeeProfile = Employee & {
   chatInstructions: string
@@ -41,7 +41,8 @@ const modelLabels = {
 }
 
 export function EmployeeDialog({
-  employee,
+  employee: identity,
+  initialProfile = false,
   base,
   close,
   openSettings,
@@ -54,11 +55,12 @@ export function EmployeeDialog({
   busyTask,
   canEdit,
 }: {
+  initialProfile?: boolean
   employee: AgentRosterEntry
   base: string
   close: () => void
   openSettings: () => void
-  openSkills: () => void
+  openSkills: (employeeId: string) => void
   openOperations: import('./operations/models').OpenOperations
   onTool: (tool: string) => void
   tasks: Task[]
@@ -70,9 +72,10 @@ export function EmployeeDialog({
   const dialog = useRef<HTMLDialogElement>(null)
   const returnFocus = useRef<HTMLElement | null>(null)
   const [view, setView] = useState<'chat' | 'deliverables' | 'profile' | 'tasks' | 'project'>(
-    'chat',
+    initialProfile ? 'profile' : 'chat',
   )
   const [profile, setProfile] = useState<EmployeeProfile | null>(null)
+  const employee = profile ? { ...identity, department: profile.department, responsibility: profile.responsibility } : identity
   const [error, setError] = useState('')
   const [reload, setReload] = useState(0)
   const [snapshot, setProject] = useState<EmployeeProjectSnapshot | null>(null)
@@ -261,7 +264,7 @@ export function EmployeeDialog({
             <DepartmentChat
               key={`chat:${scope}:${employee.id}`}
               base={base}
-              department={departmentIds[employee.id]}
+              department={departmentIds[employee.id] || employee.id}
               employeeName={employee.name}
               archiveDocuments={employee.id === 'file-agent'}
               onOperations={
@@ -389,7 +392,7 @@ export function EmployeeDialog({
                             </strong>
                             {model.enabled && (
                               <span>
-                                {t(model.source === 'department' ? '部门专用模型' : '继承企业模型')}{' '}
+                                {t(model.source === 'employee' ? '员工独立模型' : model.source === 'department' ? '部门专用模型' : '继承企业模型')}{' '}
                                 · {t(model.configured ? '已配置' : '配置未完成')}
                               </span>
                             )}
@@ -409,7 +412,7 @@ export function EmployeeDialog({
                   base={base}
                   employeeId={employee.id}
                   canEdit={canEdit}
-                  openLibrary={() => leaveFor(openSkills)}
+                  openLibrary={() => leaveFor(() => openSkills(employee.id))}
                   onSaved={() => setReload((n) => n + 1)}
                 />
               </>
@@ -436,6 +439,7 @@ export function EmployeeDialog({
             tasks={tasks}
             onRun={onRun}
             onOperations={(task) => leaveFor(() => onTaskOperations(task))}
+            onOpen={(task) => leaveFor(() => { location.hash = new URLSearchParams({ workspace: base.split('/').at(-1) || '', view: 'tasks', filter: 'all', task: task.id }).toString() })}
             busyId={busyTask}
             canEdit={canEdit}
           />

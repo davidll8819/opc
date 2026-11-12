@@ -1,4 +1,6 @@
 import type { AiAvailabilityService } from '../../ai-availability'
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
 import { Logger } from '@nestjs/common'
 import { ContentGenerationTaskRepository } from '@yikart/mongodb'
 import { vi } from 'vitest'
@@ -148,15 +150,29 @@ describe('utilMcp', () => {
       expect(utilMcp.server.name).toBe('util')
     })
 
-    it('should include wait and getCurrentTime tools', () => {
-      const server = utilMcp.server as { tools?: Array<{ name: string }> }
-      const tools = server.tools
-      expect(tools).toBeDefined()
-      expect(tools?.length).toBeGreaterThanOrEqual(2)
-
-      const toolNames = tools?.map(t => t.name)
-      expect(toolNames).toContain(UtilToolName.Wait)
-      expect(toolNames).toContain(UtilToolName.GetCurrentTime)
+    it('exposes callable tools through the MCP protocol', async () => {
+      const client = new Client({ name: 'util-test', version: '1.0.0' })
+      const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+      try {
+        await utilMcp.server.instance.connect(serverTransport)
+        await client.connect(clientTransport)
+        const { tools } = await client.listTools()
+        expect(tools.map(tool => tool.name)).toEqual(expect.arrayContaining([
+          UtilToolName.Wait,
+          UtilToolName.GetCurrentTime,
+        ]))
+        const result = await client.callTool({ name: UtilToolName.GetCurrentTime, arguments: {} })
+        expect(result.isError).not.toBe(true)
+        expect(result.content).toEqual(expect.arrayContaining([
+          expect.objectContaining({ type: 'text', text: expect.stringContaining('ISO 8601:') }),
+        ]))
+        const invalid = await client.callTool({ name: UtilToolName.Wait, arguments: { seconds: -1 } })
+        expect(invalid.isError).toBe(true)
+      }
+      finally {
+        await client.close()
+        await utilMcp.server.instance.close()
+      }
     })
   })
 })

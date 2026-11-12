@@ -399,8 +399,8 @@ export function processDeskVisitMissions(
         }
       }
 
-      const rest = { ...agent }
-      delete rest.mission
+      // AgentEntity merges patches; omitting this key would retain the previous mission.
+      const rest = { ...agent, mission: undefined }
 
       if (mission.landingAnimation) {
         return {

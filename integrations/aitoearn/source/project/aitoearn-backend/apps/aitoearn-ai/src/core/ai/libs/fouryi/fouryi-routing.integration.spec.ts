@@ -1,3 +1,4 @@
+import { officeUserContext } from '@yikart/common'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { config } from '../../../../config'
 import { GeminiService } from '../gemini/gemini.service'
@@ -39,6 +40,27 @@ describe('4YI SDK transport', () => {
   afterEach(() => {
     config.ai.fouryi.apiKey = originalKey
     vi.unstubAllGlobals()
+  })
+
+  it('isolates concurrent Office SDK calls by runtime user and refuses absent identity', async () => {
+    const original = config.officeBridge
+    config.officeBridge = {tenantId:'synthetic-tenant',secret:'synthetic-bridge-secret',revision:1,officeOrigin:'https://office.test'}
+    openai=new OpenaiService({apiKey:'synthetic-bootstrap-only',baseUrl:'https://gateway.example/api/v1',timeout:5000} as never,availability as never)
+    responseBody = {id:'chat-1',choices:[{message:{role:'assistant',content:'ok'}}]}
+    try {
+      const users=['aaaaaaaaaaaaaaaaaaaaaaaa','bbbbbbbbbbbbbbbbbbbbbbbb']
+      await Promise.all(users.map(id=>officeUserContext.run(id,()=>openai.createRawCompletion({model:'office-content-ops',messages:[{role:'user',content:id}]}))))
+      expect(requests).toHaveLength(2)
+      for(const request of requests){
+        const jwt=request.headers.get('authorization')!.replace('Bearer ','')
+        const payload=JSON.parse(Buffer.from(jwt.split('.')[1],'base64url').toString())
+        expect(payload.sub).toBe((await request.json()).messages[0].content)
+        expect(payload.aud).toBe('wishtaday-personal-model')
+        expect(jwt).not.toContain('company-test-key')
+      }
+      await expect(openai.createRawCompletion({model:'office-content-ops',messages:[]})).rejects.toThrow()
+      expect(requests).toHaveLength(2)
+    }finally{config.officeBridge=original}
   })
 
   it('sends non-stream chat with company auth and an idempotency key', async () => {

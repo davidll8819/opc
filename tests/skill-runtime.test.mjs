@@ -232,3 +232,23 @@ test('department text task can retrieve its bound skill before producing the del
   })
   assert.equal(result.output, '排查计划')
 })
+
+test('chat discovers bound skills without injecting every manual, and retrieves the full method on demand', async () => {
+  const body = '---\nname: focused\ndescription: Use for a focused task.\n---\n' + 'PRIVATE_METHOD_DETAIL '.repeat(1200)
+  const rows = [{id:'own-skill',name:'focused',format:'md',skill_file:'SKILL.md',package_data:Buffer.from(body)}]
+  const eager = await skillsFromRows(rows)
+  const lazy = await skillsFromRows(rows, {discoveryOnly:true})
+  assert.ok(lazy.instructions.length < eager.instructions.length / 10)
+  assert.match(lazy.instructions, /own-skill\/SKILL.md/)
+  assert.match(lazy.instructions, /Use for a focused task/)
+  assert.ok(!lazy.instructions.includes('PRIVATE_METHOD_DETAIL'))
+  assert.equal(lazy.documents.get('own-skill/SKILL.md'), body)
+  let round=0
+  const answer=await runWithSkills({...request,skills:lazy,call:async req=>{
+    if(round++===0)return response({content:null,tool_calls:[tool('read-own','own-skill/SKILL.md')]})
+    assert.equal(req.body.messages.at(-1).content,body)
+    return response({content:'Used the relevant method'})
+  }})
+  assert.equal(round,2)
+  assert.deepEqual(answer.skillReads,[{name:'focused',path:'own-skill/SKILL.md'}])
+})

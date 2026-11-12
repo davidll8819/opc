@@ -1,3 +1,4 @@
+import { modelDepartment } from '../../../../packages/employees/registry.mjs'
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { z } from 'zod'
 import { fail } from '../db.mjs'
@@ -173,7 +174,7 @@ export function tenantSecrets(env, tenantId) {
   }
 }
 export function resolveDepartment(policy, id) {
-  const d = policy.departments[id]
+  const d = policy.departments[id] || policy.departments[modelDepartment(id)]
   if (!d?.enabled) throw fail(409, '该部门的模型服务尚未启用')
   const model = d.model || policy.tiers[d.tier]
   if (!model) throw fail(409, '请先配置该部门使用的模型档位')
@@ -190,9 +191,9 @@ export function validGatewayToken(secret, tenantId, authorization = '') {
 
 export function resolveCapability(policy, id, kind) {
   if (kind === 'text') return resolveDepartment(policy, id)
-  const d = policy.departments[id]
+  const d = policy.departments[id] || policy.departments[modelDepartment(id)]
   if (!d?.enabled) throw fail(409, '该部门的模型服务尚未启用')
-  const selected = (d.capabilities || defaultCapabilities(id))[kind]
+  const selected = (d.capabilities || defaultCapabilities(modelDepartment(id)))[kind]
   if (!selected?.enabled) throw fail(409, '该部门尚未启用此项模型能力')
   const model = selected.model || policy.tiers[kind]
   if (!model)

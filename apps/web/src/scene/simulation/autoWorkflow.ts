@@ -24,26 +24,31 @@ export const AUTO_WORKFLOW_STEPS: AutoWorkflowStep[] = [
 ]
 
 /** Only dispatch a pair when neither person is walking, visiting or in a manual pose. */
-export function nextWorkflowStep(agents: Agent[], startIndex: number, counts: readonly number[]) {
-  const busyIds = new Set<string>()
+export function nextWorkflowStep(agents: Agent[], startIndex: number, counts: readonly number[], blocked: ReadonlySet<string> = new Set()) {
+  const busyIds = new Set<string>(blocked)
   for (const agent of agents) {
+    if (agent.onDuty === false) busyIds.add(agent.id)
     if (agent.mission) {
       busyIds.add(agent.id)
       busyIds.add(agent.mission.hostAgentId)
     }
     if (agent.state === 'walking' || agent.customAnimation) busyIds.add(agent.id)
   }
+  const steps = [...AUTO_WORKFLOW_STEPS, ...agents.slice(9).flatMap((_, i) => [
+    { visitor: i + 10, host: 1, message: '来同步一下工作安排。' },
+    { visitor: i + 10, host: 3, message: '有资料整理的问题，我们可以交流一下。' },
+  ])]
   let candidate: { step: AutoWorkflowStep; index: number; nextIndex: number } | null = null
-  for (let i = 0; i < AUTO_WORKFLOW_STEPS.length; i++) {
-    const index = (startIndex + i) % AUTO_WORKFLOW_STEPS.length
-    const step = AUTO_WORKFLOW_STEPS[index]
+  for (let i = 0; i < steps.length; i++) {
+    const index = (startIndex + i) % steps.length
+    const step = steps[index]
     const visitor = agents[step.visitor - 1]
     const host = agents[step.host - 1]
     if (visitor && host && visitor.id !== host.id && !busyIds.has(visitor.id) && !busyIds.has(host.id)) {
       // Prefer interactions that have happened least often, keeping skipped
       // visits eligible instead of letting busy colleagues miss every cycle.
       if (!candidate || (counts[index] ?? 0) < (counts[candidate.index] ?? 0)) {
-        candidate = { step, index, nextIndex: (index + 1) % AUTO_WORKFLOW_STEPS.length }
+        candidate = { step, index, nextIndex: (index + 1) % steps.length }
       }
     }
   }

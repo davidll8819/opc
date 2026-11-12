@@ -1,0 +1,19 @@
+/* One column within the existing task detail; no changes to the office shell. */
+.task-problem-panel { margin: 20px 0; padding: 20px; border: 1px solid #d7d9dd; border-radius: 8px; background: #fff; color: #202328; overflow-wrap: anywhere; }
+.task-problem-panel h3 { margin: 0 0 16px; font-size: 20px; }
+.task-problem-panel h4 { margin: 0 0 8px; font-size: 16px; }
+.task-problem-panel p { line-height: 1.6; }
+.task-problem-panel fieldset { min-width: 0; margin: 20px 0; padding: 16px; border: 1px solid #d7d9dd; border-radius: 8px; }
+.task-problem-panel legend { padding: 0 6px; font-weight: 600; }
+.task-problem-panel label { display: grid; gap: 8px; margin: 12px 0; }
+.task-problem-panel select, .task-problem-panel textarea { box-sizing: border-box; width: 100%; min-width: 0; padding: 10px; font: inherit; color: #202328; background: #fff; border: 1px solid #a9adb5; border-radius: 6px; }
+.task-problem-panel button, .task-problem-panel summary { min-height: 44px; cursor: pointer; }
+.task-problem-panel button { margin: 4px 8px 4px 0; padding: 10px 14px; border: 1px solid #a9adb5; border-radius: 6px; background: #fff; color: #202328; white-space: normal; }
+.task-problem-panel button.task-problem-resume { background: #24272b; color: #fff; }
+.task-problem-panel button:disabled { background: #e9eaec; color: #565b62; cursor: not-allowed; opacity: 1; }
+.task-problem-panel .task-problem-hint { font-size: 14px; color: #565b62; }
+.task-problem-panel .task-problem-confirm { display: flex; align-items: flex-start; line-height: 1.6; }
+.task-problem-confirm input { flex: 0 0 auto; margin-top: 6px; }
+.task-problem-panel pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 300px; overflow: auto; font: inherit; }
+.task-problem-panel :is(button,select,textarea,input,summary,a):focus-visible { outline: 2px solid #202328; outline-offset: 3px; }
+@media (max-width: 600px) { .task-problem-panel { padding: 14px; } .task-problem-panel fieldset { padding: 12px; } }

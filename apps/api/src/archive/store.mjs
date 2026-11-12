@@ -6,7 +6,7 @@ export const supportedDocument = (name) => /\.(docx|pdf|xlsx|png|jpe?g|webp)$/i.
 async function original(db, ctx, fileId, { lock = false } = {}) {
   const row = (
     await db.query(
-      `SELECT id,name,mime,${lock ? 'data,' : ''}octet_length(data) size,created_at FROM workspace_files WHERE id=$1 AND tenant_id=$2 AND user_id=$3${lock ? ' FOR UPDATE' : ''}`,
+      `SELECT id,name,mime,${lock ? 'data,' : ''}octet_length(data) size,created_at FROM workspace_files WHERE deleted_at IS NULL AND id=$1 AND tenant_id=$2 AND user_id=$3${lock ? ' FOR UPDATE' : ''}`,
       [fileId, ctx.tenantId, ctx.userId],
     )
   ).rows[0]
@@ -59,7 +59,7 @@ export async function listDocuments(db, ctx) {
   await recover(db, ctx)
   const files = (
     await db.query(
-      'SELECT id,name,mime,octet_length(data) size,created_at FROM workspace_files WHERE tenant_id=$1 AND user_id=$2 ORDER BY created_at DESC,id',
+      'SELECT id,name,mime,octet_length(data) size,created_at FROM workspace_files WHERE deleted_at IS NULL AND tenant_id=$1 AND user_id=$2 ORDER BY created_at DESC,id',
       [ctx.tenantId, ctx.userId],
     )
   ).rows.filter((f) => supportedDocument(f.name))

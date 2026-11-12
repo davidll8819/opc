@@ -1,0 +1,609 @@
+{
+  "method": "PNG CRC, IDAT decompression, per-pixel alpha reconstruction, group and path uniqueness",
+  "pairs": 12,
+  "files": 24,
+  "passed": true,
+  "assets": [
+    {
+      "file": "li-waner/portrait-hd-transparent.png",
+      "width": 1083,
+      "height": 1452,
+      "mode": "RGBA",
+      "sha256": "0b03b5c281ea71554a84cdb2d5f3d8fcaf73e831a47edee27b99dc59547c174c",
+      "fullyTransparentPercent": 35.68,
+      "nearOpaquePercent": 61.01,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        249769,
+        493423,
+        216236
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "li-waner",
+      "assetGroupId": "li-waner-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "li-waner/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "c08603f96cdbf48f7af3c4a6b80b4ad2524b156b084a22cfc36283fd867bd4e2",
+      "fullyTransparentPercent": 64.62,
+      "nearOpaquePercent": 31.06,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        168353,
+        164263,
+        156076
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "li-waner",
+      "assetGroupId": "li-waner-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "xu-zhining/portrait-hd-transparent.png",
+      "width": 1136,
+      "height": 1385,
+      "mode": "RGBA",
+      "sha256": "8ed0e3c34fce355c0b7c4307dba4d5b0c72f46923830aff9e52657f2c11ccef5",
+      "fullyTransparentPercent": 32.08,
+      "nearOpaquePercent": 64.96,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        258365,
+        505181,
+        258472
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xu-zhining",
+      "assetGroupId": "xu-zhining-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "xu-zhining/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "d52a7f538a8d6af4fd5db090a7222fd2f34eff571af8ac95b1dd0931f1d09f11",
+      "fullyTransparentPercent": 64.76,
+      "nearOpaquePercent": 32.91,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        185509,
+        171754,
+        160516
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xu-zhining",
+      "assetGroupId": "xu-zhining-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "cheng-zhiyao/portrait-hd-transparent.png",
+      "width": 1166,
+      "height": 1349,
+      "mode": "RGBA",
+      "sha256": "dd2ab18b361715ed1d8e378a1c45d552a00c75c905a9b1f857610756e5d0d862",
+      "fullyTransparentPercent": 41.49,
+      "nearOpaquePercent": 54.86,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        203106,
+        488637,
+        171211
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "cheng-zhiyao",
+      "assetGroupId": "cheng-zhiyao-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "cheng-zhiyao/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "8e29066960adb2dc73530d102ec2d983c1ea41bd39d66c13ad491f1770268117",
+      "fullyTransparentPercent": 67.86,
+      "nearOpaquePercent": 28.95,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        158614,
+        153767,
+        143198
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "cheng-zhiyao",
+      "assetGroupId": "cheng-zhiyao-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "zhao-yameng/portrait-hd-transparent.png",
+      "width": 1122,
+      "height": 1402,
+      "mode": "RGBA",
+      "sha256": "3b1640ae453164cc504e4b53a2930755a6bd9c01fb11c346cf460d54809a27bb",
+      "fullyTransparentPercent": 34.92,
+      "nearOpaquePercent": 61.95,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        267340,
+        503428,
+        203778
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "zhao-yameng",
+      "assetGroupId": "zhao-yameng-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "zhao-yameng/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "52b62d5cbdd55e17dfb3647d4031a5fce0678c463440248c2e627f95961fafcd",
+      "fullyTransparentPercent": 63.93,
+      "nearOpaquePercent": 31.7,
+      "cornerAlpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        178215,
+        165251,
+        155316
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "zhao-yameng",
+      "assetGroupId": "zhao-yameng-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "su-ying/portrait-hd-transparent.png",
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "sha256": "eac74f675ed38d7ab89c33ecea7e780c2f771185335ca3b2bfce12fc6fd47097",
+      "fullyTransparentPercent": 50.36,
+      "nearOpaquePercent": 45.89,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        152194,
+        468800,
+        100947
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "su-ying",
+      "assetGroupId": "su-ying-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "su-ying/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "5038b960ca54852d6b6a97f9896b8d1b518f5f4df28e452f0b5b6ba76185585f",
+      "fullyTransparentPercent": 61.07,
+      "nearOpaquePercent": 34.59,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        197122,
+        179096,
+        168019
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "su-ying",
+      "assetGroupId": "su-ying-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "lin-youwei/portrait-hd-transparent.png",
+      "width": 1145,
+      "height": 1374,
+      "mode": "RGBA",
+      "sha256": "c94ee71a17e3ed790ec7b1b124db72a3ef5cabdcc5c72467da3e84aca5dc04a3",
+      "fullyTransparentPercent": 30.22,
+      "nearOpaquePercent": 65.73,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        264996,
+        506561,
+        262480
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "lin-youwei",
+      "assetGroupId": "lin-youwei-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "lin-youwei/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "a7456a0a2ba29ef265fc3096ece3160c685d98db5a356162233801ec378ad137",
+      "fullyTransparentPercent": 63.54,
+      "nearOpaquePercent": 32.99,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        179052,
+        176802,
+        163282
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "lin-youwei",
+      "assetGroupId": "lin-youwei-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "pai-aqi/portrait-hd-transparent.png",
+      "width": 1263,
+      "height": 1246,
+      "mode": "RGBA",
+      "sha256": "88218a34bd0ee7dd85ebf7a45a4ace4430a559bb8c37de85ac9d4a92277a528a",
+      "fullyTransparentPercent": 59.23,
+      "nearOpaquePercent": 38.47,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        84453,
+        444512,
+        76467
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "pai-aqi",
+      "assetGroupId": "pai-aqi-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "pai-aqi/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "58687acb2a37e200f77e33d1b58b9ad1623255b21d919cb9caa7893b9cf217ee",
+      "fullyTransparentPercent": 68.93,
+      "nearOpaquePercent": 26.68,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        144977,
+        141720,
+        133186
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "pai-aqi",
+      "assetGroupId": "pai-aqi-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "shen-qinglan/portrait-hd-transparent.png",
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "sha256": "e98e351ac865f2e99af7e2dd6614f093baafd67b1ed8aea864339d2604d38c0c",
+      "fullyTransparentPercent": 46.69,
+      "nearOpaquePercent": 50.78,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        153780,
+        504391,
+        140577
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "shen-qinglan",
+      "assetGroupId": "shen-qinglan-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "shen-qinglan/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "b5944cf219d897b6c4ab4d4e63b05b439b3643d5f154e0040284fff79600afbd",
+      "fullyTransparentPercent": 64.05,
+      "nearOpaquePercent": 32.81,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        182894,
+        173167,
+        160251
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "shen-qinglan",
+      "assetGroupId": "shen-qinglan-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "long-aotian/portrait-hd-transparent.png",
+      "width": 1123,
+      "height": 1401,
+      "mode": "RGBA",
+      "sha256": "f13d14f0152beb878160ee40132e281372b9e022e05086eb53b3778a159f0360",
+      "fullyTransparentPercent": 40.47,
+      "nearOpaquePercent": 57.12,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        197472,
+        500688,
+        200457
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "long-aotian",
+      "assetGroupId": "long-aotian-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "long-aotian/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "10c628ca4b07bbf88a747d26bed865a04f0e3e23f66af647d574f11a199caa1a",
+      "fullyTransparentPercent": 61.95,
+      "nearOpaquePercent": 33.23,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        177257,
+        177363,
+        168288
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "long-aotian",
+      "assetGroupId": "long-aotian-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "ye-fan/portrait-hd-transparent.png",
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "sha256": "6cd0596881db0e761123878724d02aefb7cc184e7ad406020800ca1d65744f9b",
+      "fullyTransparentPercent": 47.05,
+      "nearOpaquePercent": 49.88,
+      "cornerAlpha": [
+        0,
+        0,
+        2,
+        6
+      ],
+      "opaquePixelsInThirds": [
+        153999,
+        473739,
+        156842
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "ye-fan",
+      "assetGroupId": "ye-fan-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "ye-fan/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "488ee11a50b964a8a605d58c87d5a8257218e71c05809e322cf348c41b839a20",
+      "fullyTransparentPercent": 63.18,
+      "nearOpaquePercent": 33.2,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        179910,
+        179213,
+        163291
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "ye-fan",
+      "assetGroupId": "ye-fan-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "liu-shi/portrait-hd-transparent.png",
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "sha256": "c43a43b3fccc41a930b63ad47fd4ff38d65bb1382a6108785e9975101fafca9f",
+      "fullyTransparentPercent": 48.91,
+      "nearOpaquePercent": 48.49,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        152264,
+        474871,
+        135678
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "liu-shi",
+      "assetGroupId": "liu-shi-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "liu-shi/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "7510ef0b3c9c5272e1e828a1a2f1cef7df1123e939491c5220e51f6be1433328",
+      "fullyTransparentPercent": 60.11,
+      "nearOpaquePercent": 35.41,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        188967,
+        183551,
+        184631
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "liu-shi",
+      "assetGroupId": "liu-shi-anime-v3",
+      "kind": "office"
+    },
+    {
+      "file": "xi-luo/portrait-hd-transparent.png",
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "sha256": "fa85383682b252eea2f4f31b8aadb2ba1a03796f23dca41b463f72de071423cb",
+      "fullyTransparentPercent": 47.35,
+      "nearOpaquePercent": 51.11,
+      "cornerAlpha": [
+        0,
+        0,
+        4,
+        17
+      ],
+      "opaquePixelsInThirds": [
+        158239,
+        482195,
+        163593
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xi-luo",
+      "assetGroupId": "xi-luo-anime-v3",
+      "kind": "portrait"
+    },
+    {
+      "file": "xi-luo/compact-slim-transparent.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "ab33e1def494a300b4e2c293ffbadfdcad32b0053d215f1c8ae530fb00622d79",
+      "fullyTransparentPercent": 63.35,
+      "nearOpaquePercent": 33.44,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        176117,
+        178435,
+        171659
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xi-luo",
+      "assetGroupId": "xi-luo-anime-v3",
+      "kind": "office"
+    }
+  ],
+  "limitations": "Static design checks only; no animation, runtime-size, or scene-occlusion test."
+}

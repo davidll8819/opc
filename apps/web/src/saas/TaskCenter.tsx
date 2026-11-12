@@ -1,13 +1,25 @@
+import {useEmployeeDirectory,taskDepartments} from './employee-directory'
+import './work-records.css'
+import { TaskReuseDetails } from './ReuseWorkspace'
+import { PrivateVideo, PrivateVideoLink } from './operations/PrivateVideo'
+import { TaskBriefSummary } from './TaskBrief'
+import { workspaceHash } from './workspace-route'
+import { taskAttention } from '../../../../packages/secretary/task-brief.mjs'
 import { useEffect, useState } from 'react'
 import { t } from '@/i18n'
 import { api } from './api'
+import { ReportMarkdown } from './ReportMarkdown'
+import { ResearchReport } from './ResearchReport'
+import { safeSourceUrl } from './research-markdown'
+import { researchExecutionLabel, researchQualityLabel } from '../../../../packages/secretary/research-quality.mjs'
 import { TaskImages } from './TaskImages'
+import { TaskRecovery } from './TaskRecovery'
 import { unfinishedImage } from './task-image-state'
 import { TaskDependencies } from './TaskDependencies'
 import { taskRunState, taskStateLabel } from './task-dependencies'
-import { departments, type Board, type Task } from '../../../../packages/secretary/model.mjs'
-export type TaskFilter = 'all' | 'completed' | 'pending'
-const taskState = (task: Task) => taskStateLabel(task.status)
+import { type Board, type Task } from '../../../../packages/secretary/model.mjs'
+export type TaskFilter = 'all' | 'completed' | 'pending' | 'attention'
+const taskState = (task: Task) => researchExecutionLabel(task) || taskStateLabel(task.status)
 export function TaskCenter({
   base,
   board,
@@ -33,15 +45,19 @@ export function TaskCenter({
   busyId: string
   onUpdate: (board: Board) => void
 }) {
+  const departments=taskDepartments(useEmployeeDirectory(base))
   const [query, setQuery] = useState(''),
     [error, setError] = useState(''),
     [acting, setActing] = useState(false)
+  const [project, setProject] = useState('')
+  const [owner, setOwner] = useState('')
   const task = board.tasks.find((t) => t.id === selected)
   const tasks = board.tasks
     .filter(
       (task) =>
         (filter === 'all' ||
-          (filter === 'completed' ? task.status === 'completed' : task.status !== 'completed')) &&
+          (filter === 'attention' ? !!taskAttention(task) : filter === 'completed' ? task.status === 'completed' : task.status !== 'completed')) &&
+        (!project || (task.briefSnapshot?.project || '未分组') === project) && (!owner || task.dept === owner) &&
         `${task.title} ${departments.find((d) => d.id === task.dept)?.person || ''}`
           .toLowerCase()
           .includes(query.toLowerCase()),
@@ -74,7 +90,7 @@ export function TaskCenter({
     }
   }
   return (
-    <section className="results-page">
+    <section className="results-page task-results-page">
       <div className="page-heading">
         <p className="eyebrow">DELIVERABLES</p>
         <h1>{t(task ? '任务成果' : '任务总览')}</h1>
@@ -88,6 +104,7 @@ export function TaskCenter({
       {task ? (
         <article className="result-detail">
           <button onClick={() => onSelect(undefined)}>← {t('返回任务列表')}</button>
+          <button onClick={() => { const url = new URL(location.href); url.search = ''; url.hash = workspaceHash(base.split('/').at(-1) || '', { tab: 'tasks', filter, task: task.id }); navigator.clipboard.writeText(url.href).then(() => setError('任务链接已复制；仅有权限的账号可以打开。')).catch(() => setError('未能复制，请从浏览器地址栏复制任务链接。')) }}>复制任务链接</button>
           <header>
             <span className="plan-tag">{t(taskState(task))}</span>
             <h2>{task.title}</h2>
@@ -99,9 +116,13 @@ export function TaskCenter({
           </header>
           <p role="status">{t(task.executionNote || taskState(task))}</p>
           <TaskDependencies task={task} tasks={board.tasks} base={base} />
+          {task.followUpOf && <button onClick={() => onSelect(task.followUpOf)}>查看原任务</button>}
+          {task.dept === 'file-agent' && task.engine === 'research-v1' && <section><p>归档不代表验收，请在原调研任务查看证据或发起补查。</p>{(task.dependsOn || []).filter(id => board.tasks.some(t => t.id === id && t.engine === 'research-v1')).map(id => <button key={id} onClick={() => onSelect(id)}>查看原调研与验收</button>)}</section>}
+          {board.tasks.filter(t => t.followUpOf === task.id).map(next => <p key={next.id}><button onClick={() => onSelect(next.id)}>查看补查任务 · {taskState(next)}</button></p>)}
+          {canEdit && task.engine && (task.status === 'blocked' || (task.status === 'queued' && !taskRunState(task, board.tasks).prerequisitesReady)) && <TaskRecovery key={`${base}/${task.id}`} base={base} taskId={task.id} onUpdate={onUpdate} onSelect={onSelect} onOperations={() => onOperations(task)} />}
           <TaskImages base={base} task={task} />
           {task.status === 'completed' && !task.images?.length && (
-            <div className="result-document">{task.summary}</div>
+            task.engine === 'research-v1' ? <ResearchReport key={task.id} task={task} base={base} canEdit={canEdit} onUpdate={onUpdate} onSelect={onSelect} /> : <div className="result-document">{task.summary}</div>
           )}
           {task.status !== 'completed' && (
             <p className="result-document">{task.request || task.summary}</p>
@@ -109,15 +130,16 @@ export function TaskCenter({
           {task.media?.map((m, i) => (
             <div key={i}>
               {m.type === 'VIDEO' ? (
-                <video controls preload="metadata" src={m.url} style={{ maxWidth: '100%' }} />
+                <PrivateVideo controls preload="metadata" src={m.url} accessContext={task.runtimeTaskId ? { root: `${base}/operations`, taskId: task.runtimeTaskId } : undefined} style={{ maxWidth: '100%' }} />
               ) : (
-                <img src={m.url} alt={task.title} style={{ maxWidth: '100%' }} />
+                <img src={`${base}/secretary/tasks/${task.id}/media/${i}`} alt={task.title} style={{ maxWidth: '100%' }} />
               )}
-              <a href={m.url} target="_blank" rel="noopener noreferrer">
-                {t(m.type === 'VIDEO' ? '视频' : '图片')} {i + 1} ↗
-              </a>
+              {m.type === 'VIDEO' ? <PrivateVideoLink src={m.url} accessContext={task.runtimeTaskId ? { root: `${base}/operations`, taskId: task.runtimeTaskId } : undefined}>视频 {i + 1} ↗</PrivateVideoLink> : <a href={`${base}/secretary/tasks/${task.id}/media/${i}`} target="_blank" rel="noopener noreferrer">图片 {i + 1} ↗</a>}
             </div>
           ))}
+          {task.archiveVideoFileId && (
+            <PrivateVideoLink src={`${base}/files/${task.archiveVideoFileId}/video`} download>下载归档成片</PrivateVideoLink>
+          )}
           {task.archiveFileId && (
             <a
               className="result-download"
@@ -133,12 +155,16 @@ export function TaskCenter({
             </p>
           )}
           {task.archiveNote && <p role="status">{t(task.archiveNote)}</p>}
+          <details className="result-context"><summary>任务需求与知识来源</summary>
+          {task.briefSnapshot && <TaskBriefSummary brief={task.briefSnapshot} />}
+          <TaskReuseDetails key={`reuse-${task.id}`} base={base} task={task} />
+          </details>
           {!!task.sources?.length && (
             <section>
               <h3>{t('调研来源')}</h3>
               {task.sources.map((s) => (
                 <p key={s.id}>
-                  <a href={s.url} target="_blank" rel="noopener noreferrer">
+                  <a href={safeSourceUrl(s.url)} target="_blank" rel="noopener noreferrer">
                     [{s.id}] {s.title}
                   </a>
                 </p>
@@ -161,7 +187,7 @@ export function TaskCenter({
             {task.dept === 'app-agent' && (
               <button onClick={() => onOperations(task)}>{t('打开运营工作台')}</button>
             )}
-            {taskRunState(task, board.tasks).available && (
+            {taskRunState(task, board.tasks).available && !(task.status === 'blocked' && task.engine) && (
               <button
                 disabled={!canEdit || !!busyId || !taskRunState(task, board.tasks).canRun}
                 onClick={() => {
@@ -210,10 +236,11 @@ export function TaskCenter({
         </article>
       ) : (
         <>
+          {selected && <p role="status">该任务暂不可见：正在加载、已移除或当前账号无权访问。<button onClick={() => onSelect(undefined)}>查看任务列表</button></p>}
           <div className="result-toolbar">
-            {(['all', 'completed', 'pending'] as const).map((key) => (
+            {(['all', 'attention', 'completed', 'pending'] as const).map((key) => (
               <button key={key} aria-pressed={filter === key} onClick={() => onFilter(key)}>
-                {t({ all: '全部任务', completed: '已完成的任务', pending: '待处理' }[key])}
+                {t({ all: '全部任务', attention: '待我处理', completed: '已完成的任务', pending: '未完成' }[key])}
               </button>
             ))}
             <input
@@ -223,8 +250,13 @@ export function TaskCenter({
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
+          <div className="result-toolbar">
+            <label className="task-filter-label">项目分组<select value={project} onChange={e => setProject(e.target.value)}><option value="">全部项目</option>{[...new Set(board.tasks.map(task => task.briefSnapshot?.project || '未分组'))].map(name => <option key={name}>{name}</option>)}</select></label>
+            <label className="task-filter-label">负责人<select value={owner} onChange={e => setOwner(e.target.value)}><option value="">全部负责人</option>{departments.filter(d => board.tasks.some(task => task.dept === d.id)).map(d => <option key={d.id} value={d.id}>{d.person} · {d.name}</option>)}</select></label>
+            <span role="status">{tasks.length} 项任务</span>
+          </div>
           {!tasks.length && <p className="result-empty">{t('当前没有符合条件的任务')}</p>}
-          <div className="result-grid">
+          <div className="result-grid task-result-list">
             {tasks.map((task) => (
               <button className="result-card" key={task.id} onClick={() => onSelect(task.id)}>
                 {task.images?.[0] ? (
@@ -235,7 +267,9 @@ export function TaskCenter({
                   </div>
                 )}
                 <span className="plan-tag">{t(taskState(task))}</span>
+                {task.status === 'completed' && task.engine === 'research-v1' && <p>{researchQualityLabel(task.quality)}</p>}
                 <h2>{task.title}</h2>
+                <p>{task.briefSnapshot?.project || '未分组'}{taskAttention(task) ? ` · ${taskAttention(task)}` : ''}</p>
                 <p>
                   {departments.find((d) => d.id === task.dept)?.person} · {task.due}
                 </p>
@@ -248,8 +282,9 @@ export function TaskCenter({
     </section>
   )
 }
-type StoredFile = { id: string; name: string; mime: string; size: number; created_at: string }
+type StoredFile = { id: string; name: string; mime: string; size: number; created_at: string; deleted_at?: string; protected?: boolean }
 export function ArchiveRoom({ base, onTask }: { base: string; onTask: (id: string) => void }) {
+  const departments=taskDepartments(useEmployeeDirectory(base))
   const [data, setData] = useState<{ tasks: Task[]; files: StoredFile[] }>({
       tasks: [],
       files: [],
@@ -300,12 +335,34 @@ export function ArchiveRoom({ base, onTask }: { base: string; onTask: (id: strin
       live = false
     }
   }, [base, preview])
+  const [storage, setStorage] = useState<{ used: number; trash: number; limit: number; items: StoredFile[] }>()
+  const [showTrash, setShowTrash] = useState(false)
+  const [fileAction, setFileAction] = useState('')
+  const [purgeId, setPurgeId] = useState('')
+  const refreshStorage = () => api<NonNullable<typeof storage>>(`${base}/files/storage`).then(setStorage)
+  useEffect(() => {
+    let live = true
+    void api<NonNullable<typeof storage>>(`${base}/files/storage`).then(r => { if (live) setStorage(r) })
+      .catch(e => { if (live) setError(e.message) })
+    return () => { live = false }
+  }, [base])
+  async function changeFile(id: string, action: string) {
+    if (fileAction) return
+    setFileAction(id); setError('')
+    try {
+      await api(`${base}/files/${id}/${action}`, action === 'purge' ? { confirm: '永久删除' } : {})
+      setPurgeId(''); setPreview(undefined)
+      await refreshStorage()
+    } catch (e) { setError((e as Error).message) }
+    finally { setFileAction('') }
+  }
   const owner = (id: string) =>
     data.tasks.find(
-      (task) => task.archiveFileId === id || task.images?.some((img) => img.fileId === id),
+      (task) => task.archiveFileId === id || task.archiveVideoFileId === id || task.images?.some((img) => img.fileId === id),
     )
-  const files = data.files.filter(
+  const files = (storage?.items || data.files).filter(
     (f) =>
+      Boolean(f.deleted_at) === showTrash &&
       `${f.name} ${owner(f.id)?.title || ''}`.toLowerCase().includes(query.toLowerCase()) &&
       (!dept || owner(f.id)?.dept === dept) &&
       (!day || f.created_at.slice(0, 10) === day) &&
@@ -317,7 +374,7 @@ export function ArchiveRoom({ base, onTask }: { base: string; onTask: (id: strin
             : !owner(f.id))),
   )
   return (
-    <section className="results-page">
+    <section className="results-page archive-records-page">
       <div className="page-heading">
         <p className="eyebrow">ARCHIVE</p>
         <h1>{t('资料室')}</h1>
@@ -328,6 +385,12 @@ export function ArchiveRoom({ base, onTask }: { base: string; onTask: (id: strin
           {t(error)}
         </p>
       )}
+      {storage && <details className="archive-capacity" aria-label="资料室容量"><summary>存储与回收站 · 已用 {(storage.used / 1048576).toFixed(1)} MB</summary>
+        <p>已用 {(storage.used / 1048576).toFixed(1)} / {storage.limit / 1048576} MB · 回收站 {(storage.trash / 1048576).toFixed(1)} MB</p>
+        <progress value={storage.used} max={storage.limit} aria-label="已用容量" />
+        <p className="muted">回收站仍占空间，彻底删除后释放。任务、对话或档案引用的文件受保护。</p>
+        <button onClick={() => { setShowTrash(v => !v); setPurgeId('') }}>{showTrash ? '返回资料室' : '打开回收站'}</button>
+      </details>}
       <div className="result-toolbar">
         <input
           value={query}
@@ -370,18 +433,27 @@ export function ArchiveRoom({ base, onTask }: { base: string; onTask: (id: strin
       <div className="result-grid">
         {files.map((file) => (
           <article className="result-card" key={file.id}>
-            {file.mime.startsWith('image/') && (
+            {!showTrash && file.mime.startsWith('image/') && (
               <img src={`${base}/files/${file.id}/preview`} alt={file.name} />
             )}
-            <h2>{file.name}</h2>
+            <div className="archive-file-info"><h2>{file.name}</h2>
             <p>
               {new Date(file.created_at).toLocaleDateString()} · {Math.ceil(file.size / 1024)} KB
             </p>
-            <div className="result-actions">
-              <button onClick={() => setPreview(file)}>{t('预览')}</button>
-              <a href={`${base}/files/${file.id}/download`} download>
+            </div><div className="result-actions">
+              {!showTrash && <button onClick={() => setPreview(file)}>{t('预览')}</button>}
+              {showTrash ? <>
+                <button disabled={!!fileAction} onClick={() => void changeFile(file.id, 'restore')}>恢复文件</button>
+                <button disabled={!!fileAction || file.protected} onClick={() => setPurgeId(file.id)}>彻底删除</button>
+                {purgeId === file.id && <div role="alert">
+                  <p>永久删除「{file.name}」后无法恢复。</p>
+                  <button disabled={!!fileAction} onClick={() => void changeFile(file.id, 'purge')}>确认永久删除</button>
+                  <button onClick={() => setPurgeId('')}>取消</button>
+                </div>}
+              </> : <button disabled={!!fileAction || file.protected} title={file.protected ? '被任务、对话或档案引用' : ''} onClick={() => void changeFile(file.id, 'trash')}>{file.protected ? '引用中，已保护' : '移入回收站'}</button>}
+              {!showTrash && <a href={`${base}/files/${file.id}/download`} download>
                 {t('下载')}
-              </a>
+              </a>}
               {owner(file.id) && (
                 <button onClick={() => onTask(owner(file.id)!.id)}>{t('查看原任务')}</button>
               )}
@@ -403,8 +475,10 @@ export function ArchiveRoom({ base, onTask }: { base: string; onTask: (id: strin
             </header>
             {preview.mime.startsWith('image/') ? (
               <img src={`${base}/files/${preview.id}/preview`} alt={preview.name} />
+            ) : preview.mime === 'video/mp4' ? (
+              <PrivateVideo controls preload="metadata" src={`${base}/files/${preview.id}/video`} style={{ maxWidth: '100%' }} aria-label="归档成片预览" />
             ) : preview.mime.startsWith('text/') || preview.mime === 'application/json' ? (
-              <pre>{text || t('正在读取…')}</pre>
+              (/\.md$/i.test(preview.name) || preview.mime === 'text/markdown') && text ? <ReportMarkdown text={text} /> : <pre>{text || t('正在读取…')}</pre>
             ) : (
               <p>{t('请下载此文件查看')}</p>
             )}

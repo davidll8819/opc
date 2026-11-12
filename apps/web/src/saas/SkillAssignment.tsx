@@ -1,91 +1,129 @@
-import { DEPARTMENT_NAMES } from '../../../../packages/employees/registry.mjs'
+import { EMPLOYEES } from '../../../../packages/employees/registry.mjs'
 import { useEffect, useState } from 'react'
 import { t } from '@/i18n'
 import { api } from './api'
-const departments = DEPARTMENT_NAMES
+
+type Binding = { skillIds: string[]; revision: string }
 export function SkillAssignment({
   base,
   id,
   canEdit,
   onClose,
+  employeeId: targetId,
+  onBound,
 }: {
+  employeeId?: string
+  onBound?: () => void
   base: string
   id: string
   canEdit: boolean
   onClose: () => void
 }) {
-  const [data, setData] = useState<{ content: string; departments: string[]; name: string } | null>(
-      null,
-    ),
-    [error, setError] = useState(''),
-    [notice, setNotice] = useState(''),
-    [busy, setBusy] = useState(false)
+  const [detail, setDetail] = useState<{ content: string; name: string } | null>(null)
+  const [employeeId, setEmployeeId] = useState(targetId || '')
+  const [binding, setBinding] = useState<Binding | null>(null)
+  const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
+  const [busy, setBusy] = useState(false)
   useEffect(() => {
-    api<NonNullable<typeof data>>(`${base}/skills/${id}/detail`)
-      .then(setData)
-      .catch((e) => setError(e.message))
+    let active = true
+    api<NonNullable<typeof detail>>(`${base}/skills/${id}/detail`)
+      .then((data) => {
+        if (active) setDetail(data)
+      })
+      .catch((e) => {
+        if (active) setError(e.message)
+      })
+    return () => {
+      active = false
+    }
   }, [base, id])
+  useEffect(() => {
+    let active = true
+    setBinding(null)
+    setNotice('')
+    setError('')
+    if (employeeId)
+      api<Binding>(`${base}/employees/${employeeId}/skills`)
+        .then((data) => {
+          if (active) setBinding(data)
+        })
+        .catch((e) => {
+          if (active) setError(e.message)
+        })
+    return () => {
+      active = false
+    }
+  }, [base, employeeId, id])
+  const employee = EMPLOYEES.find((e) => e.id === employeeId)
+  const bound = binding?.skillIds.includes(id)
+  async function toggle() {
+    if (!binding) return
+    setBusy(true)
+    setError('')
+    setNotice('')
+    try {
+      const data = await api<Binding>(
+        `${base}/employees/${employeeId}/skills`,
+        {
+          revision: binding.revision,
+          skillIds: bound
+            ? binding.skillIds.filter((skillId) => skillId !== id)
+            : [...binding.skillIds, id],
+        },
+        'PUT',
+      )
+      setBinding(data)
+      onBound?.()
+      setNotice(
+        `${employee?.name}：${t(bound ? '已解除此技能绑定' : '已绑定此技能')}。${t('其他员工不受影响。')}`,
+      )
+    } catch (e) {
+      setError((e as Error).message)
+    } finally {
+      setBusy(false)
+    }
+  }
   return (
     <section className="builder-card">
       <div className="heading-row">
-        <h3>{data?.name || t('正在加载…')}</h3>
+        <h3>{detail?.name || t('正在加载…')}</h3>
         <button onClick={onClose}>{t('收起')}</button>
       </div>
-      {data && (
-        <>
-          <p>
-            {t(
-              '启用后，部门对话会读取技能说明。脚本与外部工具需要对应执行环境，不会在上传时自动运行。',
-            )}
-          </p>
-          <pre className="skill-instructions">{data.content}</pre>
-          <h3>{t('分配给部门')}</h3>
-          <div className="skill-assignees">
-            {Object.entries(departments).map(([key, name]) => (
-              <label key={key}>
-                <input
-                  type="checkbox"
-                  disabled={!canEdit || busy}
-                  checked={data.departments.includes(key)}
-                  onChange={(e) => {
-                    setData({
-                      ...data,
-                      departments: e.target.checked
-                        ? [...data.departments, key]
-                        : data.departments.filter((d) => d !== key),
-                    })
-                    setNotice('')
-                  }}
-                />
-                {t(name)}
-              </label>
-            ))}
-          </div>
-          <button
-            className="primary"
-            disabled={!canEdit || busy}
-            onClick={async () => {
-              setBusy(true)
-              setError('')
-              try {
-                await api(
-                  `${base}/skills/${id}/assignments`,
-                  { departments: data.departments },
-                  'PUT',
-                )
-                setNotice('技能分配已保存')
-              } catch (e) {
-                setError((e as Error).message)
-              } finally {
-                setBusy(false)
-              }
-            }}
-          >
-            {t('保存分配')}
-          </button>
-        </>
+      {detail && (
+        <details>
+          <summary>{t('查看技能说明')}</summary>
+          <pre className="skill-instructions">{detail.content}</pre>
+        </details>
       )}
-      {notice && <p role="status">{t(notice)}</p>}
+      <label>
+        {t('选择绑定员工')}
+        <select
+          value={employeeId}
+          disabled={busy || !!targetId}
+          onChange={(e) => setEmployeeId(e.target.value)}
+        >
+          <option value="">{t('请选择一位员工')}</option>
+          {EMPLOYEES.map((e) => (
+            <option key={e.id} value={e.id}>
+              {e.name} · {t(e.department)}
+            </option>
+          ))}
+        </select>
+      </label>
+      {employee && binding && (
+        <p>
+          {employee.name} · {t(bound ? '已绑定此技能' : '未绑定此技能')} · {binding.skillIds.length}{' '}
+          / 8
+        </p>
+      )}
+      <button
+        disabled={!canEdit || busy || !binding || (!bound && binding.skillIds.length >= 8)}
+        onClick={() => void toggle()}
+      >
+        {t(bound ? '解除该员工绑定' : '绑定给该员工')}
+      </button>
+      {notice && <p role="status">{notice}</p>}
       {error && (
         <p role="alert" className="error">
           {t(error)}

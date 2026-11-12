@@ -25,7 +25,7 @@ export async function loadComparisonInputs(db, ctx, oldFileId, newFileId, { lock
   if (oldFileId === newFileId) throw fail(400, '请选择两个不同文件作为旧版和新版')
   const rows = (
     await db.query(
-      `SELECT id,name,data FROM workspace_files WHERE id=ANY($1::uuid[]) AND tenant_id=$2 AND user_id=$3 ORDER BY id${lock ? ' FOR SHARE' : ''}`,
+      `SELECT id,name,data FROM workspace_files WHERE deleted_at IS NULL AND id=ANY($1::uuid[]) AND tenant_id=$2 AND user_id=$3 ORDER BY id${lock ? ' FOR SHARE' : ''}`,
       [[oldFileId, newFileId], ctx.tenantId, ctx.userId],
     )
   ).rows

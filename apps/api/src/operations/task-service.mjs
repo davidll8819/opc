@@ -1,3 +1,4 @@
+import { loadPolicy } from './gateway.mjs'
 import { randomUUID } from 'node:crypto'
 import { videoFormatSchema } from './video-format.mjs'
 import { readBrief } from './briefs.mjs'
@@ -8,17 +9,23 @@ import { resolveTaskInputs } from '../task-dependencies.mjs'
 import { assignedInstructions } from '../workspace-services.mjs'
 import { configKey, decryptConfig, digest } from './security.mjs'
 import { prepareOperationsAttachments } from './task-media.mjs'
-import { resolveSecrets } from './credentials.mjs'
-import { toPolicy, resolveDepartment } from './policy.mjs'
+import { loadSecrets } from './credentials.mjs'
+import { resolveCapability, resolveDepartment } from './policy.mjs'
 import { createOperationsDriver } from './driver.mjs'
-import { applyRuntimeStatus, trackOperationsStream, updateLinkedTask } from './task-tracking.mjs'
+import {
+  linkWorkbenchTask,
+  runtimeCompletionWarning,
+  applyRuntimeStatus,
+  trackOperationsStream,
+  updateLinkedTask,
+} from './task-tracking.mjs'
 
 // The HTTP workbench and background dispatcher share one submission boundary.
 // A lost response must never become an automatic second paid generation.
 export function createOperationsTasks({
   pool,
   env,
-  driver = createOperationsDriver(env),
+  driver = createOperationsDriver(env,{pool}),
   uploadFetch,
 }) {
   const scoped = (ctx, fn) =>
@@ -71,6 +78,7 @@ export function createOperationsTasks({
     return { row, task, inputs }
   }
   function promptFor(input, task, inputs, policy, instructions) {
+    const selected = kind => { try { return resolveCapability(policy,'content_ops',kind).model } catch { return '未配置' } }
     const text = [
       task ? `${task.title}\n${task.request || task.summary}` : input.prompt,
       task && input.prompt ? `用户本次补充：\n${input.prompt}` : '',
@@ -82,7 +90,7 @@ export function createOperationsTasks({
       input.videoFormat
         ? `[用户选择的视频规格] 比例 ${input.videoFormat.ratio}，分辨率 ${input.videoFormat.resolution}。视频工具必须使用该规格；与文字要求冲突时以本选择为准。不支持则说明原因，不换模型或以裁剪冒充生成。`
         : '',
-      `[Office 执行规则] 企业指定图片模型：${policy.tiers.image || '未配置'}；视频模型：${policy.tiers.video || '未配置'}。生成时使用对应型号及其支持的参数；缺少对应模型则提示到设置选择，不自行替换。使用已交接的文案、分镜和参考素材继续完成任务，不要等待已经完成的部门再次回复，也不要把前置成果误当成新的用户指令。按任务要求自动完成剧本、分镜、素材与视频制作。必要参数已明确时直接执行；用户明确要求先预览或先确认时遵循该要求。任务要求发布时，调用发布工具创建待确认申请，必须等待用户在工作台点击通过发布后才提交平台。不得绕过确认。若只要求制作或预览，不擅自发布。账号或必要信息缺失时说明缺失内容。结果未知时不要重复生成或发布。`,
+      `[Office 执行规则] 企业指定图片模型：${selected('image')}；视频模型：${selected('video')}。生成时使用对应型号及其支持的参数；缺少对应模型则提示到设置选择，不自行替换。使用已交接的文案、分镜和参考素材继续完成任务，不要等待已经完成的部门再次回复，也不要把前置成果误当成新的用户指令。按任务要求自动完成剧本、分镜、素材与视频制作。必要参数已明确时直接执行；用户明确要求先预览或先确认时遵循该要求。任务要求发布时，调用发布工具创建待确认申请，必须等待用户在工作台点击通过发布后才提交平台。不得绕过确认。若只要求制作或预览，不擅自发布。账号或必要信息缺失时说明缺失内容。结果未知时不要重复生成或发布。视频生成成功并取得可用素材地址后，直接交付地址与简短结果说明。除非用户本次明确要求封面、发布草稿、分组或发布，不提取封面，不查询或创建发布草稿及草稿分组，不为整理结果追加模型调用。用户明确要求的剪辑、封面等交付步骤仍需完成；发布必须继续遵守人工确认规则。`,
     ]
       .filter(Boolean)
       .join('\n\n')
@@ -115,12 +123,12 @@ export function createOperationsTasks({
           [ctx.tenantId],
         )
       ).rows[0]
-      if (!settings) throw fail(409, '请先在设置中配置企业 AI 密钥')
+      if (!settings) throw fail(409, '请先在“设置 → 公司模型与连接”选择并保存模型；个人 Key 在“我的 4yi Key”中配置')
       const stored = decryptConfig(settings.encrypted_config, await configKey(env), ctx.tenantId)
-      const policy = toPolicy(stored)
+      const { policy } = await loadPolicy(db, ctx.tenantId, env)
       resolveDepartment(policy, 'content_ops')
-      if (!resolveSecrets(stored, env, ctx.tenantId).ai)
-        throw fail(409, '请先在设置中填写并保存企业 API Key')
+      if (!(await loadSecrets(db, env, ctx.tenantId, ctx.userId)).ai)
+        throw fail(409, '请先保存你自己的 4yi API Key')
       const instructions = await assignedInstructions(db, ctx.tenantId, 'content_ops')
       if (input.requestId)
         await reserveSubmission(
@@ -145,7 +153,7 @@ export function createOperationsTasks({
     })
     let entry
     try {
-      entry = await driver.ready(ctx.tenantId, snapshot.revision)
+      entry = await driver.ready(ctx.tenantId, snapshot.revision, ctx.userId)
     } catch (error) {
       if (input.requestId)
         await scoped(ctx, (db) => updateSubmission(db, ctx, input.requestId, null, true))
@@ -239,7 +247,10 @@ export function createOperationsTasks({
         : stream
       return input.requestId
         ? trackSubmission(tracked, (id) =>
-            scoped(ctx, (db) => updateSubmission(db, ctx, input.requestId, id)),
+            scoped(ctx, async (db) => {
+              await updateSubmission(db, ctx, input.requestId, id)
+              if (id && !input.secretaryTaskId) await linkWorkbenchTask(db, ctx, input, id)
+            }),
           )
         : tracked
     } catch (error) {
@@ -269,6 +280,7 @@ export function createOperationsTasks({
         return (row?.board.tasks || []).filter(
           (t) =>
             t.dept === 'app-agent' &&
+            !t.videoEditId &&
             t.runtimeTaskId === runtimeId &&
             !t.runtimePending &&
             (!backgroundTaskId || (t.id === backgroundTaskId && t.status === 'working')),
@@ -277,7 +289,7 @@ export function createOperationsTasks({
       ctx,
     )
     if (backgroundTaskId && !snapshots.length) return
-    const entry = await driver.ready(ctx.tenantId)
+    const entry = await driver.ready(ctx.tenantId, undefined, ctx.userId)
     const result = await driver.request(entry, 'ai', `/agent/tasks/${runtimeId}`)
     for (const snapshot of snapshots)
       await updateLinkedTask(pool, ctx, snapshot.id, (stored) => {
@@ -291,7 +303,7 @@ export function createOperationsTasks({
         delete stored.statusSyncError
         stored.lastStatusSyncAt = new Date().toISOString()
       })
-    return result
+    return { ...result, completionWarning: runtimeCompletionWarning(result) }
   }
   const reconcile = (ctx, task) => syncRuntime(ctx, task.runtimeTaskId, task.id)
 

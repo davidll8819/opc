@@ -72,6 +72,7 @@ async function setup(documentParser) {
   policy.tiers.fast = 'archive-test-model'
   policy.departments.archive.tier = 'fast'
   policy.departments.archive.enabled = true
+  for(const user of [alice,bob])await query('INSERT INTO personal_model_keys(tenant_id,user_id,encrypted_key) VALUES($1,$2,$3)',[tenant,user,encryptConfig({apiKey:'synthetic-personal-'+user},key,`${tenant}:${user}`)])
   await query(
     'INSERT INTO operations_settings(tenant_id,encrypted_config,updated_by) VALUES($1,$2,$3)',
     [

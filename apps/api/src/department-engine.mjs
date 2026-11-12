@@ -1,3 +1,4 @@
+import { assertOnDuty } from './employee-duty.mjs'
 import { randomUUID } from 'node:crypto'
 import { transaction, tenantAccess, fail } from './db.mjs'
 import { createModelGateway, loadPolicy } from './operations/gateway.mjs'
@@ -24,7 +25,7 @@ const saveBoard = (db, ctx, board) =>
     [ctx.tenantId, ctx.userId, JSON.stringify(board)],
   )
 async function office(db, ctx, task, working) {
-  const rosterNo = departmentRoster[departmentMap[task.dept]]
+  const rosterNo = departmentRoster[(departmentMap[task.dept] || (/^custom_[a-f0-9]{32}$/.test(task.dept)?task.dept:undefined))]
   if (!rosterNo) return
   await db.query('INSERT INTO office_events(tenant_id,action) VALUES($1,$2)', [
     ctx.tenantId,
@@ -125,7 +126,8 @@ export function createDepartmentEngine({ pool, env, fetcher, operations }) {
         let inputs
         try {
           inputs = await resolveTaskInputs(db, ctx, current.board, task)
-          if (!departmentMap[task.dept]) throw fail(409, '部门尚未接入')
+          await assertOnDuty(db, ctx.tenantId, (departmentMap[task.dept] || (/^custom_[a-f0-9]{32}$/.test(task.dept)?task.dept:undefined)))
+          if (!(departmentMap[task.dept] || (/^custom_[a-f0-9]{32}$/.test(task.dept)?task.dept:undefined))) throw fail(409, '部门尚未接入')
         } catch (error) {
           task.status = 'blocked'
           task.executionNote = error.expose ? error.message : '无法读取前置成果，请检查任务资料'
@@ -186,14 +188,14 @@ export function createDepartmentEngine({ pool, env, fetcher, operations }) {
           await office(db, ctx, task, task.status === 'working')
         })
       } else {
-        const department = departmentMap[claim.task.dept]
+        const department = (departmentMap[claim.task.dept] || (/^custom_[a-f0-9]{32}$/.test(claim.task.dept)?claim.task.dept:undefined))
         const { policy, skills } = await scoped(ctx, async (db) => ({
           ...(await loadPolicy(db, ctx.tenantId, env)),
           skills: await loadAssignedSkills(db, ctx.tenantId, department),
         }))
         const call = async (request) => {
           await update(ctx, claim, async () => {})
-          return gateway(request)
+          return gateway({ ...request, ctx: { ...request.ctx, taskId: claim.task.id, billingStep: '员工任务执行' } })
         }
         const result = await performDepartmentTask({
           call,

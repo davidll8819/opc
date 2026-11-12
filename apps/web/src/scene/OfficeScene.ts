@@ -1,4 +1,4 @@
-import type { OfficeWorkStatus } from '@/saas/office-work-status'
+import { officeRoleLabel, type OfficeWorkStatus } from '@/saas/office-work-status'
 import { t } from '@/i18n'
 import { Application, Container, Sprite } from 'pixi.js'
 import type { FederatedPointerEvent } from 'pixi.js'
@@ -33,6 +33,8 @@ import {
   loadOfficeAssets,
 } from '@/scene/assets/loadOfficeAssets'
 import { loadSpineAssets } from '@/scene/assets/loadSpineAssets'
+import { loadLiWanerCharacter } from '@/scene/characters/LiWanerCharacter'
+import { OFFICE_CHARACTER_LIBRARY } from '@/scene/characters/officeCharacterLibrary'
 
 export type OfficeAgentClick = {
   agent: Agent
@@ -42,10 +44,11 @@ export type OfficeAgentClick = {
 }
 
 export class OfficeScene {
+  libraryReadyCount = 0
   private disposed = false
   private workIndicators: Record<string, OfficeWorkStatus> = {}
   private paused = false
-  private automatic = false
+  private automatic = true
   private app: Application | null = null
   private world: Container | null = null
   private roomBackground: Sprite | null = null
@@ -95,6 +98,9 @@ export class OfficeScene {
     const spineOk = await loadSpineAssets()
     if (this.disposed) return
     if (!spineOk) throw new Error('角色模型加载失败，请重新加载场景')
+    const characterResults = await Promise.all(OFFICE_CHARACTER_LIBRARY.map(entry => loadLiWanerCharacter(entry.variant)))
+    this.libraryReadyCount = characterResults.filter(Boolean).length
+    if (this.disposed) return
     const officeOk = await loadOfficeAssets()
     if (this.disposed) return
     if (!officeOk) {
@@ -118,6 +124,7 @@ export class OfficeScene {
     hostRosterNo: number,
     message: string,
   ) {
+    if (this.socialBlocked(this.agents[visitorRosterNo - 1]) || this.socialBlocked(this.agents[hostRosterNo - 1])) return
     this.agents = this.simulator.startDeskVisit(
       this.agents,
       visitorRosterNo,
@@ -133,6 +140,9 @@ export class OfficeScene {
     hostRosterNos: number[],
     messageFn?: (hostRosterNo: number, hostName: string) => string,
   ) {
+    if (this.socialBlocked(this.agents[visitorRosterNo - 1])) return
+    hostRosterNos = hostRosterNos.filter(n => !this.socialBlocked(this.agents[n - 1]))
+    if (!hostRosterNos.length) return
     this.agents = this.simulator.startDeskVisitTour(
       this.agents,
       visitorRosterNo,
@@ -144,11 +154,56 @@ export class OfficeScene {
 
   setWorkIndicators(indicators: Record<string, OfficeWorkStatus>) {
     this.workIndicators = indicators
-    for (const [id, entity] of this.agentEntities) entity.setWorkStatus(indicators[id])
+    // Register data-driven employee instances; reuse the existing character assets and motion systems.
+    if(this.officeLayer)for(const [id,status] of Object.entries(indicators)){
+      if(!status.custom || this.agents.some(a=>a.id===id))continue
+      const source=INITIAL_AGENTS.find(a=>a.id===status.avatarId) || INITIAL_AGENTS[0]
+      const agent:Agent={...source,id,name:status.employeeName||'自建员工',avatarId:status.avatarId,onDuty:false,assignedDeskId:undefined,mission:undefined}
+      this.agents.push(agent)
+      this.agentEntities.get(id)?.destroy({children:true})
+      const entity=new AgentEntity(agent)
+      this.agentEntities.set(id,entity)
+      entity.on('pointertap',(event:FederatedPointerEvent)=>{event.stopPropagation();this.options.onAgentClick?.({agent:{...entity.data},rosterNo:this.agents.findIndex(a=>a.id===id)+1,clientX:event.clientX,clientY:event.clientY})})
+      this.officeLayer.addChild(entity)
+    }
+    this.agents = this.agents.map(agent => {
+      const status = indicators[agent.id]
+      if (status?.jobTitle && !agent.mission) agent = { ...agent, currentTask: officeRoleLabel(status) }
+      if (!status || status.seat === undefined) return agent
+      const desk = status.seat === null ? undefined : DESKS[status.seat]
+      if (agent.onDuty === Boolean(desk) && (!desk || agent.assignedDeskId === desk.id)) return agent
+      this.agentEntities.get(agent.id)?.hideBubble()
+      return { ...agent, onDuty: Boolean(desk), assignedDeskId: desk?.id,
+        x: desk?.seatX ?? agent.x, y: desk?.seatY ?? agent.y, state: 'working' as const,
+        mission: undefined, targetX: undefined, targetY: undefined, walkPath: undefined,
+        bubbleText: undefined, customAnimation: undefined, viewFacing: 'back' as const }
+    })
+    for (const agent of [...this.agents]) {
+      const host = this.agents.find(a => a.id === agent.mission?.hostAgentId)
+      if (agent.onDuty !== false && (indicators[agent.id]?.status === 'working' || (agent.mission && this.socialBlocked(host)))) {
+        if ((agent.mission && agent.mission.phase !== 'return') || agent.customAnimation || agent.state === 'talking') {
+          const status = indicators[agent.id]
+          const task = status?.taskTitle || (status?.jobTitle ? officeRoleLabel(status) : AGENT_ROSTER.find(e => e.id === agent.id)?.task)
+          if (isHomeDeskSeat(agent.assignedDeskId, agent.x, agent.y)) this.setAgentState(agent.id, 'working', task)
+          else this.agents = startReturnToDesk(this.agents, agent.id, { landingState: 'working', task })
+          this.agentEntities.get(agent.id)?.hideBubble()
+        }
+      }
+    }
+    this.pushDataToEntities()
+    this.syncDeskOccupancy()
+  }
+
+  private socialBlocked(agent?: Agent) {
+    return !agent || agent.onDuty === false || this.workIndicators[agent.id]?.status === 'working'
   }
 
   getAgents(): Agent[] {
     return this.agents.map((agent) => ({ ...agent }))
+  }
+
+  setCharacterLibrary(enabled: boolean) {
+    for (const entity of this.agentEntities.values()) entity.setLibraryCharacter(enabled)
   }
 
   setAgentState(id: string, state: AgentState, task?: string) {
@@ -192,7 +247,7 @@ export class OfficeScene {
 
   playAgentAnimation(id: string, animation: string, task?: string) {
     const current = this.agents.find((a) => a.id === id)
-    if (!current) return
+    if (!current || this.socialBlocked(current)) return
 
     // 离座小人：先走回座位，到位后再播放表情（避免被钉座位瞬移）
     if (!isHomeDeskSeat(current.assignedDeskId, current.x, current.y)) {
@@ -262,6 +317,7 @@ export class OfficeScene {
       walkPathIndex: undefined, mission: undefined, bubbleText: undefined,
       customAnimation: undefined,
     }))
+    this.setWorkIndicators(this.workIndicators)
     this.autoWorkflowIndex = 0
     this.autoWorkflowCounts = []
     this.autoWorkflowTimer = 0.8
@@ -372,7 +428,7 @@ export class OfficeScene {
       return
     }
 
-    const next = nextWorkflowStep(this.agents, this.autoWorkflowIndex, this.autoWorkflowCounts)
+    const next = nextWorkflowStep(this.agents, this.autoWorkflowIndex, this.autoWorkflowCounts, new Set(this.agents.filter(a=>this.socialBlocked(a)).map(a=>a.id)))
     if (!next) {
       this.autoWorkflowTimer = 0.45
       return
@@ -418,6 +474,7 @@ export class OfficeScene {
       if (!entity) continue
 
       const prev = entity.data
+      entity.visible = agent.onDuty !== false
       entity.apply(agent)
       entity.setWorkStatus(this.workIndicators[agent.id])
       if (
@@ -440,7 +497,7 @@ export class OfficeScene {
   private syncDeskOccupancy() {
     const occupied = new Set(
       this.agents
-        .filter((a) => a.state === 'working' && a.assignedDeskId)
+        .filter((a) => a.onDuty !== false && a.state === 'working' && a.assignedDeskId)
         .map((a) => a.assignedDeskId!),
     )
     for (const desk of this.deskEntities.values()) {

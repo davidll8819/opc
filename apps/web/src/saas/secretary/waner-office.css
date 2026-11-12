@@ -1,0 +1,759 @@
+.workspace.workspace-waner-office.workspace-secretary-layout {
+  grid-template-columns: 200px minmax(0, 1fr);
+  background: #e9e9e7;
+}
+.workspace-waner-office .workspace-content.workspace-secretary {
+  padding: 24px;
+  min-width: 0;
+}
+.workspace-waner-office .workspace-nav {
+  background: #f5f5f3;
+}
+.workspace-waner-office .workspace-nav nav button.selected {
+  background: #e2e3e0;
+  color: #24292a;
+  box-shadow: none;
+}
+.waner-room {
+  --room-ink: #272b2c;
+  --room-paper: #f5f5f2;
+  --room-muted: #646a6c;
+  color: var(--room-ink);
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+.waner-room-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 18px;
+}
+.waner-room-heading p {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--room-muted);
+  margin: 0 0 7px;
+}
+.waner-room-heading h1 {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+.waner-room button:focus-visible {
+  outline: 3px solid #39867e;
+  outline-offset: 4px;
+}
+.waner-device {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid #c6c9c7 !important;
+  background: var(--room-paper) !important;
+  color: #454c4d !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+}
+.waner-stage {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 1664/941;
+  min-height: 460px;
+  overflow: hidden;
+  background: #6b6b69;
+}
+.waner-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.waner-inhabitant {
+  position: absolute;
+  bottom: 8%;
+  left: 43%;
+  height: 80%;
+  width: 23%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.waner-character {
+  height: 100%;
+  width: 100%;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: 50% 96%;
+  animation: waner-breathe 5s ease-in-out infinite;
+}
+.waner-character img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  user-select: none;
+  filter: drop-shadow(5px 9px 5px #2223);
+}
+.waner-inhabitant:after {
+  content: '';
+  position: absolute;
+  bottom: -0.8%;
+  left: 15%;
+  width: 70%;
+  height: 2%;
+  border-radius: 50%;
+  background: #2224;
+  z-index: -1;
+}
+.waner-speech {
+  position: absolute;
+  left: 78%;
+  top: 9%;
+  width: clamp(150px, 17vw, 260px);
+  padding: 14px 18px;
+  background: #f8f8f4;
+  color: #303536;
+  border-radius: 12px 12px 12px 2px;
+  box-shadow: 0 3px 16px #0001;
+  line-height: 1.6;
+  font-size: clamp(12px, 1.1vw, 16px);
+  z-index: 4;
+  pointer-events: none;
+}
+.waner-wall {
+  position: absolute;
+  top: 20.7%;
+  left: 63.4%;
+  width: 18.8%;
+  height: 20.8%;
+  padding: 12px;
+  background: #242829;
+  color: #e8ecea;
+  transform: skewY(-3deg);
+  overflow: hidden;
+}
+.waner-wall-title {
+  font-size: clamp(10px, 0.95vw, 14px);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.waner-wall-title span {
+  font-size: 10px;
+  color: #b7c0bf;
+}
+.waner-wall button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid #ffffff20 !important;
+  border-radius: 0 !important;
+  color: #edf1ee !important;
+  text-align: left;
+  box-shadow: none !important;
+}
+.waner-wall button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(10px, 0.8vw, 12px);
+}
+.waner-wall small {
+  color: #b8ded5;
+  white-space: nowrap;
+  font-size: 10px;
+}
+.waner-wall p {
+  font-size: 12px;
+  color: #bdc6c3;
+}
+.waner-scene-caption {
+  position: absolute;
+  left: 24px;
+  bottom: 86px;
+  display: grid;
+  gap: 4px;
+  color: white;
+  text-shadow: 0 1px 5px #0008;
+  font-size: 15px;
+}
+.waner-scene-caption span + span {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+.waner-actions {
+  position: absolute;
+  bottom: 23px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: min(680px, 90%);
+}
+.waner-actions button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 48px;
+  flex: 1;
+  padding: 12px 18px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 6px !important;
+  background: #f4f4f0 !important;
+  color: #303536 !important;
+  box-shadow: 0 3px 12px #0001;
+  font-size: 14px;
+  white-space: nowrap;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+.waner-actions button:hover {
+  transform: translateY(-2px);
+  background: #fff !important;
+}
+.waner-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  background: #855b24;
+  color: white;
+  border-radius: 9px;
+  font-size: 11px;
+  padding: 0 4px;
+}
+.waner-room-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  color: var(--room-muted);
+  font-size: 12px;
+}
+.waner-room-footer button {
+  background: none !important;
+  border: 0 !important;
+  color: #3a5752 !important;
+  padding: 6px !important;
+  font-size: 12px;
+}
+.waner-asset-error {
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  background: #fff;
+  padding: 12px;
+  max-width: 80%;
+  font-size: 13px;
+}
+.waner-dialog {
+  border: 1px solid #c7cbc7;
+  border-radius: 10px;
+  padding: 0;
+  width: min(640px, calc(100vw - 32px));
+  max-height: 88dvh;
+  color: #292e2f;
+  background: #f9faf8;
+  box-shadow: 0 20px 80px #0004;
+}
+.waner-dialog::backdrop {
+  background: #14191db3;
+}
+.waner-dialog-work {
+  width: min(1080px, calc(100vw - 32px));
+}
+.waner-dialog > header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #f9faf8;
+  border-bottom: 1px solid #dde0dc;
+}
+.waner-dialog h2 {
+  font-size: 18px;
+  margin: 0;
+}
+.waner-dialog > header button {
+  height: 44px;
+  width: 44px;
+  background: none;
+  border: 0;
+  font-size: 26px;
+  color: #414849;
+}
+.waner-dialog-body {
+  padding: 24px;
+  overflow-wrap: anywhere;
+}
+.waner-dialog-body .secretary-workspace {
+  min-width: 0;
+}
+.waner-message-intro,
+.waner-phone-info p {
+  color: #5e6767;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.waner-phone-info h3 {
+  font-size: 18px;
+}
+.waner-message-task {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: #fff !important;
+  color: #303637 !important;
+  border: 1px solid #d9ded9 !important;
+  padding: 18px !important;
+  margin: 14px 0;
+  border-radius: 6px !important;
+}
+.waner-message-task small {
+  color: #885d23;
+}
+.waner-message-task span {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.waner-message {
+  border-top: 1px solid #dde2dc;
+  padding: 18px 0;
+}
+.waner-message small {
+  color: #65706b;
+  font-size: 12px;
+}
+.waner-message p {
+  white-space: pre-wrap;
+  line-height: 1.8;
+  font-size: 14px;
+  max-height: 220px;
+  overflow: auto;
+  margin-bottom: 0;
+}
+.waner-dialog button:focus-visible {
+  outline: 3px solid #39867e;
+  outline-offset: 2px;
+}
+@keyframes waner-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.004);
+  }
+}
+@media (min-width: 1700px) {
+  .waner-stage {
+    max-height: calc(100dvh - 220px);
+  }
+}
+@media (max-width: 1100px) {
+  .workspace.workspace-waner-office.workspace-secretary-layout {
+    grid-template-columns: 150px minmax(0, 1fr);
+  }
+  .workspace-waner-office .workspace-content.workspace-secretary {
+    padding: 18px;
+  }
+  .waner-wall {
+    padding: 8px;
+  }
+  .waner-wall-title span {
+    display: none;
+  }
+  .waner-stage {
+    min-height: 500px;
+  }
+  .waner-inhabitant {
+    left: 43%;
+    width: 32%;
+    height: 76%;
+  }
+  .waner-wall {
+    left: 64%;
+    width: 24%;
+    top: 23%;
+    height: 20%;
+  }
+  .waner-wall button {
+    padding: 6px 0 !important;
+  }
+  .waner-wall-title {
+    font-size: 12px;
+  }
+  .waner-speech {
+    left: 70%;
+    width: 180px;
+  }
+}
+@media (max-width: 700px) {
+  .workspace.workspace-waner-office.workspace-secretary-layout {
+    grid-template-columns: 1fr;
+  }
+  .workspace-waner-office .workspace-nav {
+    padding: 12px 16px;
+    overflow: hidden;
+  }
+  .workspace-waner-office .workspace-nav > h2,
+  .workspace-waner-office .workspace-nav > .eyebrow,
+  .workspace-waner-office .workspace-nav > .plan-tag,
+  .workspace-waner-office .workspace-note {
+    display: none;
+  }
+  .workspace-waner-office .workspace-nav nav {
+    display: flex;
+    overflow-x: auto;
+    margin: 0;
+    gap: 6px;
+  }
+  .workspace-waner-office .workspace-nav nav button {
+    flex: none;
+    min-height: 44px;
+    gap: 7px;
+    padding: 10px;
+  }
+  .workspace-waner-office .workspace-nav nav button span {
+    display: inline;
+  }
+  .workspace-waner-office .workspace-content.workspace-secretary {
+    padding: 16px 12px;
+  }
+  .waner-room-heading {
+    gap: 8px;
+  }
+  .waner-room-heading h1 {
+    font-size: 21px;
+  }
+  .waner-room-heading p {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+  .waner-device {
+    padding: 8px !important;
+    font-size: 11px !important;
+  }
+  .waner-stage {
+    aspect-ratio: auto;
+    height: min(70dvh, 660px);
+    min-height: 480px;
+  }
+  .waner-backdrop {
+    object-position: 43% center;
+  }
+  .waner-inhabitant {
+    left: 44%;
+    height: 71%;
+    width: 62%;
+    bottom: 13%;
+  }
+  .waner-speech {
+    left: 36%;
+    top: -5%;
+    width: 190px;
+    font-size: 13px;
+    padding: 12px;
+  }
+  .waner-wall {
+    display: none;
+  }
+  .waner-scene-caption {
+    left: 16px;
+    bottom: 85px;
+  }
+  .waner-actions {
+    gap: 6px;
+    width: calc(100% - 24px);
+    bottom: 18px;
+  }
+  .waner-actions button {
+    padding: 10px 7px !important;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .waner-actions svg {
+    width: 17px;
+    flex: none;
+  }
+  .waner-room-footer {
+    align-items: flex-start;
+    font-size: 11px;
+  }
+  .waner-dialog-body {
+    padding: 16px;
+  }
+  .waner-dialog > header {
+    padding: 10px 16px;
+  }
+  .waner-dialog h2 {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .waner-character {
+    animation: none;
+  }
+  .waner-actions button {
+    transition: none;
+  }
+}
+
+/* One office entry; the original secretary stays mounted when its window closes. */
+.waner-office-view {
+  min-width: 0;
+}
+.waner-office-view[hidden] {
+  display: none;
+}
+.waner-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  max-height: 92dvh;
+}
+.waner-dialog > header {
+  flex: none;
+  position: relative;
+}
+.waner-dialog > .waner-dialog-body {
+  overflow: auto;
+  min-height: 0;
+  overscroll-behavior: contain;
+}
+.waner-dialog-work {
+  width: min(1320px, calc(100vw - 48px));
+}
+.waner-dialog-work .secretary-workspace {
+  min-width: 0;
+}
+.waner-dialog-work .sec-page-heading {
+  margin-bottom: 12px;
+}
+.waner-dialog-work .sec-page-heading > div:first-child {
+  display: none;
+}
+.waner-dialog-work .sec-page-tools {
+  margin-left: auto;
+}
+.waner-dialog-work .sec-mode-note {
+  margin-bottom: 14px;
+}
+.waner-dialog-work .sec-conversation {
+  height: calc(92dvh - 210px);
+  min-height: 450px;
+}
+.waner-dialog-work .sec-chat-body {
+  min-height: 150px;
+}
+.waner-dialog-work .sec-composer {
+  max-height: 60%;
+  overflow: auto;
+}
+.waner-dialog-work .sec-sync-error {
+  margin: 8px 0 12px;
+  color: #885b24;
+  font-size: 13px;
+}
+.waner-actions .waner-messages-button {
+  flex: 1.4;
+  background: #273b39 !important;
+  color: #fff !important;
+  border-color: #59716b !important;
+}
+.waner-actions .waner-messages-button:hover {
+  background: #344b48 !important;
+}
+.waner-action-hint {
+  font-size: 12px;
+  opacity: 0.85;
+}
+.waner-phone-info {
+  font-size: 14px;
+  line-height: 1.8;
+}
+.waner-phone-info label {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.waner-phone-info input {
+  width: 100%;
+  min-height: 44px;
+  min-width: 0;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #bbc4c0;
+  border-radius: 5px;
+}
+.waner-phone-info button {
+  min-height: 44px;
+  padding: 10px 16px;
+}
+.waner-phone-info li {
+  margin: 10px 0;
+}
+.waner-connection-notice {
+  border-left: 3px solid #8c7043;
+  padding: 12px 16px;
+  background: #f1eee7;
+}
+@media (max-width: 1050px) {
+  .waner-dialog-work .sec-conversation {
+    order: -1;
+  }
+  .waner-dialog-work .sec-left {
+    margin-top: 8px;
+  }
+}
+@media (max-width: 700px) {
+  .workspace.workspace-waner-office.workspace-secretary-layout {
+    display: block;
+  }
+  .waner-dialog-work {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh !important;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .waner-dialog-work > header {
+    padding: max(8px, env(safe-area-inset-top)) 16px 8px;
+  }
+  .waner-dialog-work > .waner-dialog-body {
+    padding: 8px 12px max(12px, env(safe-area-inset-bottom));
+  }
+  .waner-dialog-work .sec-page-tools {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .waner-dialog-work .sec-page-tools button {
+    flex: 1;
+    font-size: 13px;
+  }
+  .waner-dialog-work .sec-mode-note {
+    display: none;
+  }
+  .waner-dialog-work .sec-conversation {
+    min-height: 440px;
+    height: calc(100dvh - 138px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+  .waner-dialog-work .sec-chat-header {
+    min-height: 52px;
+    padding: 10px 14px;
+  }
+  .waner-dialog-work .sec-chat-body {
+    min-height: 140px;
+    padding: 14px;
+  }
+  .waner-dialog-work .sec-composer {
+    padding: 10px;
+    max-height: 57%;
+  }
+  .waner-dialog-work .sec-quick-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-bottom: 8px;
+    padding-bottom: 2px;
+  }
+  .waner-dialog-work .sec-quick-actions button {
+    flex: none;
+  }
+  .waner-dialog-work .sec-input-row textarea,
+  .waner-dialog-work input,
+  .waner-dialog-work select {
+    font-size: 16px;
+  }
+  .waner-dialog-work .sec-identity {
+    display: none;
+  }
+  .waner-dialog-work .sec-left {
+    display: block;
+  }
+  .waner-actions {
+    width: calc(100% - 32px);
+    gap: 10px;
+  }
+  .waner-actions button {
+    min-height: 52px;
+    font-size: 14px;
+  }
+  .waner-action-hint {
+    display: none;
+  }
+  .waner-room-heading p {
+    font-size: 10px;
+  }
+  .waner-speech {
+    top: -7%;
+    left: 25%;
+    width: 200px;
+    max-width: 80vw;
+  }
+  .waner-room-footer {
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+}
+
+/* Explicit width prevents aspect-ratio + minimum height from widening the scene. */
+.waner-stage {
+  width: 100%;
+}
+.workspace-waner-office .workspace-content.workspace-secretary {
+  background: #e9e9e7;
+}
+.waner-dialog-work .task-brief-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 12px;
+}
+.waner-dialog-work .task-brief-toggle input {
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  flex: none;
+  margin: 0;
+}
+@media (max-width: 1100px) and (min-width: 701px) {
+  .workspace.workspace-waner-office.workspace-secretary-layout {
+    grid-template-columns: 170px minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .waner-stage {
+    height: clamp(460px, calc(100svh - 316px), 660px);
+    min-height: 460px;
+  }
+}
+
+.waner-dialog-work .task-brief-toggle { flex-direction: row; text-align: left; }

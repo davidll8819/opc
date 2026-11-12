@@ -1,0 +1,583 @@
+{
+  "passed": true,
+  "files": 24,
+  "assets": [
+    {
+      "file": "li-waner/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "91e6d56793ab8d5b22bde563bf6ddbd437ad9e841a5476adbb98daa0081d5e35",
+      "fullyTransparentPercent": 74.32,
+      "nearOpaquePercent": 18.6,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        75205,
+        145166,
+        72294
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "li-waner",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "li-waner/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "87c2f82d2c4a1d99a6ab40d2928782d3d3acaefd6e85f268fcc5f8135c37dee7",
+      "fullyTransparentPercent": 73.91,
+      "nearOpaquePercent": 21.57,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        90434,
+        160407,
+        88613
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "li-waner",
+      "sheet": "walk"
+    },
+    {
+      "file": "li-waner/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "25e36a0d46b370c87747a80f9e1e88d63c9faef4f516d540731ea0fa88426b8b",
+      "fullyTransparentPercent": 70.36,
+      "nearOpaquePercent": 23.16,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        84895,
+        182575,
+        96886
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "li-waner",
+      "sheet": "turn"
+    },
+    {
+      "file": "zhao-yameng/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "ecd49da01fc11eb9ad030a8635f791918970f615ab206ac630c417a79f51f2c4",
+      "fullyTransparentPercent": 74.29,
+      "nearOpaquePercent": 19.86,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        79591,
+        155931,
+        77039
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "zhao-yameng",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "zhao-yameng/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "589e5da044b5b6eeb697448c22cd67035f0d3fd2f98127a131d86152a320e242",
+      "fullyTransparentPercent": 73.07,
+      "nearOpaquePercent": 22.3,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        90103,
+        170889,
+        89933
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "zhao-yameng",
+      "sheet": "walk"
+    },
+    {
+      "file": "zhao-yameng/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "4f1163bb0a1be6147f7cb1ef1ebed39ac3b4577a2d380b2850bb3e299e69148a",
+      "fullyTransparentPercent": 73.85,
+      "nearOpaquePercent": 22.44,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        79548,
+        181580,
+        92032
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "zhao-yameng",
+      "sheet": "turn"
+    },
+    {
+      "file": "lin-youwei/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "aff6e55aad5d448683e1c7408389186a49c31db10222a838e79394271fbbddbe",
+      "fullyTransparentPercent": 73.9,
+      "nearOpaquePercent": 20.27,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        81546,
+        156074,
+        81287
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "lin-youwei",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "lin-youwei/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "f4bddcb7f5e13f6561a7c15656fa7f3266ff80eb5e86a77d5632e3c5cdd94ef7",
+      "fullyTransparentPercent": 70.49,
+      "nearOpaquePercent": 23.97,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        102134,
+        176022,
+        98965
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "lin-youwei",
+      "sheet": "walk"
+    },
+    {
+      "file": "lin-youwei/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "36267ddc978970de0520f6b57ef66703a9c162e4dcf5dcc8884ace1261c82c7c",
+      "fullyTransparentPercent": 69.03,
+      "nearOpaquePercent": 24.54,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        91507,
+        190626,
+        104091
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "lin-youwei",
+      "sheet": "turn"
+    },
+    {
+      "file": "pai-aqi/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "8eab284ddc799e7411e31c58b11393cc02183660e04a0c5101a28fab521f44e8",
+      "fullyTransparentPercent": 80.04,
+      "nearOpaquePercent": 16.17,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        64996,
+        127021,
+        62461
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "pai-aqi",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "pai-aqi/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "aed767a6cc9bfb98a1b327b44d550e150040d0c3ec2f976732a397131b061ea9",
+      "fullyTransparentPercent": 67.54,
+      "nearOpaquePercent": 21.82,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        88195,
+        163534,
+        91539
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "pai-aqi",
+      "sheet": "walk"
+    },
+    {
+      "file": "pai-aqi/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "67d78129b092f771b1e633d64a8bb038b216f0336910e2a79af5e34b70ced240",
+      "fullyTransparentPercent": 74.88,
+      "nearOpaquePercent": 20.13,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        72288,
+        161610,
+        82887
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "pai-aqi",
+      "sheet": "turn"
+    },
+    {
+      "file": "long-aotian/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "bc57beb5b125170fdb391de4f9e2e04acc90fc5d419db4fb37ab4dd8065a6942",
+      "fullyTransparentPercent": 76.16,
+      "nearOpaquePercent": 20.36,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        82012,
+        158774,
+        79575
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "long-aotian",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "long-aotian/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "a0335952f8c51c90a674fac3bb401441fdcb625715c7ede1e7dfeb50db85ea65",
+      "fullyTransparentPercent": 65.71,
+      "nearOpaquePercent": 23.06,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        94121,
+        171546,
+        97144
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "long-aotian",
+      "sheet": "walk"
+    },
+    {
+      "file": "long-aotian/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "5be0b87dee418dc225d4c13c1a2b55bada69455182b67f588677208c06c3588f",
+      "fullyTransparentPercent": 75.34,
+      "nearOpaquePercent": 20.58,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        70943,
+        167341,
+        85622
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "long-aotian",
+      "sheet": "turn"
+    },
+    {
+      "file": "ye-fan/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "e15eb6be5630cc82fea99f01a2b0b71eb57bcf5b225dfce19e73452d90cbec59",
+      "fullyTransparentPercent": 74.6,
+      "nearOpaquePercent": 20.53,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        82800,
+        160736,
+        79440
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "ye-fan",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "ye-fan/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "d95c4aa44116409367ef8069230adacc299ea7121dbacdfb32c885aed4032e1d",
+      "fullyTransparentPercent": 63.35,
+      "nearOpaquePercent": 24.26,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        102527,
+        176845,
+        102423
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "ye-fan",
+      "sheet": "walk"
+    },
+    {
+      "file": "ye-fan/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "c9ef2a4f072afd554a7fa828aab283dd0b3bf17b73c74f27d773399a9c5eb7b7",
+      "fullyTransparentPercent": 72.48,
+      "nearOpaquePercent": 22.53,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        75870,
+        184951,
+        93751
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "ye-fan",
+      "sheet": "turn"
+    },
+    {
+      "file": "liu-shi/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "c8313c42ac44ff5665f9a8b6bc7866ed57d195b8395760bfc8b61210a9c93a8a",
+      "fullyTransparentPercent": 75.87,
+      "nearOpaquePercent": 19.17,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        77656,
+        150014,
+        74027
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "liu-shi",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "liu-shi/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "06b2807db70198564fd58c6b5a069af67f4f85fd0e706540281a1975880fe39f",
+      "fullyTransparentPercent": 66.42,
+      "nearOpaquePercent": 23.63,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        98730,
+        173276,
+        99772
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "liu-shi",
+      "sheet": "walk"
+    },
+    {
+      "file": "liu-shi/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "6236ca1df8da13247ba1ae29fb9e38b9cdc950f302db8acf7028291eb28e128a",
+      "fullyTransparentPercent": 72.99,
+      "nearOpaquePercent": 22.22,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        81062,
+        176086,
+        92538
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "liu-shi",
+      "sheet": "turn"
+    },
+    {
+      "file": "xi-luo/motion/sit-back.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "edbe12307630df686102e0c51f4fae3112d58abf04e337885240cb44cd070fe1",
+      "fullyTransparentPercent": 68.65,
+      "nearOpaquePercent": 21.1,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        84513,
+        165445,
+        82033
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xi-luo",
+      "sheet": "sit-back"
+    },
+    {
+      "file": "xi-luo/motion/walk.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "474157681df108918e2a73d84a367d8eb09e45856160f0310f323b540202dffb",
+      "fullyTransparentPercent": 69.5,
+      "nearOpaquePercent": 24.23,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        100966,
+        180005,
+        100306
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xi-luo",
+      "sheet": "walk"
+    },
+    {
+      "file": "xi-luo/motion/turn.png",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "sha256": "67bbab3e7ba696f1ac7800d2130a65cdfc34d79f91609d76f44e24a3f8a0b073",
+      "fullyTransparentPercent": 74.8,
+      "nearOpaquePercent": 21.23,
+      "cornerAlpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "opaquePixelsInThirds": [
+        70684,
+        175747,
+        87620
+      ],
+      "alphaVerified": true,
+      "pngCrcVerified": true,
+      "characterId": "xi-luo",
+      "sheet": "turn"
+    }
+  ],
+  "method": "PNG CRC and alpha reconstruction; published files byte-identical to design originals; image layout manually reviewed."
+}

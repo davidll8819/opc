@@ -1,7 +1,13 @@
+import {useEmployeeDirectory,taskDepartments} from '../employee-directory'
+import { mergeSecretarySnapshot, type SecretarySync, type SecretarySnapshot as Snapshot } from './secretary-sync'
+import { TaskBriefFields } from '../TaskBrief'
+import { emptyBrief, type TaskBrief } from '../../../../../packages/secretary/task-brief.mjs'
+import { ChatRequestStatus } from '../ChatRequestStatus'
+import { EmployeeSkills } from '../EmployeeSkills'
 import { DailyBrief } from './DailyBrief'
 import { Attachments, type Attachment } from './Attachments'
 import { ReminderSettings } from './ReminderSettings'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../api'
 import { TaskDependencies } from '../TaskDependencies'
 import { isOperationsNavigation } from '../task-dependencies'
@@ -9,9 +15,7 @@ import { t, useLanguage } from '@/i18n'
 import { SecretaryPreferences } from './SecretaryPreferences'
 import { defaultPreferences, portrait, type Preferences } from './preferences'
 import {
-  departments,
   emptyBoard,
-  type Board,
   type Task,
   type Action,
 } from '../../../../../packages/secretary/model.mjs'
@@ -21,31 +25,69 @@ const localDay = () => {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
-type Snapshot = { revision: number; board: Board; preferences?: Preferences }
 export function SecretaryWorkspace({
   base,
+  sync,
+  active = true,
+  openSkills,
+  initialProfile = false,
   canEdit,
   openOperations,
   openSettings,
   initialInput,
+  initialBrief,
+  onBriefLoaded,
   onVoice,
   onTask,
 }: {
   base: string
+  sync?: SecretarySync
+  active?: boolean
+  openSkills: () => void
+  initialProfile?: boolean
   canEdit: boolean
   openOperations: (brief?: string, task?: Task) => void
   openSettings: () => void
   onVoice: () => void
   onTask: (id: string) => void
   initialInput?: string
+  initialBrief?: TaskBrief
+  onBriefLoaded?: () => void
 }) {
+  const employees=useEmployeeDirectory(base)
+  const departments=useMemo(()=>taskDepartments(employees),[employees])
+  const [profileOpen, setProfileOpen] = useState(initialProfile)
+  const [submitted, setSubmitted] = useState('')
+  const [received, setReceived] = useState(false)
+  const acting = useRef(false)
   const language = useLanguage()
-  const [saved, setSaved] = useState<Snapshot>({ revision: 0, board: emptyBoard() })
   const [preferences, setPreferences] = useState<Preferences>(defaultPreferences)
-  const [loading, setLoading] = useState(true)
+  const [localSaved, setLocalSaved] = useState<Snapshot>({ revision: 0, board: emptyBoard() })
+  const saved = sync?.snapshot ?? localSaved
+  const acceptShared = sync?.accept
+  const setSaved = useCallback((next: Snapshot) => {
+    if (acceptShared) acceptShared(next)
+    else setLocalSaved(previous => mergeSecretarySnapshot(previous, next))
+  }, [acceptShared])
+  useEffect(() => {
+    if (saved.preferences) setPreferences(saved.preferences)
+  }, [saved.preferences])
+  useEffect(() => { if (initialProfile) setProfileOpen(true) }, [initialProfile])
+  const [localLoading, setLoading] = useState(true)
+  const shared = !!sync
+  const loading = sync ? sync.lastSynced === 0 : localLoading
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [input, setInput] = useState('')
+  const [brief, setBrief] = useState<TaskBrief>(emptyBrief)
+  const [useBrief, setUseBrief] = useState(false)
+  useEffect(() => {
+    if (!initialBrief) return
+    setBrief(initialBrief)
+    setUseBrief(true)
+    setInput(value => value || '请根据需求单整理任务分工，执行前先让我确认。')
+    onBriefLoaded?.()
+  }, [initialBrief, onBriefLoaded])
   const [uploading, setUploading] = useState(false)
   const [attachments, setAttachments] = useState<Attachment[]>([])
   useEffect(() => {
@@ -61,25 +103,29 @@ export function SecretaryWorkspace({
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const board = saved.board
   const editable = canEdit
-  const deptName = (id: string) => {
-    const d = departments.find((d) => d.id === id)
-    return d ? (language === 'en' ? d.en : d.name) : t('秘书处')
-  }
-  const title = (task: Task) =>
-    language === 'en' ? task.titleEn || task.title : task.titleZh || task.title
-  async function refresh() {
+  const deptName = useCallback(
+    (id: string) => {
+      const d = departments.find((d) => d.id === id)
+      return d ? (language === 'en' ? d.en : d.name) : t('秘书处')
+    },
+    [language, departments],
+  )
+  const title = useCallback(
+    (task: Task) => (language === 'en' ? task.titleEn || task.title : task.titleZh || task.title),
+    [language],
+  )
+  const refresh = useCallback(async () => {
     const data = await api<Snapshot>(`${base}/secretary`)
     setSaved(data)
-    if (data.preferences) setPreferences(data.preferences)
     return data
-  }
+  }, [base, setSaved])
   useEffect(() => {
+    if (shared) return
     let live = true
     api<Snapshot>(`${base}/secretary`)
       .then((d) => {
         if (live) {
           setSaved(d)
-          if (d.preferences) setPreferences(d.preferences)
         }
       })
       .catch((e) => {
@@ -91,7 +137,7 @@ export function SecretaryWorkspace({
     return () => {
       live = false
     }
-  }, [base])
+  }, [base, shared, setSaved])
   useEffect(() => {
     const update = () => setOnline(navigator.onLine)
     window.addEventListener('online', update)
@@ -102,15 +148,20 @@ export function SecretaryWorkspace({
     }
   }, [])
   useEffect(() => {
-    messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'smooth' })
-  }, [board.messages.length])
+    if (!active) return
+    const frame = requestAnimationFrame(() => {
+      messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: 'instant' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [board.messages.length, busy, active])
   useEffect(() => {
+    if (shared) return
     let live = true
     const update = () => {
       if (document.hidden) return
       void api<Snapshot>(`${base}/secretary`)
         .then((data) => {
-          if (live) setSaved((previous) => (data.revision > previous.revision ? data : previous))
+          if (live) setSaved(data)
         })
         .catch(() => {
           /* Keep saved content on a temporary background network failure. */
@@ -118,18 +169,24 @@ export function SecretaryWorkspace({
     }
     const timer = window.setInterval(update, 5000)
     window.addEventListener('focus', update)
+    window.addEventListener('online', update)
+    document.addEventListener('visibilitychange', update)
     return () => {
       live = false
       clearInterval(timer)
       window.removeEventListener('focus', update)
+      window.removeEventListener('online', update)
+      document.removeEventListener('visibilitychange', update)
     }
-  }, [base])
+  }, [base, shared, setSaved])
   const modalOpen = !!editing
   useEffect(() => {
     if (!modalOpen) return
     const previous = document.activeElement as HTMLElement | null
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        event.preventDefault()
+        event.stopPropagation()
         setEditing(null)
         return
       }
@@ -150,53 +207,69 @@ export function SecretaryWorkspace({
         first?.focus()
       }
     }
-    document.addEventListener('keydown', keyboard)
+    document.addEventListener('keydown', keyboard, true)
     return () => {
-      document.removeEventListener('keydown', keyboard)
+      document.removeEventListener('keydown', keyboard, true)
       previous?.focus()
     }
   }, [modalOpen])
-  async function act(action: Action, requireTasks = false) {
-    if (busy || uploading || loading) return false
-    setBusy(true)
-    setError('')
-    setActiveAction(action.type === 'send' ? action.intent : action.type)
-    try {
-      if (action.type === 'send') {
-        setSaved(
-          await api<Snapshot>(`${base}/secretary/chat`, {
-            revision: saved.revision,
-            requireTasks,
-            attachmentIds: attachments.map((a) => a.id),
-            lastUserMessageId:
-              saved.board.messages.filter((m) => m.role === 'user').at(-1)?.id || '',
-            text: action.text,
-            intent: action.intent,
-            language: action.language,
-          }),
-        )
-      } else {
-        const next = await api<Snapshot>(`${base}/secretary`, {
-          revision: saved.revision,
-          action,
-          today: localDay(),
-        })
-        setSaved(next)
-      }
-      return true
-    } catch (e) {
-      setError((e as Error).message)
+  const act = useCallback(
+    async (action: Action, requireTasks = false) => {
+      if (acting.current || busy || uploading || loading) return false
+      acting.current = true
+      setSubmitted(action.type === 'send' ? action.text : '')
+      setReceived(false)
+      setBusy(true)
+      setError('')
+      setActiveAction(action.type === 'send' ? action.intent : action.type)
       try {
-        await refresh()
-      } catch {
-        /* Keep the original failure visible. */
+        if (action.type === 'send') {
+          const next = await api<Snapshot>(
+              `${base}/secretary/chat`,
+              {
+                revision: saved.revision,
+                requireTasks,
+                ...(useBrief && action.intent === 'plan' ? { brief } : {}),
+                attachmentIds: attachments.map((a) => a.id),
+                lastUserMessageId:
+                  saved.board.messages.filter((m) => m.role === 'user').at(-1)?.id || '',
+                text: action.text,
+                intent: action.intent,
+                language: action.language,
+              },
+              'POST',
+              () => setReceived(true),
+          )
+          setSaved(next)
+          if (action.intent === 'plan' && next.board.messages.at(-1)?.batchId) {
+            setUseBrief(false)
+            setBrief(emptyBrief)
+          }
+        } else {
+          const next = await api<Snapshot>(`${base}/secretary`, {
+            revision: saved.revision,
+            action,
+            today: localDay(),
+          })
+          setSaved(next)
+        }
+        return true
+      } catch (e) {
+        setError((e as Error).message)
+        try {
+          await refresh()
+        } catch {
+          /* Keep the original failure visible. */
+        }
+        return false
+      } finally {
+        setBusy(false)
+        setActiveAction('')
+        acting.current = false
       }
-      return false
-    } finally {
-      setBusy(false)
-      setActiveAction('')
-    }
-  }
+    },
+    [busy, uploading, loading, base, saved.revision, saved.board.messages, attachments, refresh, useBrief, brief, setSaved],
+  )
   function handToOperations() {
     openOperations(input.trim() || undefined)
   }
@@ -206,9 +279,10 @@ export function SecretaryWorkspace({
       handToOperations()
       return
     }
-    const sent = await act({ type: 'send', text: input.trim(), intent, language })
+    const submittedInput = input
+    const sent = await act({ type: 'send', text: submittedInput.trim(), intent, language })
     if (sent) {
-      setInput('')
+      setInput((current) => (current === submittedInput ? '' : current))
       setAttachments([])
       setIntent('plan')
     }
@@ -226,13 +300,109 @@ export function SecretaryWorkspace({
         ? '催办中'
         : '拆分任务中'
       : '在线 · 待命中'
-  const openEdit = (batchId: string) => {
-    setEditing(batchId)
-    setEdits(
-      board.tasks.filter((t) => t.batchId === batchId).map((t) => ({ ...t, title: title(t) })),
-    )
-    setError('')
-  }
+  const openEdit = useCallback(
+    (batchId: string) => {
+      setEditing(batchId)
+      setEdits(
+        board.tasks.filter((t) => t.batchId === batchId).map((t) => ({ ...t, title: title(t) })),
+      )
+      setError('')
+    },
+    [board.tasks, title],
+  )
+  const messageItems = useMemo(
+    () =>
+      board.messages.map((message) => {
+        const tasks = board.tasks.filter(
+          (task) => task.batchId === message.batchId && message.batchId,
+        )
+        const batch = board.batches.find((b) => b.id === message.batchId)
+        return (
+          <div className={`sec-message ${message.role}`} key={message.id}>
+            <span className="sec-message-author">
+              {message.role === 'user' ? t('我') : preferences.name}
+              {message.role === 'assistant' && <span>{t('秘书处')}</span>}
+            </span>
+            <div className="sec-bubble">
+              <p>{language === 'en' && message.textEn ? message.textEn : message.text}</p>
+              {!!message.attachments?.length && (
+                <div className="message-attachments">
+                  {message.attachments.map((a) => (
+                    <a key={a.id} href={`${base}/files/${a.id}/download`} download>
+                      {a.mime.startsWith('image/') && (
+                        <img src={`${base}/files/${a.id}/preview`} alt={a.name} />
+                      )}
+                      📎 {a.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+              {!!tasks.length && (
+                <>
+                  <ol className="sec-task-list">
+                    {tasks.map((task, i) => (
+                      <li key={task.id}>
+                        <span className="sec-task-index">{String(i + 1).padStart(2, '0')}</span>
+                        <div>
+                          <button
+                            type="button"
+                            className="sec-title-button"
+                            onClick={() => onTask(task.id)}
+                          >
+                            {title(task)} ↗
+                          </button>
+                          <span>
+                            {deptName(task.dept)} ·{' '}
+                            {departments.find((d) => d.id === task.dept)?.person} · {task.due}
+                          </span>
+                          <TaskDependencies task={task} tasks={board.tasks} compact />
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                  {batch?.status === 'draft' ? (
+                    <div className="sec-task-actions">
+                      <button
+                        className="sec-primary"
+                        disabled={busy || !editable}
+                        onClick={() => void act({ type: 'dispatch', batchId: batch.id })}
+                      >
+                        {t('确认派发')} <span aria-hidden="true">↗</span>
+                      </button>
+                      <button disabled={busy || !editable} onClick={() => openEdit(batch.id)}>
+                        {t('修改任务')}
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="sec-queued">
+                      ✓ {t('分工已派发，各部门按依赖顺序自动执行')}
+                    </span>
+                  )}
+                  {batch?.status === 'draft' && (
+                    <small>{t('已有任务草稿，请核对部门、日期和任务内容')}</small>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )
+      }),
+    [
+      board.messages,
+      board.tasks,
+      board.batches,
+      language,
+      preferences.name,
+      base,
+      busy,
+      editable,
+      onTask,
+      title,
+      deptName,
+      act,
+      openEdit,
+    ],
+  )
   return (
     <section className="secretary-workspace" aria-label={t('秘书工作台')}>
       <header className="sec-page-heading">
@@ -241,18 +411,36 @@ export function SecretaryWorkspace({
           <h1>{t('秘书工作台')}</h1>
         </div>
         <div className="sec-page-tools">
+          <button aria-pressed={profileOpen} onClick={() => setProfileOpen(!profileOpen)}>
+            {t('员工档案与技能')}
+          </button>
           <button onClick={() => setConfig(!config)}>
             {t(config ? '返回工作台' : '助手配置')}
           </button>
         </div>
       </header>
+      {profileOpen && (
+        <section className="builder-card" aria-label={t('秘书员工档案')}>
+          <h2>
+            {t('李婉儿')} · {t('秘书处')}
+          </h2>
+          <p>{t('传达、安排老板交代的工作')}</p>
+          <EmployeeSkills
+            base={base}
+            employeeId="marvis"
+            canEdit={canEdit}
+            openLibrary={openSkills}
+            onSaved={() => {}}
+          />
+        </section>
+      )}
       {config ? (
         <div className="sec-configuration">
           {loading ? (
             <p>{t('正在加载…')}</p>
           ) : (
             <>
-              <SecretaryPreferences base={base} preferences={preferences} onSave={setPreferences} />
+              <SecretaryPreferences base={base} preferences={preferences} onSave={value => { setPreferences(value); void refresh().catch(e => setError(e.message)) }} />
               <ReminderSettings base={base} canEdit={canEdit} />
             </>
           )}
@@ -263,6 +451,7 @@ export function SecretaryWorkspace({
             <span aria-hidden="true">◈</span>
             <span>{t('秘书按你的偏好交流，使用当前企业配置的文字模型。')}</span>
           </div>
+          {sync?.error && <p className="sec-sync-error" role="status">{language === 'en' ? 'Sync interrupted. Showing saved records; reconnecting automatically.' : sync.error}</p>}
           {error && (
             <div className="sec-error" role="alert">
               {t(error)}
@@ -368,92 +557,8 @@ export function SecretaryWorkspace({
                     </button>
                   </div>
                 )}
-                {board.messages.map((message) => {
-                  const tasks = board.tasks.filter(
-                    (task) => task.batchId === message.batchId && message.batchId,
-                  )
-                  const batch = board.batches.find((b) => b.id === message.batchId)
-                  return (
-                    <div className={`sec-message ${message.role}`} key={message.id}>
-                      <span className="sec-message-author">
-                        {message.role === 'user' ? t('我') : preferences.name}
-                        {message.role === 'assistant' && <span>{t('秘书处')}</span>}
-                      </span>
-                      <div className="sec-bubble">
-                        <p>{language === 'en' && message.textEn ? message.textEn : message.text}</p>
-                        {!!message.attachments?.length && (
-                          <div className="message-attachments">
-                            {message.attachments.map((a) => (
-                              <a key={a.id} href={`${base}/files/${a.id}/download`} download>
-                                {a.mime.startsWith('image/') && (
-                                  <img src={`${base}/files/${a.id}/preview`} alt={a.name} />
-                                )}
-                                📎 {a.name}
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                        {!!tasks.length && (
-                          <>
-                            <ol className="sec-task-list">
-                              {tasks.map((task, i) => (
-                                <li key={task.id}>
-                                  <span className="sec-task-index">
-                                    {String(i + 1).padStart(2, '0')}
-                                  </span>
-                                  <div>
-                                    <button
-                                      type="button"
-                                      className="sec-title-button"
-                                      onClick={() => onTask(task.id)}
-                                    >
-                                      {title(task)} ↗
-                                    </button>
-                                    <span>
-                                      {deptName(task.dept)} ·{' '}
-                                      {departments.find((d) => d.id === task.dept)?.person} ·{' '}
-                                      {task.due}
-                                    </span>
-                                    <TaskDependencies task={task} tasks={board.tasks} compact />
-                                  </div>
-                                </li>
-                              ))}
-                            </ol>
-                            {batch?.status === 'draft' ? (
-                              <div className="sec-task-actions">
-                                <button
-                                  className="sec-primary"
-                                  disabled={busy || !editable}
-                                  onClick={() => void act({ type: 'dispatch', batchId: batch.id })}
-                                >
-                                  {t('确认派发')} <span aria-hidden="true">↗</span>
-                                </button>
-                                <button
-                                  disabled={busy || !editable}
-                                  onClick={() => openEdit(batch.id)}
-                                >
-                                  {t('修改任务')}
-                                </button>
-                              </div>
-                            ) : (
-                              <span className="sec-queued">
-                                ✓ {t('分工已派发，各部门按依赖顺序自动执行')}
-                              </span>
-                            )}
-                            {batch?.status === 'draft' && (
-                              <small>{t('已有任务草稿，请核对部门、日期和任务内容')}</small>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  )
-                })}
-                {busy && (
-                  <p className="sec-thinking" role="status">
-                    {t(activeAction === 'dispatch' ? '正在派发任务…' : '秘书正在思考…')}
-                  </p>
-                )}
+                {messageItems}
+                {busy && <ChatRequestStatus text={submitted} received={received} />}
               </div>
               {board.messages.length > 0 && (!board.tasks.length || board.lastReplyError) && (
                 <div className="sec-task-notice">
@@ -500,6 +605,8 @@ export function SecretaryWorkspace({
                   void send()
                 }}
               >
+                <label className="task-brief-toggle"><input type="checkbox" checked={useBrief} disabled={busy || !editable || intent !== 'plan'} onChange={e => setUseBrief(e.target.checked)} /> 附上任务需求单（目标、格式、验收要求）</label>
+                {useBrief && intent === 'plan' && <TaskBriefFields value={brief} onChange={setBrief} disabled={busy || !editable} />}
                 <div className="sec-quick-actions">
                   <button type="button" onClick={onVoice}>
                     {t('语音输入')}
@@ -554,7 +661,12 @@ export function SecretaryWorkspace({
                       setInput(e.target.value)
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+                      if (
+                        e.key === 'Enter' &&
+                        !e.shiftKey &&
+                        !e.nativeEvent.isComposing &&
+                        e.nativeEvent.keyCode !== 229
+                      ) {
                         e.preventDefault()
                         void send()
                       }

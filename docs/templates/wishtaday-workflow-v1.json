@@ -1,0 +1,32 @@
+{
+  "format": "wishtaday.workflow",
+  "version": 1,
+  "title": "资料整理与文案流程",
+  "workflow": {
+    "brief": {
+      "project": "{{项目}}",
+      "goal": "{{目标}}",
+      "audience": "",
+      "format": "",
+      "acceptance": "{{验收要求}}",
+      "budget": "",
+      "materials": ""
+    },
+    "steps": [
+      {
+        "title": "整理资料",
+        "dept": "file-agent",
+        "brief": "整理{{项目}}的资料，目标：{{目标}}。不足的信息明确列出。",
+        "dependsOn": []
+      },
+      {
+        "title": "编写文案",
+        "dept": "new-agent-7",
+        "brief": "根据前序资料完成{{目标}}；验收：{{验收要求}}。只交付草稿，不发布。",
+        "dependsOn": [
+          0
+        ]
+      }
+    ]
+  }
+}

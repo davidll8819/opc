@@ -25,6 +25,8 @@ export class MovementSystem {
       if (agent.state !== 'walking' || agent.targetX == null || agent.targetY == null) {
         continue
       }
+      // Only the opt-in Li Waner preview holds movement until standing/turning completes.
+      if (entity.holdsMovement) continue
 
       anyMoving = true
       const dx = agent.targetX - agent.x

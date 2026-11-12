@@ -1,7 +1,15 @@
+import {useEmployeeDirectory} from './employee-directory'
+import { Recruitment } from './Recruitment'
+import { useSecretarySync } from './secretary/secretary-sync'
+import { WanerOffice } from './secretary/WanerOffice'
+import { ReuseWorkspace } from './ReuseWorkspace'
+import { useWorkspaceRoute } from './workspace-route'
+import { WorkspaceHelp } from './WorkspaceHelp'
+import './onboarding.css'
 import { deriveOfficeWorkStatuses } from './office-work-status'
 import { TaskCenter, ArchiveRoom, type TaskFilter } from './TaskCenter'
 import { WorkspaceTools } from './WorkspaceTools'
-import { emptyBoard, type Task, type Board } from '../../../../packages/secretary/model.mjs'
+import { type Task } from '../../../../packages/secretary/model.mjs'
 import { lazy, Suspense, useCallback, useEffect, useState, useMemo } from 'react'
 import { t, useLanguage } from '@/i18n'
 import { api, type Tenant } from './api'
@@ -9,7 +17,7 @@ import { Members } from './Members'
 import { Usage } from './Usage'
 import { Skills, type SkillView } from './Skills'
 import { SkillUpload } from './SkillUpload'
-import { AgentWorkspace } from './AgentWorkspace'
+import { EmployeeDialog } from './EmployeeDialog'
 import { SecretaryWorkspace } from './secretary/SecretaryWorkspace'
 import { OperationsDialog } from './operations/OperationsDialog'
 import type { OperationsHandoff } from './operations/OperationsWorkspace'
@@ -18,7 +26,7 @@ import { Settings } from './Settings'
 import { NavigationIcon } from './NavigationIcon'
 import { OfficeHeaderStats, OfficeRightPanel } from '@/components/OfficeDashboardChrome'
 const Office = lazy(() => import('../App'))
-export function Workspace({ tenant }: { tenant: Tenant }) {
+export function Workspace({ tenant, privateOrigin }: { tenant: Tenant; privateOrigin?: string | null }) {
   const language = useLanguage()
   const [operationsOpen, setOperationsOpen] = useState(false)
   const [operationsVisited, setOperationsVisited] = useState(false)
@@ -38,27 +46,37 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
     },
     [],
   )
+  const [returningToProfile, setReturningToProfile] = useState(false)
+  const [skillEmployee, setSkillEmployee] = useState('')
+  const [recruitmentEmployee, setRecruitmentEmployee] = useState<string>()
+  const [returnToRecruitment, setReturnToRecruitment] = useState(false)
   const [skillView, setSkillView] = useState<SkillView>('catalog')
   const [skillRevision, setSkillRevision] = useState(0)
   const skillInstalled = () => {
     setSkillRevision((n) => n + 1)
     setSkillView('installed')
   }
-  const [automatic, setAutomatic] = useState(false)
-  const [tab, setTab] = useState('office')
-  const [taskFilter, setTaskFilter] = useState<TaskFilter>('all')
-  const [selectedTask, setSelectedTask] = useState<string>()
+  const [automatic, setAutomatic] = useState(true)
+  const [route, navigate] = useWorkspaceRoute(tenant.id)
+  const { tab, filter: taskFilter, task: selectedTask } = route
+  const setTab = useCallback((tab: string) => navigate({ tab, filter: 'all' }), [navigate])
+  const setTaskFilter = (filter: TaskFilter) => navigate({ tab: 'tasks', filter })
+  const setSelectedTask = (task?: string) => navigate({ tab: 'tasks', filter: taskFilter, task })
   const openTasks = (filter: TaskFilter = 'all', id?: string) => {
-    setTaskFilter(filter)
-    setSelectedTask(id)
-    setTab('tasks')
+    navigate({ tab: 'tasks', filter, task: id })
   }
   const base = `/api/tenants/${tenant.id}`
+  const employeeRoster=useEmployeeDirectory(base)
+  const secretarySync = useSecretarySync(base)
+  const { board } = secretarySync.snapshot
+  const setBoard = secretarySync.replaceBoard
+  const [conversationOpen, setConversationOpen] = useState(false)
+  const openSecretary = useCallback(() => { setConversationOpen(true); setTab('secretary') }, [setTab])
   const [tool, setTool] = useState(''),
     [dictated, setDictated] = useState(''),
     [agentId, setAgentId] = useState<string>()
-  const [board, setBoard] = useState<Board>(emptyBoard()),
-    [status, setStatus] = useState<{
+  const selectedEmployee = employeeRoster.find(employee => employee.id === agentId && employee.role !== 'secretary')
+  const [status, setStatus] = useState<{
       departments: {
         id: string
         name: string
@@ -77,11 +95,11 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
     setBusyTask(task.id)
     setTaskError('')
     try {
-      const result = await api<{ board: Board }>(
+      const result = await api<import('./secretary/secretary-sync').SecretarySnapshot>(
         `${base}/secretary/tasks/${task.id}/run`,
         task.status === 'completed' ? { regenerateImage: true } : {},
       )
-      setBoard(result.board)
+      secretarySync.accept(result)
     } catch (e) {
       setTaskError((e as Error).message)
     } finally {
@@ -96,16 +114,23 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
     setTool('')
     setTab('settings')
   }
-  const openPerson = useCallback(
+  const openRecruitmentEmployee = useCallback(
     (id: string) => {
-      if (id === 'marvis') setTab('secretary')
-      else if (id === 'app-agent') openOperations()
+      if (id === 'marvis') openSecretary()
       else {
+        setReturningToProfile(false)
         setAgentId(id)
-        setTab('agents')
+        setTab('recruitment')
       }
     },
-    [openOperations],
+    [setTab, openSecretary],
+  )
+  const openPerson = useCallback(
+    (id: string) => {
+      if (id === 'app-agent') openOperations()
+      else openRecruitmentEmployee(id)
+    },
+    [openOperations, openRecruitmentEmployee],
   )
   useEffect(() => {
     let live = true
@@ -113,19 +138,14 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
     const update = async () => {
       if (document.hidden || pending) return
       pending = true
-      await Promise.all([
-        api<{ board: Board }>(`${base}/secretary`),
-        api<NonNullable<typeof status>>(`${base}/workspace/status`),
-      ])
-        .then(([b, s]) => {
+      await api<NonNullable<typeof status>>(`${base}/workspace/status`)
+        .then((s) => {
           if (live) {
-            setTaskError('')
-            setBoard(b.board)
             setStatus(s)
           }
         })
         .catch(() => {
-          if (live) setTaskError('任务状态暂时无法刷新，显示上次记录')
+          /* Secretary synchronization reports its own connection state. */
         })
         .finally(() => {
           pending = false
@@ -137,7 +157,7 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
       live = false
       clearInterval(timer)
     }
-  }, [base, tab])
+  }, [base])
 
   useEffect(() => {
     const ids = [
@@ -171,23 +191,25 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
 
   return (
     <div
-      className={`workspace ${['secretary', 'tasks', 'archive'].includes(tab) ? 'workspace-secretary-layout' : ''}`}
+      className={`workspace ${tab === 'recruitment' ? 'workspace-recruitment' : ''} ${tab === 'help' ? 'workspace-onboarding' : ''} ${tab === 'secretary' ? 'workspace-waner-office' : ''} ${['help', 'secretary', 'waner-office', 'tasks', 'archive', 'reuse', 'recruitment'].includes(tab) ? 'workspace-secretary-layout' : ''}`}
     >
       <aside className="workspace-nav">
-        <p className="eyebrow">WORKSPACE</p>
+        <p className="eyebrow">{tab === 'help' ? '工作空间' : 'WORKSPACE'}</p>
         <h2>{tenant.name}</h2>
         <span className="plan-tag">{tenant.plan === 'enterprise' ? t('企业版') : t('个人版')}</span>
         <nav lang={language} aria-label={t('主导航')}>
           {[
             ['secretary', t('私人秘书')],
             ['office', t('办公室')],
+            ['recruitment', language === 'en' ? 'Recruit employees' : '招聘员工'],
             ['tasks', t('任务成果')],
             ['archive', t('资料室')],
-            ['members', t('企业成员')],
             ['skills', t('技能库')],
-            ['agents', t('智能体')],
+            ['reuse', t('工作知识')],
+            ['members', t('企业成员')],
             ['settings', t('设置')],
             ['usage', t('用量与费用')],
+            ['help', t('使用帮助')],
           ].map(([key, label]) => (
             <button
               key={key}
@@ -195,10 +217,10 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
               className={tab === key ? 'selected' : ''}
               onClick={() => {
                 setAgentId(undefined)
+                if (key === 'secretary') setConversationOpen(false)
                 setTab(key)
                 if (key === 'tasks') {
-                  setSelectedTask(undefined)
-                  setTaskFilter('completed')
+                  openTasks('all')
                 }
               }}
             >
@@ -215,22 +237,24 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
       <main
         className={`workspace-content ${tab === 'office' ? 'workspace-office' : tab === 'skills' ? 'workspace-skills' : tab === 'secretary' ? 'workspace-secretary' : ''}`}
       >
-        {tab === 'tasks' && taskError && (
+        {tab === 'tasks' && (taskError || secretarySync.error) && (
           <p className="error" role="alert">
-            {t(taskError)}
+            {t(taskError || secretarySync.error)}
           </p>
         )}
-        {tab === 'secretary' && (
-          <SecretaryWorkspace
-            base={base}
-            canEdit={tenant.role !== 'member'}
-            openOperations={openOperations}
-            initialInput={dictated}
-            openSettings={openSettings}
-            onVoice={() => setTool('voice')}
-            onTask={(id) => openTasks('all', id)}
-          />
-        )}
+        {tab === 'help' && <WorkspaceHelp onStart={() => setTab('secretary')} onTasks={() => openTasks('attention')} onUsage={() => setTab('usage')} />}
+        <div className="waner-office-view" hidden={tab !== 'secretary'}>
+          <WanerOffice privateOrigin={privateOrigin} board={board} error={secretarySync.error} loaded={secretarySync.lastSynced > 0}
+            lastSynced={secretarySync.lastSynced} conversationOpen={tab === 'secretary' && conversationOpen}
+            onConversationChange={setConversationOpen} onTask={id => openTasks('all', id)} onAllTasks={() => openTasks('attention')}>
+            <SecretaryWorkspace base={base} canEdit={tenant.role !== 'member'} sync={secretarySync} active={tab === 'secretary' && conversationOpen}
+              openSkills={() => { setReturningToProfile(false); setSkillEmployee('marvis'); setSkillView('catalog'); setTab('skills') }}
+              initialProfile={returningToProfile && skillEmployee === 'marvis'}
+              openOperations={openOperations} openSettings={openSettings}
+              initialInput={dictated} onVoice={() => setTool('voice')}
+              onTask={id => openTasks('all', id)} />
+          </WanerOffice>
+        </div>
         {tab === 'office' && (
           <>
             <OfficeHeaderStats
@@ -274,10 +298,22 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
           />
         )}
         {tab === 'archive' && <ArchiveRoom base={base} onTask={(id) => openTasks('all', id)} />}
+        {tab === 'recruitment' && <Recruitment base={base} canEdit={tenant.role !== 'member'} onOpenEmployee={openRecruitmentEmployee}
+          initialEmployeeId={recruitmentEmployee} onSelection={setRecruitmentEmployee}
+          onOpenSkills={id => { setReturnToRecruitment(true); setSkillEmployee(id); setSkillView('catalog'); setTab('skills') }} />}
         {tab === 'members' && <Members base={base} tenant={tenant} />}{' '}
         {tab === 'skills' && (
           <Skills
             base={base}
+            employeeId={skillEmployee}
+            onEmployee={setSkillEmployee}
+            returnProfile={() => {
+              if (returnToRecruitment) { setReturnToRecruitment(false); setAgentId(undefined); setTab('recruitment'); return }
+              setReturningToProfile(true)
+              setAgentId(skillEmployee)
+              if (skillEmployee === 'marvis') openSecretary()
+              else setTab('recruitment')
+            }}
             canEdit={tenant.role !== 'member'}
             view={skillView}
             onView={setSkillView}
@@ -286,20 +322,24 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
             openOperations={openOperations}
           />
         )}
-        {tab === 'agents' && (
-          <AgentWorkspace
-            key={agentId || 'all'}
-            initialId={agentId}
+        {tab === 'recruitment' && selectedEmployee && (
+          <EmployeeDialog
+            key={selectedEmployee.id}
+            employee={selectedEmployee}
+            close={() => { setAgentId(undefined); setReturningToProfile(false) }}
+            initialProfile={returningToProfile}
             onTool={setTool}
-            tasks={board.tasks}
+            tasks={board.tasks.filter(task => task.dept === selectedEmployee.id)}
             onRun={runTask}
             onTaskOperations={openTaskOperations}
             busyTask={busyTask}
             canEdit={tenant.role !== 'member'}
             base={base}
             openSettings={openSettings}
-            openSkills={() => {
-              setSkillView('installed')
+            openSkills={(employeeId) => {
+              setReturnToRecruitment(false)
+              setSkillEmployee(employeeId)
+              setSkillView('catalog')
               setTab('skills')
             }}
             openOperations={openOperations}
@@ -307,6 +347,7 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
         )}
         {tab === 'settings' && <Settings base={base} canEdit={tenant.role !== 'member'} />}
         {tab === 'usage' && <Usage base={base} />}
+        {tab === 'reuse' && <ReuseWorkspace base={base} board={board} canRun={tenant.role !== 'member'} onDraft={next => { setBoard(next); openSecretary() }} onTask={id => openTasks('all', id)} />}
       </main>
       {tool && (
         <WorkspaceTools
@@ -317,7 +358,7 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
           openSettings={openSettings}
           onDictated={(text) => {
             setDictated(text)
-            setTab('secretary')
+            openSecretary()
           }}
         />
       )}
@@ -331,7 +372,7 @@ export function Workspace({ tenant }: { tenant: Tenant }) {
           openSettings={openSettings}
         />
       )}
-      {['secretary', 'tasks', 'archive'].includes(tab) ? null : tab === 'office' ? (
+      {['help', 'secretary', 'waner-office', 'tasks', 'archive', 'reuse', 'recruitment'].includes(tab) ? null : tab === 'office' ? (
         <OfficeRightPanel
           base={base}
           board={board}

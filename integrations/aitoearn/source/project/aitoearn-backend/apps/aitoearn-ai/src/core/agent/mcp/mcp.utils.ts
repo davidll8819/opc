@@ -1,3 +1,4 @@
+import { officeUserContext } from '@yikart/common'
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js'
 import type { AiAvailabilityService } from '../../ai-availability'
 import { createSdkMcpServer, InferShape, McpSdkServerConfigWithInstance, tool } from '@anthropic-ai/claude-agent-sdk'
@@ -96,6 +97,7 @@ export function wrapTool<T extends z.ZodRawShape>(
   schema: T,
   handler: (params: InferShape<T>) => Promise<CallToolResult>,
   aiAvailability: AiAvailabilityService,
+  officeUserId = officeUserContext.getStore(),
 ) {
   const availabilityContext = { provider: 'mcp', operation: toolName, module: 'agent' }
 
@@ -107,7 +109,7 @@ export function wrapTool<T extends z.ZodRawShape>(
       try {
         const result = await aiAvailability.execute(
           availabilityContext,
-          () => handler(params),
+          () => officeUserId ? officeUserContext.run(officeUserId, () => handler(params)) : handler(params),
         )
         return result
       }

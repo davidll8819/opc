@@ -1,0 +1,19 @@
+.skill-studio { margin-top: 24px; border: 1px solid var(--border, #ded9e6); border-radius: 16px; padding: 24px; background: var(--panel, #fff); }
+.skill-studio h2 { margin: 0 0 8px; font-size: 22px; }
+.skill-studio header p,.skill-studio .muted { color: #625b6e; font-size: 14px; line-height: 1.65; }
+.skill-studio-layout { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 28px; margin-top: 24px; }
+.skill-studio aside { border-right: 1px solid #e5e0ec; padding-right: 20px; }
+.skill-studio aside button { width: 100%; text-align: left; margin-bottom: 8px; white-space: normal; overflow-wrap: anywhere; }
+.skill-studio small { display: block; margin-top: 5px; color: #625b6e; }
+.skill-studio [aria-current=true] { background: #eee8f5; border-color: #8e6aac; }
+.skill-studio fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.skill-studio label { display: grid; gap: 8px; font-size: 14px; margin-bottom: 18px; }
+.skill-studio input:not([type=checkbox]),.skill-studio textarea,.skill-studio select { width: 100%; min-width: 0; box-sizing: border-box; }
+.skill-studio textarea { resize: vertical; line-height: 1.6; }
+.skill-studio pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.75; max-height: 440px; overflow-y: auto; background: #f6f3f8; padding: 16px; border-radius: 8px; }
+.studio-actions,.studio-version { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 16px 0; }
+.studio-confirm { display: flex !important; align-items: center; }
+.studio-trial { border-top: 1px solid #e5e0ec; margin-top: 24px; }
+.skill-studio details { margin: 20px 0; }
+.skill-studio summary { cursor: pointer; line-height: 1.6; }
+@media (max-width: 768px) { .skill-studio { padding: 16px; } .skill-studio-layout { grid-template-columns: 1fr; gap: 16px; } .skill-studio aside { border: 0; padding: 0; max-height: 220px; overflow: auto; } }

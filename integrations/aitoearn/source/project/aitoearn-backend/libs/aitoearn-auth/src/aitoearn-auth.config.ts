@@ -12,6 +12,8 @@ export class AitoearnAuthConfig extends createZodDto(aitoearnAuthConfigSchema) {
 
 export interface TokenPayload {
   readonly id: string
+  readonly officeTenantId?: string
+  readonly officeLegacyRead?: string
   readonly mail?: string
   readonly name?: string
   readonly shopDomain?: string

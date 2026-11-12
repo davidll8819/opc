@@ -1,5 +1,5 @@
 import { fail } from '../db.mjs'
-// The upstream identity is shared by a tenant. Office owns user-level task authorization.
+// Office enforces task ownership for both personal runtime identities and read-only legacy tasks.
 export async function ownRuntimeIds(db, ctx) {
   const rows = (
     await db.query(

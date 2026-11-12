@@ -65,10 +65,11 @@ const BOOT_STATES: AgentState[] = [
 
 function buildInitialAgents(): Agent[] {
   return AGENT_ROSTER.map((entry, i) => {
-    const desk = DESKS[i]
+    const desk = DESKS[i % DESKS.length]
     const state = BOOT_STATES[i] ?? 'idle'
     return {
       id: entry.id,
+      onDuty: i < DESKS.length,
       name: entry.name,
       color: entry.color,
       x: desk.seatX,

@@ -29,6 +29,8 @@ try {
   for (const service of ['server', 'ai']) {
     const template = `integrations/aitoearn/source/project/aitoearn-backend/apps/aitoearn-${service}/config/config.yaml.example`
     const config = parse(await readFile(template, 'utf8'))
+    if (entry.serviceHost) config.host = entry.serviceHost
+    if (entry.servicePorts?.[service]) config.port = entry.servicePorts[service]
     const infra = entry.infrastructure
     for (const field of ['mongodb', 'redis', 'redlock', 'assets']) {
       if (!infra[field]) throw new Error(`Missing infrastructure ${field}`)
@@ -44,7 +46,8 @@ try {
       // Example platform credentials are not configured accounts. Account binding
       // uses the explicitly prepared Relay below; keep native adapters disabled.
       config.channel = { channelDb: infra.channelDb, shortLink: { baseUrl: '' } }
-      if (secrets.relay && !entry.relayCallbackUrl) throw new Error('Prepare a verified Relay callback before enabling account binding')
+      if (secrets.relay && !entry.relayCallbackUrl)
+        console.warn('Platform authorization stays disabled until a verified Relay callback is configured; media creation remains available.')
       if (entry.relayCallbackUrl) {
         config.relay = { serverUrl: value.aitoearn.region === 'china' ? 'https://aitoearn.cn/api' : 'https://aitoearn.ai/api', apiKey: '', callbackUrl: entry.relayCallbackUrl }
       } else delete config.relay

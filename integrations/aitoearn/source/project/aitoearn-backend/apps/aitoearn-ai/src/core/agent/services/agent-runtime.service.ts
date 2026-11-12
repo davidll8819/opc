@@ -1,3 +1,4 @@
+import { officeModelToken } from '@yikart/common'
 import { spawn } from 'node:child_process'
 import * as fs from 'node:fs'
 import { join } from 'node:path'
@@ -37,7 +38,7 @@ import { firstValueFrom, from, interval, merge, Observable, of, throwError } fro
 import { catchError, concatMap, filter, finalize, first, map, mergeMap, share, skip, takeUntil, tap, timeout } from 'rxjs/operators'
 import { z } from 'zod'
 import { RedlockKey } from '../../../common/enums'
-import { config } from '../../../config'
+import { config, routerApiKey } from '../../../config'
 import { AiAvailabilityService } from '../../ai-availability'
 import { RelayMediaResolverService } from '../../ai/relay-media'
 import { ChannelsToolName, CLAUDE_CODE_ROUTER_PROVIDER_NAME, McpServerName, POLLING_TASK_AGENT_PROMPT, SKILL_ANALYZER_AGENT_PROMPT, SYSTEM_PROMPT } from '../agent.constants'
@@ -205,7 +206,7 @@ export class AgentRuntimeService {
       : this.sessionDir
 
     if (options.taskId && !fs.existsSync(taskCwd)) {
-      fs.mkdirSync(taskCwd, { recursive: true })
+      fs.mkdirSync(taskCwd, { recursive: true, mode: 0o700 })
     }
 
     const queryModel = options.model || config.agent.defaultModel
@@ -216,18 +217,18 @@ export class AgentRuntimeService {
       includePartialMessages: options.includePartialMessages ?? false,
       model: queryModel,
       cwd: taskCwd,
-      settingSources: ['project', 'user'],
+      settingSources: config.officeBridge ? [] : ['project', 'user'],
       env: {
-        ...process.env,
-        DEBUG_CLAUDE_AGENT_SDK: '1',
-        ANTHROPIC_AUTH_TOKEN: 'ccr',
+        ...(config.officeBridge ? { PATH: process.env['PATH'], TMPDIR: process.env['TMPDIR'], LANG: process.env['LANG'] } : process.env),
+        DEBUG_CLAUDE_AGENT_SDK: config.officeBridge ? '0' : '1',
+        ANTHROPIC_AUTH_TOKEN: config.officeBridge ? officeModelToken(config.officeBridge) : routerApiKey(),
         ANTHROPIC_API_KEY: '',
-        ANTHROPIC_BASE_URL: 'http://127.0.0.1:3456',
+        ANTHROPIC_BASE_URL: config.officeBridge ? `${config.officeBridge.officeOrigin}/integrations/model-gateway/${config.officeBridge.tenantId}/api/anthropic` : 'http://127.0.0.1:3456',
         NO_PROXY: '127.0.0.1',
         DISABLE_TELEMETRY: 'true',
         DISABLE_COST_WARNINGS: 'true',
-        HOME: this.sessionDir,
-        USERPROFILE: this.sessionDir,
+        HOME: config.officeBridge ? taskCwd : this.sessionDir,
+        USERPROFILE: config.officeBridge ? taskCwd : this.sessionDir,
       },
       mcpServers,
       allowedTools: this.generateAllowedTools(mcpServers ?? {}),
@@ -291,7 +292,17 @@ export class AgentRuntimeService {
         },
       },
       canUseTool: async (name, input, options) => {
-        this.logger.debug({ options, name, input }, 'Received tool request')
+        if (config.officeBridge) {
+          if (['Bash','Write','Edit','WebFetch','Skill'].includes(name)) return { behavior: 'deny', message: 'This tool is not enabled for isolated Office tasks' }
+          if (name === 'Read') {
+            try {
+              const file = fs.realpathSync(String(input['file_path'] || ''))
+              if (!file.startsWith(fs.realpathSync(taskCwd) + '/')) return { behavior: 'deny', message: 'Only this task workspace can be read' }
+            }
+            catch { return { behavior: 'deny', message: 'Task file is unavailable' } }
+          }
+        }
+        this.logger.debug({ name }, 'Received tool request')
         return { behavior: 'allow', updatedInput: input }
       },
       hooks: {
@@ -524,7 +535,7 @@ export class AgentRuntimeService {
                   windowsHide: true,
                 })
                 childProcess.stderr.on('data', (data) => {
-                  this.logger.debug({ taskId, sessionId }, `Received Claude DEBUG Log: ${data}`)
+                  if (!config.officeBridge) this.logger.debug({ taskId, sessionId }, `Received Claude DEBUG Log: ${data}`)
                 })
                 childProcess.on('exit', (code) => {
                   this.logger.debug({ taskId, sessionId, code }, `Claude Code process exited with code ${code}`)
@@ -736,7 +747,15 @@ export class AgentRuntimeService {
       task = originalTask
       historicalMessages = originalTask.messages || []
 
-      await this.downloadAgentSession(originalTask)
+      if (config.officeBridge && !historicalMessages.some(message => message['type'] === 'assistant')) {
+        // A provider rejection can leave only a queue marker, not a resumable conversation.
+        // Office supplies the full brief again; reuse the task and its media reservations.
+        sessionId = undefined
+        this.logger.warn({ taskId: originalTaskId }, 'Restarting unanswered Office session within the existing task')
+      }
+      else {
+        await this.downloadAgentSession(originalTask)
+      }
     }
     else {
       task = await this.contentGenerateRepository.create({
@@ -910,7 +929,7 @@ export class AgentRuntimeService {
     try {
       this.logger.debug(`Uploading session ${sessionId} for task ${taskId}`)
       const taskProjectDir = this.getTaskProjectDir(taskId)
-      const projectsDir = join(this.sessionDir, '.claude/projects', taskProjectDir)
+      const projectsDir = join(config.officeBridge ? this.getTaskCwd(taskId) : this.sessionDir, '.claude/projects', taskProjectDir)
       const sessionFile = join(projectsDir, `${sessionId}.jsonl`)
 
       if (!fs.existsSync(sessionFile)) {
@@ -948,7 +967,7 @@ export class AgentRuntimeService {
       const response = await this.storageProvider.getObject(s3Key)
 
       const taskProjectDir = this.getTaskProjectDir(task.id)
-      const projectsDir = join(this.sessionDir, '.claude/projects', taskProjectDir)
+      const projectsDir = join(config.officeBridge ? this.getTaskCwd(taskId) : this.sessionDir, '.claude/projects', taskProjectDir)
 
       if (response.buffer) {
         fs.mkdirSync(projectsDir, { recursive: true })
@@ -976,7 +995,7 @@ export class AgentRuntimeService {
       }
 
       if (task.todos?.length) {
-        const todosDir = join(this.sessionDir, '.claude/todos')
+        const todosDir = join(config.officeBridge ? this.getTaskCwd(taskId) : this.sessionDir, '.claude/todos')
         fs.mkdirSync(todosDir, { recursive: true })
 
         for (const todoS3Key of task.todos) {
@@ -1025,7 +1044,7 @@ export class AgentRuntimeService {
       }
     }
 
-    const todosDir = join(this.sessionDir, '.claude/todos')
+    const todosDir = join(config.officeBridge ? this.getTaskCwd(taskId) : this.sessionDir, '.claude/todos')
     if (fs.existsSync(todosDir)) {
       const files = fs.readdirSync(todosDir).filter(file => file.startsWith(sessionId))
       for (const file of files) {

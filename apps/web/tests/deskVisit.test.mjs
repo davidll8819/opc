@@ -162,10 +162,11 @@ test('unknown and already seated agents are unchanged', () => {
 })
 
 test('all nine colleagues can visit every other desk and return home', () => {
-  assert.equal(initialAgents.length, 9)
+  assert.equal(initialAgents.length, 13)
+  assert.equal(initialAgents.filter(a=>a.onDuty).length, 9)
   assert.equal(new Set(initialAgents.map(a => a.assignedDeskId)).size, 9)
-  for (let visitor = 1; visitor <= initialAgents.length; visitor++) {
-    for (let host = 1; host <= initialAgents.length; host++) {
+  for (let visitor = 1; visitor <= 9; visitor++) {
+    for (let host = 1; host <= 9; host++) {
       if (visitor === host) continue
       let agents = startDeskVisit(structuredClone(initialAgents), visitor, host, 'route check', 0.1)
       let reachedHost = false
@@ -222,10 +223,23 @@ test('automatic workflow sends every new colleague out, lets them speak and brin
     cursor = nextIndex
     timer = workflow.AUTO_WORKFLOW_INTERVAL
   }
-  for (const agent of initialAgents.slice(6)) {
+  for (const agent of initialAgents.slice(6,9)) {
     assert.ok(sent.has(agent.id), `${agent.name} should automatically leave the desk`)
     assert.ok(spoke.has(agent.id), `${agent.name} should speak at the destination`)
     assert.ok(returned.has(agent.id), `${agent.name} should return home`)
     assert.ok(hosted.has(agent.id), `${agent.name} should receive a visit`)
   }
+})
+
+
+test('automatic visits skip working and off-duty staff but accept a reserve employee after seating', () => {
+  const agents = structuredClone(initialAgents)
+  const blocked = new Set(agents.filter(a=>a.onDuty).map(a=>a.id))
+  assert.equal(workflow.nextWorkflowStep(agents,0,[],blocked),null)
+  agents[1].onDuty=false
+  agents[9]={...agents[9],onDuty:true,assignedDeskId:agents[1].assignedDeskId,x:agents[1].x,y:agents[1].y}
+  blocked.delete(agents[0].id)
+  const next=workflow.nextWorkflowStep(agents,0,[],blocked)
+  assert.equal(next.step.visitor,10)
+  assert.equal(next.step.host,1)
 })

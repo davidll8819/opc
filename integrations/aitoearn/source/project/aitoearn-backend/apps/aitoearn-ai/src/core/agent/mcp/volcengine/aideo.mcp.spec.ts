@@ -1,4 +1,6 @@
 import type { AiAvailabilityService } from '../../../ai-availability'
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
 import { Logger } from '@nestjs/common'
 import { UserType } from '@yikart/common'
 import { vi } from 'vitest'
@@ -323,17 +325,33 @@ describe('aideoMcp', () => {
       expect(server.name).toBe('aideo')
     })
 
-    it('should include expected tools', () => {
-      const server = aideoMcp.createServer(userId, userType) as { tools?: Array<{ name: string }> }
-      const toolNames = server.tools?.map(t => t.name)
-
-      expect(toolNames).toContain(AideoToolName.SubmitAideoTask)
-      expect(toolNames).toContain(AideoToolName.GetAideoTaskStatus)
-    })
-
-    it('should have version 1.0.0', () => {
-      const server = aideoMcp.createServer(userId, userType) as { version?: string }
-      expect(server.version).toBe('1.0.0')
+    it('advertises its version and executes a status tool through the MCP protocol', async () => {
+      const server = aideoMcp.createServer(userId, userType)
+      const client = new Client({ name: 'aideo-test', version: '1.0.0' })
+      const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+      mockAideoService.getAideoTask.mockResolvedValue({
+        taskId: 'aideo-task-123', status: AideoTaskStatus.Processing,
+      } as never)
+      try {
+        await server.instance.connect(serverTransport)
+        await client.connect(clientTransport)
+        expect(client.getServerVersion()).toEqual({ name: 'aideo', version: '1.0.0' })
+        const { tools } = await client.listTools()
+        expect(tools.map(tool => tool.name)).toEqual(expect.arrayContaining([
+          AideoToolName.SubmitAideoTask,
+          AideoToolName.GetAideoTaskStatus,
+        ]))
+        const result = await client.callTool({ name: AideoToolName.GetAideoTaskStatus, arguments: { taskId: 'aideo-task-123' } })
+        expect(mockAideoService.getAideoTask).toHaveBeenCalledWith({ userId, userType, taskId: 'aideo-task-123' })
+        expect(result.isError).not.toBe(true)
+        expect(result.content).toEqual(expect.arrayContaining([
+          expect.objectContaining({ type: 'text', text: expect.stringContaining('continue polling') }),
+        ]))
+      }
+      finally {
+        await client.close()
+        await server.instance.close()
+      }
     })
   })
 })

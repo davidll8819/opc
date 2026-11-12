@@ -50,6 +50,7 @@ test('design -> operations -> records uses durable handoffs without a browser', 
     await query("INSERT INTO memberships VALUES($1,$2,'owner')", [tenant, user])
   const key = Buffer.alloc(32, 9),
     env = { NODE_ENV: 'test', OPERATIONS_CONFIG_KEY: key.toString('base64') }
+  await query('INSERT INTO personal_model_keys(tenant_id,user_id,encrypted_key) VALUES($1,$2,$3)',[ctx.tenantId,ctx.userId,encryptConfig({apiKey:'synthetic-personal-handoff'},key,`${ctx.tenantId}:${ctx.userId}`)])
   const policy = defaultPolicy()
   policy.tiers.fast = 'fixture-text'
   policy.tiers.cheap = 'fixture-text'

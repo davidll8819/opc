@@ -17,6 +17,7 @@ function fixture({
   report: changeReport,
   plan,
   truncated,
+  missing = false,
 } = {}) {
   const outline = Array.from({ length: count }, (_, index) => section(index + 1))
   const timeline = [],
@@ -70,6 +71,14 @@ function fixture({
         timeline.push('model:outline')
         return response(plan || { sections: outline }, truncated === 'plan' ? 'length' : 'stop')
       }
+      if (messages[1].content.startsWith('证据覆盖检查')) {
+        timeline.push('model:coverage')
+        const latest = steps.filter(s => s.data).at(-1).data.researchOutline
+        return response({ questions: latest.flatMap(s => s.questions.map((question, i) => ({
+          id: `${s.id}Q${i + 1}`, status: missing ? 'missing' : 'covered', reason: 'Fixture support',
+          evidence: s.sourceIds.map(sourceId => ({ sourceId, quote: `Public evidence ${sourceId}`, kind: 'official' }))
+        }))) })
+      }
       timeline.push('model:report')
       assert.match(messages[1].content, /Public evidence/)
       const latest = steps.filter((step) => step.data).at(-1).data.researchOutline
@@ -115,20 +124,19 @@ test('research builds and persists a goal-specific outline before searching, the
   assert.match(result.report, /问题 1/)
   assert.match(result.report, /https:\/\/example.com\/S1/)
   assert.match(result.report, /2026-10-11T00:01:00.000Z/)
-  assert.deepEqual(f.counts(), { modelCalls: 2, reads: 4 })
+  assert.deepEqual(f.counts(), { modelCalls: 3, reads: 4 })
 })
 
 test('a failed read tries the next source, and failed sections remain visibly limited', async () => {
   const f = fixture({ count: 2, failReads: ['S1', 'S3', 'S4'] })
   const result = await runOutlinedResearch(f.options)
   assert.deepEqual(result.researchOutline[0].sourceIds, ['S2'])
-  assert.equal(result.researchOutline[1].status, 'blocked')
-  assert.match(result.researchOutline[1].limitation, /未能读取/)
-  assert.match(result.report, /实际检索局限/)
-  assert.match(result.report, /S3：网页无法读取/)
+  assert.equal(result.researchOutline[1].status, 'completed')
+  assert.ok(result.quality.issues.some(x => x.includes('S3：网页无法读取')))
+  assert.equal(result.quality.usage.searches, 3)
   assert.deepEqual(
     result.sources.map((source) => source.id),
-    ['S2'],
+    ['S2', 'S5', 'S6'],
   )
   assert.ok(f.timeline.indexOf('read:S2') > f.timeline.indexOf('read:S1'))
 })
@@ -146,15 +154,15 @@ test('missing search provenance or all failed reads cannot produce a completed r
   assert.equal(f.counts().reads, 0)
 })
 
-test('search errors persist the current section failure before stopping without synthesis', async () => {
+test('search errors try other sections and stop without synthesis when no pages can be read', async () => {
   const f = fixture({ count: 2 })
   f.options.web.search = async () => {
     throw Error('fixture gateway unavailable')
   }
-  await assert.rejects(runOutlinedResearch(f.options), /fixture gateway/)
+  await assert.rejects(runOutlinedResearch(f.options), /尚未读取有效来源/)
   assert.deepEqual(
     f.steps.at(-1).data.researchOutline.map((item) => item.status),
-    ['blocked', 'pending'],
+    ['blocked', 'blocked'],
   )
   assert.match(f.steps.at(-1).detail, /已配置模型未能完成/)
   assert.equal(f.counts().modelCalls, 1)
@@ -201,4 +209,38 @@ test('three outline groups stay within three searches and six read attempts', as
   assert.equal(f.counts().reads, 6)
   assert.equal(result.sources.length, 5)
   assert.ok(result.researchOutline.every((item) => item.status === 'completed'))
+})
+
+
+test('missing evidence remains partial after one bounded follow-up per topic', async () => {
+  const f = fixture({ count: 3, missing: true })
+  const result = await runOutlinedResearch(f.options)
+  assert.equal(result.quality.status, 'partial')
+  assert.deepEqual(result.quality.usage.searches, 6)
+  assert.deepEqual(result.quality.usage.reads, 12)
+  assert.equal(f.counts().modelCalls, 4)
+  assert.ok(result.quality.questions.every(q => q.status === 'missing'))
+  assert.match(result.report, /部分交付/)
+})
+
+test('identical pages are deduplicated and cannot inflate evidence count', async () => {
+  const f = fixture({ count: 2 })
+  const read = f.options.web.read
+  f.options.web.read = async url => ({ ...await read(url), text: 'Public evidence S1' })
+  const result = await runOutlinedResearch(f.options)
+  assert.equal(result.sources.length, 1)
+  assert.ok(result.researchOutline.every(s => s.sourceIds.length === 1))
+})
+
+test('elapsed budget stops new retrievals and reports uncovered questions honestly', async () => {
+  const f = fixture({ count: 3 })
+  let elapsed = 0
+  f.options.now = () => elapsed
+  const read = f.options.web.read
+  f.options.web.read = async url => { const page = await read(url); elapsed = 360001; return page }
+  const result = await runOutlinedResearch(f.options)
+  assert.equal(result.quality.status, 'partial')
+  assert.equal(result.quality.usage.searches, 1)
+  assert.equal(result.quality.usage.reads, 1)
+  assert.ok(result.quality.issues.some(x => x.includes('6分钟')))
 })

@@ -1,51 +1,8 @@
 import { fail } from '../db.mjs'
 import { loadFilingDocument, filingView } from './filing-store.mjs'
 import { buildDocumentContext } from './context.mjs'
-const stop = new Set([
-  '请问',
-  '请帮',
-  '帮我',
-  '我查',
-  '查询',
-  '检索',
-  '已归',
-  '归档',
-  '档资',
-  '资料',
-  '文档',
-  '回答',
-  '什么',
-  '多少',
-  '一下',
-  '告诉',
-  '根据',
-  '当前',
-  '中的',
-  '里面',
-  '是否',
-  '哪些',
-  '以及',
-  '还有',
-  '这个',
-  '那份',
-  '这份',
-  '需要',
-  '问题',
-  '要求',
-  '给我',
-  '我们',
-  '你们',
-  '请从',
-  '档案',
-  '已在',
-])
-export function archiveQueryTerms(text = '') {
-  const value = text.normalize('NFKC').toLowerCase(),
-    terms = [...(value.match(/zl-\d{4}-\d{6,}/g) || []), ...(value.match(/[a-z0-9]+/g) || [])]
-  for (const word of value.match(/[\p{Script=Han}]+/gu) || [])
-    for (let i = 0; i < word.length - 1; i++) terms.push(word.slice(i, i + 2))
-  return [...new Set(terms)].filter((t) => !stop.has(t)).slice(0, 32)
-}
+import { archiveQueryTerms } from './query.mjs'
+export { archiveQueryTerms } from './query.mjs'
 const pattern = (t) => '%' + t.replace(/[\\%_]/g, '\\$&') + '%'
 const referenceFor = (row, identity) => ({
   id: row.id,

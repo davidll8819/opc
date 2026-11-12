@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "services": [
+    {
+      "name": "web",
+      "dockerfile": "Dockerfile",
+      "context": ".",
+      "route": "public",
+      "port": 3000,
+      "healthPath": "/health/ready",
+      "env": {
+        "AUTH_MODE": "4yi",
+        "FOURYI_ROUTER_IDENTITY_REQUIRED": "1",
+        "FOURYI_PORTAL_ORIGIN": "https://xclaw-dev.bieases.com"
+      },
+      "storage": { "sizeGb": 20, "mountPath": "/app/.local", "fsGroup": 1000 },
+      "resources": { "cpu": 2, "memoryMb": 4096 }
+    }
+  ]
+}

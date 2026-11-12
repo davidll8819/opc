@@ -19,7 +19,7 @@ const readTool = {
   },
 }
 
-export async function skillsFromRows(rows, { execution = false } = {}) {
+export async function skillsFromRows(rows, { execution = false, discoveryOnly = false } = {}) {
   const documents = new Map(),
     names = new Map(),
     loaded = []
@@ -61,7 +61,7 @@ export async function skillsFromRows(rows, { execution = false } = {}) {
             /* A readable document need not have YAML metadata. */
           }
         }
-        index.push(`${key}: ${description}`)
+        index.push(`[${row.name}] ${key}: ${description}`)
       }
       if (path === 'skills/using-superpowers/SKILL.md') {
         const block = `[启动技能 ${key}]\n${content}\n`
@@ -79,7 +79,9 @@ export async function skillsFromRows(rows, { execution = false } = {}) {
         ? '可使用本轮 workspace 工具在隔离项目内真实操作；Git、子智能体和浏览器未接入，不得虚构这些操作。\n'
         : '当前只提供 read_skill；没有终端、文件写入、浏览器或子智能体工具。需要其他工具时说明缺少的环境，提供可用的分析或方案，不得声称已经运行代码、测试或完成实际操作。\n') +
       bootstraps.join('') +
-      entries.join('\n').slice(0, 48000 - bootstrapSize) +
+      (discoveryOnly
+        ? '先按技能目录判断本轮需要哪些方法；相关时用 read_skill 读取，再处理任务。简单问候或不相关问题无需读取技能。\n'
+        : entries.join('\n').slice(0, 48000 - bootstrapSize)) +
       '\n可按需读取的技能（先读取适用的技能，再回答；引用文档使用同一技能包前缀和相对目录）：\n' +
       index.join('\n')
     : ''

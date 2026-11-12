@@ -1,11 +1,12 @@
 import type { AiAvailabilityService } from '../../ai-availability'
 import { Logger } from '@nestjs/common'
-import { FileUtil, UserType } from '@yikart/common'
+import { officeUserContext, AppException, FileUtil, ResponseCode, UserType } from '@yikart/common'
 import { AiLogStatus } from '@yikart/mongodb'
 import { vi } from 'vitest'
 import { config } from '../../../config'
 import { ImageService } from '../../ai/image'
 import { GrokVideoService, OpenAIVideoService } from '../../ai/video'
+import { VideoPreflightException } from '../../ai/video/video-preflight.exception'
 import { MediaMcp, MediaToolName } from './media.mcp'
 
 vi.mock('@anthropic-ai/claude-agent-sdk', async (importOriginal) => {
@@ -71,6 +72,20 @@ describe('mediaMcp', () => {
     await company.createFourYiVideoTool(userId, userType, 'task-1').handler({ model: 'fixture', prompt: 'Coffee', ratio: '16:9', resolution: '1080p' }, {})
     expect(videos.userVideoGeneration).toHaveBeenCalledWith(expect.objectContaining({ ratio: '9:16', resolution: '720p' }))
     expect(taskRepository.getByUserIdAndId).toHaveBeenCalledWith(userId, 'task-1')
+  })
+
+  it('retains the bound owner when an SDK invokes delayed media tools outside the HTTP request',async()=>{
+    const seen:string[]=[]
+    const videos={userVideoGeneration:vi.fn(async({userId}:{userId:string})=>{
+      await new Promise(r=>setTimeout(r,2));expect(officeUserContext.getStore()).toBe(userId);seen.push(userId);return {id:'job-'+userId}
+    })}
+    const company=new MediaMcp(mockOpenaiVideoService,mockImageService,mockAiAvailability as never,mockGrokVideoService,videos as never,taskRepository as never)
+    const users=['aaaaaaaaaaaaaaaaaaaaaaaa','bbbbbbbbbbbbbbbbbbbbbbbb']
+    const tools=users.map(id=>company.createFourYiVideoTool(id,userType,'task-'+id))
+    expect(officeUserContext.getStore()).toBeUndefined()
+    await Promise.all(tools.map(t=>t.handler({model:'fixture',prompt:'test'},{})))
+    expect(new Set(seen)).toEqual(new Set(users))
+    expect(officeUserContext.getStore()).toBeUndefined()
   })
 
   describe('createGenerateImageTool', () => {
@@ -538,6 +553,30 @@ describe('mediaMcp', () => {
     finally {
       config.ai.fouryi.apiKey = originalKey
     }
+  })
+
+  it('allows a corrected video request after a proven local preflight rejection', async () => {
+    const videos = { userVideoGeneration: vi.fn()
+      .mockRejectedValueOnce(new VideoPreflightException(ResponseCode.InvalidModel))
+      .mockResolvedValueOnce({ id: 'corrected-video' }) }
+    const company = new MediaMcp(mockOpenaiVideoService, mockImageService, mockAiAvailability as never, mockGrokVideoService, videos as never, taskRepository as never)
+    const failed = await company.createFourYiVideoTool(userId, userType, 'task-1').handler({ model: 'unavailable', prompt: 'Fixture' }, {})
+    expect(failed.isError).toBe(true)
+    const resumed = new MediaMcp(mockOpenaiVideoService, mockImageService, mockAiAvailability as never, mockGrokVideoService, videos as never, taskRepository as never)
+    const corrected = await resumed.createFourYiVideoTool(userId, userType, 'task-1').handler({ model: 'enabled', prompt: 'Fixture' }, {})
+    expect(corrected.isError).toBeUndefined()
+    expect(videos.userVideoGeneration).toHaveBeenCalledTimes(2)
+  })
+
+  it('does not release a provider failure merely because it has the same model error code', async () => {
+    const videos = { userVideoGeneration: vi.fn().mockRejectedValue(new AppException(ResponseCode.InvalidModel)) }
+    const company = new MediaMcp(mockOpenaiVideoService, mockImageService, mockAiAvailability as never, mockGrokVideoService, videos as never, taskRepository as never)
+    const tool = company.createFourYiVideoTool(userId, userType, 'task-1')
+    await tool.handler({ model: 'fixture', prompt: 'Fixture' }, {})
+    const blocked = await tool.handler({ model: 'fixture', prompt: 'Fixture' }, {})
+    expect(blocked.isError).toBe(true)
+    expect(JSON.stringify(blocked.content)).toContain('unresolved')
+    expect(videos.userVideoGeneration).toHaveBeenCalledOnce()
   })
 
   it('blocks repeated paid media submissions after a tool failure while status reads remain available', async () => {

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger, NotFoundException, Optional } from '@nestjs/common'
 import { QueueService } from '@yikart/aitoearn-queue'
 import { AssetsService } from '@yikart/assets'
-import { AppException, getErrorMessage, getExtByMimeType, ImageType, ResponseCode, UserType } from '@yikart/common'
+import { AppException, officeUserContext, getErrorMessage, getExtByMimeType, ImageType, ResponseCode, UserType } from '@yikart/common'
 import { AiLogChannel, AiLogImageResult, AiLogRepository, AiLogStatus, AiLogType, AssetType, ImageAiLogResponse, Transactional } from '@yikart/mongodb'
 import parseDataUri from 'data-urls'
 import OpenAI from 'openai'
@@ -294,7 +294,7 @@ export class ImageService {
     model: 'gemini-3.1-flash-image-preview' | 'gemini-3-pro-image-preview',
   ) {
     if (config.ai.fouryi.apiKey)
-      return this.modelsConfigService.config.image.generation.find(item => item.name === model.replace(/-preview$/, '')) ?? null
+      return (await this.modelsConfigService.forUser()).image.generation.find(item => item.name === model.replace(/-preview$/, '')) ?? null
     const chatModels = this.modelsConfigService.config.chat
     const modelConfig = chatModels.find(m => m.name === model)
     if (!modelConfig) {
@@ -332,8 +332,8 @@ export class ImageService {
     })
 
     const result = await runWithAiGenerationRetry(
-      run,
-      retry,
+      () => officeUserContext.run(userId, run),
+      config.officeBridge ? 0 : retry,
       (error, attempt, maxAttempts) => {
         this.logger.warn(
           { error, model, attempt, maxAttempts },
@@ -367,6 +367,7 @@ export class ImageService {
    */
   async userGeneration(request: UserImageGenerationDto) {
     const { userId, userType, ...params } = request
+    if(config.officeBridge) await this.modelsConfigService.forUser(userId)
 
     return await this.handleUserAiAction({
       userId,
@@ -384,6 +385,7 @@ export class ImageService {
    */
   async userEdit(request: UserImageEditDto) {
     const { userId, userType, ...params } = request
+    if(config.officeBridge) await this.modelsConfigService.forUser(userId)
 
     return await this.handleUserAiAction({
       userId,
@@ -401,7 +403,7 @@ export class ImageService {
    * @param data 查询参数，包含可选的 userId 和 userType，可用于后续个性化模型推荐
    */
   async generationModelConfig(_data: ImageGenerationModelsQueryDto) {
-    return this.modelsConfigService.config.image.generation
+    return (await this.modelsConfigService.forUser()).image.generation
   }
 
   /**
@@ -409,7 +411,7 @@ export class ImageService {
    * @param data 查询参数，包含可选的 userId 和 userType，可用于后续个性化模型推荐
    */
   async editModelConfig(_data: ImageEditModelsQueryDto) {
-    return this.modelsConfigService.config.image.edit
+    return (await this.modelsConfigService.forUser()).image.edit
   }
 
   /**
@@ -418,6 +420,7 @@ export class ImageService {
   @Transactional()
   async userGenerationAsync(request: UserImageGenerationDto) {
     const { userId, userType, ...params } = request
+    if(config.officeBridge) await this.modelsConfigService.forUser(userId)
 
     // 创建 AiLog 记录
     const log = await this.aiLogRepo.create({
@@ -456,6 +459,7 @@ export class ImageService {
   @Transactional()
   async userEditAsync(request: UserImageEditDto) {
     const { userId, userType, ...params } = request
+    if(config.officeBridge) await this.modelsConfigService.forUser(userId)
 
     // 创建 AiLog 记录
     const log = await this.aiLogRepo.create({
@@ -493,7 +497,7 @@ export class ImageService {
    */
   async getTaskStatus(logId: string) {
     const log = await this.aiLogRepo.getById(logId)
-    if (!log || log.type !== AiLogType.Image) {
+    if (!log || log.type !== AiLogType.Image || (config.officeBridge && log.userId !== officeUserContext.getStore())) {
       throw new NotFoundException('任务不存在')
     }
     const response = log.response as ImageAiLogResponse | undefined

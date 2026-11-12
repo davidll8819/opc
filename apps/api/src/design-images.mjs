@@ -7,6 +7,8 @@ const MAX_IMAGE = 6 * 1024 * 1024
 export function needsDesignImage(task) {
   if (task.dept !== 'new-agent-7') return false
   const title = task.title || ''
+  // A storyboard/creative brief is a text deliverable even when it describes visuals.
+  if (/分镜|脚本|storyboard|script/i.test(title) && !/生成图片|绘制|生图|海报|插画|generate.*image/i.test(title)) return false
   const text = `${title}\n${task.request || task.summary || ''}`
   if (
     /仅(?:需|要)?(?:文字|文案|提示词|设计说明)|只(?:需|要)?(?:写|提供|输出)?(?:文字|提示词|设计说明)|text[- ]only|prompt only/i.test(

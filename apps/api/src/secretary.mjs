@@ -1,3 +1,9 @@
+import {employeeDirectory,findEmployee} from './employee-directory.mjs'
+import { readDuty } from './employee-duty.mjs'
+import { productContext } from './product-context.mjs'
+import { knowledgeContext, attachKnowledge } from './reuse.mjs'
+import { taskBriefSchema, captureTaskBrief, attachTaskBrief } from './task-brief.mjs'
+import { formatTaskBrief } from '../../../packages/secretary/task-brief.mjs'
 import { attachmentContext, withAttachments } from './task-assets.mjs'
 import { parseSecretaryReply } from './secretary-reply.mjs'
 import { plannedTasks, enqueueResearch } from './research/plan.mjs'
@@ -32,7 +38,7 @@ const actionSchema = z.discriminatedUnion('type', [
             .object({
               id: key,
               title: z.string().trim().min(1).max(120),
-              dept: z.enum(departments.map((d) => d.id)),
+              dept: z.union([z.enum(departments.map((d) => d.id)),z.string().regex(/^custom_[a-f0-9]{32}$/)]),
               due: day,
             })
             .strict(),
@@ -79,6 +85,7 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
       .object({
         revision: z.number().int().nonnegative(),
         requireTasks: z.boolean().default(false),
+        brief: taskBriefSchema.optional(),
         attachmentIds: z.array(z.uuid()).max(4).default([]),
         lastUserMessageId: z.string().max(80).optional(),
         text: z.string().trim().min(1).max(4000),
@@ -103,10 +110,13 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
             (row.board.messages.findLast((m) => m.role === 'user')?.id || '')
         )
           throw fail(409, '对话已在其他页面更新，请刷新后重试')
+        const brief = captureTaskBrief(input.brief || (input.requireTasks ? row.board.messages.findLast(m => m.role === 'user')?.briefSnapshot : undefined))
         return {
           ctx,
           policy,
           ...row,
+          brief,
+          knowledge: await knowledgeContext(db, ctx, { project: brief?.project || '', question: [input.text, brief?.goal].filter(Boolean).join('\n') }),
           instructions: await assignedInstructions(db, ctx.tenantId, 'secretary'),
           attachments: await attachmentContext(
             db,
@@ -118,6 +128,8 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
                 ),
           ),
           preferences: preferencesSchema.parse(row.preferences),
+          employees: (await employeeDirectory(db,ctx.tenantId)).map(e=>e.id),
+          onDuty: (await readDuty(db, ctx.tenantId)).filter(e=>e.seat!==null).map(e=>({id:e.employeeId,department:e.departmentName,jobTitle:e.jobTitle,capabilities:e.capabilities})),
         }
       },
       ['owner', 'admin'],
@@ -134,13 +146,14 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
             role: 'system',
             content:
               secretaryPrompt(preferences, input.language, board, input.intent) +
-              snapshot.instructions +
+              snapshot.instructions + productContext(policy) +
+              '\n当前已上岗员工及实际岗位能力（以此为准）：' + JSON.stringify(snapshot.onDuty) + '。分工优先仅使用这些员工。未上岗的员工需用户先到招聘页安排工位；不能声称已安排其执行。四位新增员工支持独立文字分析和技能方法，媒体制作、联网调研和代码执行仍交由已接入专用工作台的员工。' +
               (input.requireTasks
                 ? '\n本次操作是生成任务分工：必须返回上述 JSON，tasks 至少一项，brief 包含此前已确认的完整要求；不可只声称已经安排。'
                 : ''),
           },
           ...board.messages.slice(-20).map((m) => ({ role: m.role, content: m.text })),
-          { role: 'user', content: withAttachments(input.text, snapshot.attachments) },
+          { role: 'user', content: withAttachments([input.text, formatTaskBrief(snapshot.brief), snapshot.knowledge.text].filter(Boolean).join('\n\n'), snapshot.attachments) },
         ],
         max_tokens: 4096,
       },
@@ -150,6 +163,7 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
     try {
       const parsed = parseSecretaryReply(rawText, {
         finishReason: response.choices?.[0]?.finish_reason,
+        employeeIds:snapshot.employees,
       })
       text = parsed.reply
       tasks = parsed.tasks
@@ -180,6 +194,7 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
               text: input.text,
               time,
               attachments: snapshot.attachments.refs,
+              briefSnapshot: snapshot.brief,
             },
             {
               id: randomUUID(),
@@ -249,10 +264,10 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
               ]
                 .join('\n')
                 .slice(-12000),
-            }).map((task) => ({
+            }).map((task) => attachKnowledge(attachTaskBrief({
               ...task,
               attachmentIds: snapshot.attachments.refs.map((a) => a.id),
-            })),
+            }, snapshot.brief), snapshot.knowledge)),
           )
         }
         if (
@@ -268,6 +283,7 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
             text: input.text,
             time,
             attachments: snapshot.attachments.refs,
+            briefSnapshot: snapshot.brief,
           },
           { id: randomUUID(), role: 'assistant', text, time, batchId },
         )
@@ -315,6 +331,7 @@ export function registerSecretary(app, scoped, { pool, env, fetcher }) {
           ['plan', 'meeting'].includes(action.intent)
         )
           throw fail(409, '任务库已满，请联系管理员归档')
+        if(action.type==='edit')for(const task of action.tasks)await findEmployee(db,ctx.tenantId,task.dept)
         const board = applyAction(current.board, action, {
           id: randomUUID,
           today,

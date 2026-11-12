@@ -10,6 +10,7 @@ export function AgentWorkspace({
   openSettings,
   openSkills,
   initialId,
+  initialProfile,
   onTool,
   tasks,
   onRun,
@@ -20,13 +21,14 @@ export function AgentWorkspace({
   openOperations: import('./operations/models').OpenOperations
   base: string
   openSettings: () => void
-  openSkills: () => void
+  openSkills: (employeeId: string) => void
   onTool: (tool: string) => void
   tasks: Task[]
   onRun: (task: Task) => void
   onTaskOperations: (task: Task) => void
   busyTask: string
   canEdit: boolean
+  initialProfile?: boolean
   initialId?: string
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(initialId || null)
@@ -72,6 +74,7 @@ export function AgentWorkspace({
       {selected && (
         <EmployeeDialog
           key={selected.id}
+          initialProfile={initialProfile}
           employee={selected}
           base={base}
           close={() => setSelectedId(null)}

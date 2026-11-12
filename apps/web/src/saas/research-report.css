@@ -1,0 +1,20 @@
+.research-report { min-width: 0; line-height: 1.75; }
+.research-report > section, .research-report > details, .research-review { margin-block: 1.25rem; }
+.research-report details { margin-block: .75rem; }
+.research-report summary { cursor: pointer; font-weight: 600; padding-block: .4rem; }
+.research-quality { padding: 1rem; background: #f6f3fa; border: 1px solid #d7cde4; border-radius: 12px; overflow-wrap: anywhere; }
+.research-quality strong { color: #443054; }
+.research-report label { display: block; margin-block: .75rem; }
+.research-report input[type=checkbox] { width: auto; margin-inline-end: .5rem; }
+.research-report textarea { width: 100%; min-height: 6rem; box-sizing: border-box; }
+.research-report button { margin: .5rem .5rem .5rem 0; }
+.report-markdown { min-width: 0; max-width: 100%; overflow-wrap: anywhere; white-space: normal; line-height: 1.8; }
+.report-markdown p { margin-block: .65em; }
+.report-markdown a { text-decoration: underline; text-underline-offset: .15em; }
+.report-markdown li { margin-block: .4rem; }
+.report-markdown pre { max-width: 100%; overflow-x: auto; padding: .8rem; background: #f5f3f7; white-space: pre; }
+.report-table { max-width: 100%; overflow-x: auto; margin-block: 1rem; }
+.report-table table { border-collapse: collapse; width: 100%; min-width: 28rem; font-size: .94em; }
+.report-table th, .report-table td { padding: .7rem; border: 1px solid #ddd6e5; text-align: left; vertical-align: top; }
+.report-table th { background: #f6f3fa; }
+.research-quality blockquote { margin: .5rem 0; padding-left: 1rem; border-left: 3px solid #ad9bbd; }

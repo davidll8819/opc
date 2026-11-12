@@ -190,7 +190,7 @@ export class UploadService extends BaseService {
         message: '无法获取视频文件大小（响应头缺少 content-length）',
       })
     }
-    const fileSize = Number.parseInt(contentLength, 10)
+    const fileSize = Number.parseInt(String(contentLength), 10)
 
     if (!fileName || !fileExtension) {
       const urlObj = new URL(url)

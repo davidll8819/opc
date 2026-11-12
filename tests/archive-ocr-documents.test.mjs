@@ -1,8 +1,8 @@
-import test from 'node:test'
+import test, { after } from 'node:test'
 import assert from 'node:assert/strict'
 import { PGlite } from '@electric-sql/pglite'
 import { randomUUID, createHash } from 'node:crypto'
-import { readdirSync, existsSync } from 'node:fs'
+import { readdirSync, existsSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { once } from 'node:events'
@@ -15,6 +15,18 @@ import { defaultPolicy } from '../apps/api/src/operations/policy.mjs'
 import { encryptConfig } from '../apps/api/src/operations/security.mjs'
 import { makeDocx, makePdf, makeXlsx } from './helpers/archive-fixtures.mjs'
 import { rasterFixture, scanPdf } from './helpers/archive-ocr-fixtures.mjs'
+// Node runs each test file in its own process. Isolate every parser created by
+// this suite, including its cleanup assertions, from concurrent test files.
+const suiteTemp = mkdtempSync(join(tmpdir(), 'office-ocr-suite-'))
+const previousTemp = Object.fromEntries(['TMPDIR', 'TEMP', 'TMP'].map(key => [key, process.env[key]]))
+for (const key of Object.keys(previousTemp)) process.env[key] = suiteTemp
+after(() => {
+  for (const [key, value] of Object.entries(previousTemp)) {
+    if (value === undefined) delete process.env[key]
+    else process.env[key] = value
+  }
+  rmSync(suiteTemp, { recursive: true, force: true })
+})
 class Cache {
   values = new Map()
   async get(k) {
@@ -79,6 +91,7 @@ async function setup(documentParser) {
   policy.tiers.fast = 'archive-test-model'
   policy.departments.archive.tier = 'fast'
   policy.departments.archive.enabled = true
+  for(const user of [alice,bob])await query('INSERT INTO personal_model_keys(tenant_id,user_id,encrypted_key) VALUES($1,$2,$3)',[tenant,user,encryptConfig({apiKey:'synthetic-personal-'+user},key,`${tenant}:${user}`)])
   await query(
     'INSERT INTO operations_settings(tenant_id,encrypted_config,updated_by) VALUES($1,$2,$3)',
     [

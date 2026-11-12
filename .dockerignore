@@ -7,4 +7,21 @@ node_modules
 .secrets
 infra
 
+# Local business outputs and verification artifacts are not application assets.
+outputs
+.taste-skill
+**/.git
+**/.local
+**/.env
+**/.env.*
+**/.secrets
+**/.claude-session
+**/.aws
+**/.ssh
+**/*.log
+**/*.pid
+**/*.dump
+**/RESTORE-KEY.json
+docs/*-evidence-*/
+
 integrations/aitoearn/source

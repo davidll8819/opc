@@ -3,6 +3,8 @@ import { t } from '@/i18n'
 import { api } from './api'
 export type Config = {
   authMode: string
+  platformOrigin?: string | null
+  privateOrigin?: string | null
   agentsReady: boolean
   paymentsEnabled: boolean
   agentRegion: string
@@ -102,10 +104,17 @@ export function Login({
               </button>
               <p className="small muted">
                 {t(
-                  '本地验证模式。云端用户名密码和 Passkey（通行密钥）由 Cognito（身份服务）提供。',
+                  config.privateOrigin && location.origin === config.privateOrigin
+                    ? '已通过私人设备网络连接这台 Mac。请使用电脑上的 Wishtaday 账号登录。'
+                    : '本地验证模式。云端用户名密码和 Passkey（通行密钥）由 Cognito（身份服务）提供。',
                 )}
               </p>
             </form>
+          ) : config?.authMode === '4yi' ? (
+            <>
+              <p>{t('请从 4yi 应用市场打开 Wishtaday，平台会验证你的身份。')}</p>
+              {config.platformOrigin && <a className="primary button-link wide" href={config.platformOrigin}>{t('返回 4yi 平台')}</a>}
+            </>
           ) : (
             <>
               <a className="primary button-link wide" href="/auth/login">

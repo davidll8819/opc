@@ -8,7 +8,7 @@ export async function attachmentContext(db, ctx, ids = []) {
   for (const id of [...new Set(ids)]) {
     const file = (
       await db.query(
-        'SELECT id,name,mime,data FROM workspace_files WHERE id=$1 AND tenant_id=$2 AND user_id=$3',
+        'SELECT id,name,mime,data FROM workspace_files WHERE deleted_at IS NULL AND id=$1 AND tenant_id=$2 AND user_id=$3 FOR SHARE',
         [id, ctx.tenantId, ctx.userId],
       )
     ).rows[0]
@@ -121,7 +121,7 @@ export function registerDeliverables(app, { scoped }) {
       ).rows[0]
       const files = (
         await db.query(
-          'SELECT id,name,mime,octet_length(data) size,created_at FROM workspace_files WHERE tenant_id=$1 AND user_id=$2 ORDER BY created_at DESC',
+          'SELECT id,name,mime,octet_length(data) size,created_at FROM workspace_files WHERE deleted_at IS NULL AND tenant_id=$1 AND user_id=$2 ORDER BY created_at DESC',
           [ctx.tenantId, ctx.userId],
         )
       ).rows

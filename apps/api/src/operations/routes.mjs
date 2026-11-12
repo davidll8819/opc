@@ -1,4 +1,8 @@
+import { loadPolicy } from './gateway.mjs'
+import { registerVideoShots } from './video-shots.mjs'
 import { createOperationsTasks } from './task-service.mjs'
+import { openVideoDownload } from './video-download.mjs'
+import { registerVideoEdits } from './video-edit-routes.mjs'
 import { readBrief, saveBrief } from './briefs.mjs'
 import { ownRuntimeIds, assertRuntimeAccess } from './task-access.mjs'
 import { readSubmission, listSubmissions } from './submissions.mjs'
@@ -10,7 +14,7 @@ import { transaction, fail } from '../db.mjs'
 import { configKey, encryptConfig, decryptConfig, digest, verifyBridge } from './security.mjs'
 import { createOperationsDriver } from './driver.mjs'
 import { policySchema, toPolicy, secretNames, resolveDepartment } from './policy.mjs'
-import { resolveSecrets } from './credentials.mjs'
+import { loadSecrets, resolveSecrets } from './credentials.mjs'
 import { budgetSnapshot } from './budget.mjs'
 const admin = ['owner', 'admin']
 const credentialInput = z.string().trim().max(4096).optional()
@@ -62,11 +66,26 @@ export function registerOperations(
     scoped,
     pool,
     env,
-    driver = createOperationsDriver(env),
+    driver = createOperationsDriver(env,{pool}),
     tasks = createOperationsTasks({ pool, env, driver }),
+    provisioning,
   },
 ) {
+  registerVideoShots(app, { scoped, driver, env })
+  registerVideoEdits(app, { scoped, pool, env, driver })
   const root = '/api/tenants/:tenantId/operations'
+  app.get(`${root}/provisioning`, async req => {
+    const ctx = await scoped(req, async (_db, _tenant, ctx) => ctx)
+    const state = await provisioning.status(ctx.tenantId)
+    if (['disabled', 'not_requested'].includes(state.state) && await driver.binding(ctx.tenantId))
+      return { state: 'ready', stage: 'ready', message: '视频服务已配置，可刷新检查连接', canRetry: false }
+    return state
+  })
+  app.post(`${root}/provisioning/retry`, async req => {
+    z.object({}).strict().parse(req.body)
+    const ctx = await scoped(req, async (_db, _tenant, ctx) => ctx, admin)
+    return provisioning.enqueue(ctx.tenantId, { retry: true })
+  })
   app.get(`${root}/submissions`, (req) =>
     scoped(req, async (db, tenant, ctx) => ({ items: await listSubmissions(db, ctx) })),
   )
@@ -109,8 +128,8 @@ export function registerOperations(
       ctx,
       row: await settings(db, ctx),
     }))
-    if (!info.row) throw fail(409, '请先在设置中配置企业 AI 密钥')
-    return driver.ready(info.ctx.tenantId, info.row.revision)
+    if (!info.row) throw fail(409, '请先在“设置 → 公司模型与连接”选择并保存模型；个人 Key 在“我的 4yi Key”中配置')
+    return driver.ready(info.ctx.tenantId, info.row.revision, info.ctx.userId)
   }
   async function insertProposal(db, ctx, payload) {
     const hash = digest(payload)
@@ -181,16 +200,16 @@ export function registerOperations(
       ctx,
       row: await settings(db, ctx),
     }))
-    if (!row) return { ready: false, reason: '请先在设置中配置企业 AI 密钥' }
+    if (!row) return { ready: false, reason: '请在“公司模型与连接”选择模型，并在“我的 4yi Key”保存个人 Key' }
     try {
       const stored = decryptConfig(row.encrypted_config, await configKey(env), ctx.tenantId)
-      if (!resolveSecrets(stored, env, ctx.tenantId).ai)
-        return { ready: false, reason: '请先在设置中填写并保存企业 API Key' }
+      if (!(await scoped(req,db=>loadSecrets(db,env,ctx.tenantId,ctx.userId))).ai)
+        return { ready: false, reason: '请先保存你自己的 4yi API Key' }
       resolveDepartment(
-        toPolicy(decryptConfig(row.encrypted_config, await configKey(env), ctx.tenantId)),
+        (await scoped(req, async db => (await loadPolicy(db,ctx.tenantId,env)).policy)),
         'content_ops',
       )
-      await driver.ready(ctx.tenantId, row.revision)
+      await driver.ready(ctx.tenantId, row.revision, ctx.userId)
       return { ready: true, reason: '运行服务已连接' }
     } catch (e) {
       return { ready: false, reason: e.expose ? e.message : '企业运行服务尚未部署或无法连接' }
@@ -199,10 +218,10 @@ export function registerOperations(
   app.get(`${root}/tasks`, async (req) => {
     const owned = await scoped(req, (db, tenant, ctx) => ownRuntimeIds(db, ctx))
     if (!owned.size) return { list: [], total: 0 }
-    const data = await driver.request(await runtime(req), 'ai', '/agent/tasks?page=1&pageSize=30')
-    const list = (Array.isArray(data) ? data : data.list || data.items || []).filter((t) =>
-      owned.has(t.id),
-    )
+    const entry=await runtime(req)
+    const results=await Promise.allSettled([...owned].slice(-30).reverse().map(id=>driver.request(entry,'ai',`/agent/tasks/${id}`)))
+    const list=results.filter(r=>r.status==='fulfilled').map(r=>r.value)
+    if(!list.length&&results.length)throw fail(502,'制作任务暂时无法读取，请稍后重试')
     return { list, total: list.length }
   })
   app.get(`${root}/tasks/:id`, async (req) => {
@@ -212,6 +231,21 @@ export function registerOperations(
       .parse(req.params.id)
     const ctx = await scoped(req, async (db, tenant, ctx) => ctx)
     return tasks.syncRuntime(ctx, id)
+  })
+
+  app.get(`${root}/tasks/:id/video/download`, async (req, reply) => {
+    const id = z.string().regex(/^[a-f0-9]{24}$/).parse(req.params.id)
+    const { url } = z.object({ url: z.string().url().max(4096) }).strict().parse(req.query)
+    await scoped(req, (db, tenant, ctx) => assertRuntimeAccess(db, ctx, id))
+    const entry = await runtime(req)
+    const task = await driver.request(entry, 'ai', `/agent/tasks/${id}`)
+    const response = await openVideoDownload({ entry, task, url })
+    reply.header('content-type', 'video/mp4')
+      .header('content-disposition', `attachment; filename="video-${id}.mp4"`)
+      .header('x-content-type-options', 'nosniff')
+    const length = response.headers.get('content-length')
+    if (length && /^\d+$/.test(length)) reply.header('content-length', length)
+    return reply.send(Readable.fromWeb(response.body))
   })
 
   app.post(`${root}/tasks/:id/abort`, async (req) => {

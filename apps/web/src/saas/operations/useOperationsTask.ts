@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { api, csrf } from '../api'
 import {
-  readable,
+  taskReply,
   resultMedia,
   mergeMedia,
   type OperationsHandoff,
@@ -66,6 +66,7 @@ export function useOperationsTask(
           videoFormat?: VideoFormat
           savedVideos?: { status?: string }[]
           videoStatusUnavailable?: boolean
+          completionWarning?: string
         }>(`${root}/tasks/${id}`)
         if (!current(scope) || seq !== lookup.current) return
         setTaskId(id)
@@ -77,11 +78,16 @@ export function useOperationsTask(
             ),
         )
         setPhase(
-          data.status === 'error' && data.savedVideos?.some((video) => video.status === 'SUCCESS')
-            ? '对话执行中断，已保存的素材仍可查看'
-            : labels[data.status || ''] || '任务状态待核对',
+          data.completionWarning ||
+            (data.status === 'error' &&
+            data.savedVideos?.some((video) => video.status === 'SUCCESS')
+              ? '对话执行中断，已保存的素材仍可查看'
+              : labels[data.status || ''] || '任务状态待核对'),
         )
-        setOutput([readable(data.messages || data.result) || '任务记录暂无文本'])
+        setOutput([
+          taskReply(data.messages || data.result) ||
+            '暂无需要补充的文字说明，请查看任务状态和已保存素材。',
+        ])
         setMedia(mergeMedia(resultMedia([data.messages || data.result, data.savedVideos])))
         setUnresolved(!labels[data.status || ''])
       } catch (e) {
@@ -237,7 +243,7 @@ export function useOperationsTask(
           try {
             const event = JSON.parse(data)
             if (/^[a-f0-9]{24}$/.test(event.taskId || '')) setTaskId(event.taskId)
-            const text = readable(event)
+            const text = taskReply(event)
             if (text) pending.push(text.slice(0, 30000))
             pendingMedia.push(...resultMedia(event))
           } catch {

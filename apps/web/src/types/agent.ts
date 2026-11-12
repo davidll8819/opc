@@ -33,6 +33,8 @@ export interface DeskVisitMission {
 }
 
 export interface Agent {
+  avatarId?: string
+  onDuty?: boolean
   id: string
   name: string
   color: number

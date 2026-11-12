@@ -107,7 +107,7 @@ function chatResults(response) {
 }
 
 /** Search through the configured model gateway; no second credential or direct provider fetch. */
-export function createModelWebTools({ model, call, reader = readPublicPage }) {
+export function createModelWebTools({ model, call, reader = readPublicPage, limits = { searches: 3, reads: 6 } }) {
   if (typeof model !== 'string' || !model.trim() || typeof call !== 'function')
     throw fail(409, '请先选择市场调研使用的企业模型')
   const native = ['gemini-3.5-flash','gemini-2.5-pro','grok-4.3'].includes(model),
@@ -118,7 +118,7 @@ export function createModelWebTools({ model, call, reader = readPublicPage }) {
   return {
     sources,
     async search(query) {
-      if (++queries > 3) throw fail(409, '本次任务已达到 3 次搜索上限')
+      if (++queries > limits.searches) throw fail(409, `本次任务已达到 ${limits.searches} 次搜索上限`)
       if (typeof query !== 'string' || !query.trim() || query.length > 300)
         throw fail(400, '搜索词不正确')
       const messages = [
@@ -165,7 +165,7 @@ export function createModelWebTools({ model, call, reader = readPublicPage }) {
       return found
     },
     async read(value) {
-      if (++reads > 6) throw fail(409, '本次任务已达到 6 次网页读取上限')
+      if (++reads > limits.reads) throw fail(409, `本次任务已达到 ${limits.reads} 次网页读取上限`)
       const url = safeURL(value)
       if (!url) throw fail(400, '只允许读取公开网页')
       const source = sources.get(url)

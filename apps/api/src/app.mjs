@@ -1,7 +1,24 @@
+import {registerCustomEmployees} from './employee-directory.mjs'
+import {registerPersonalKey} from './personal-key.mjs'
+import { registerSkillStudio } from './skill-studio.mjs'
+import { registerEmployeeDuty, registerEmployeeRoles } from './employee-duty.mjs'
+import { registerOrganization } from './organization.mjs'
+import { registerTaskImageAccess } from './operations/task-image-access.mjs'
+import { createModelTransport } from './operations/model-transport.mjs'
+import { registerBilling, blockUnmetered } from './billing.mjs'
+import { registerReuse } from './reuse.mjs'
+import { registerHealth } from './health.mjs'
+import { registerVideoAccess } from './operations/video-access.mjs'
+import { createOperationsDriver } from './operations/driver.mjs'
+import { createFouryiIdentity, fouryiEnvironment } from './fouryi-identity.mjs'
+import { createVideoProvisioning } from './operations/provisioning.mjs'
 import { registerDeliverables } from './task-assets.mjs'
+import { registerEmployeeDiagnostics } from './employee-diagnostics.mjs'
+import { registerTaskRecovery } from './task-recovery.mjs'
 import { registerDailyBrief } from './daily-brief.mjs'
 import { registerSlowResponses, responseError } from './slow-response.mjs'
 import { registerResearchEngine } from './research/engine.mjs'
+import { registerResearchReview } from './research/review-routes.mjs'
 import { registerDepartmentEngine } from './department-engine.mjs'
 import { createOperationsTasks } from './operations/task-service.mjs'
 import { registerSearchSettings } from './research/settings.mjs'
@@ -53,19 +70,24 @@ export async function buildApp({
   skillCatalog = readSkillCatalog,
   catalogInstaller = prepareCatalogSkill,
   operationsDriver,
+  videoProvisioning,
   modelFetch,
   executionDriver,
   documentParser,
   env = process.env,
   staticRoot = fileURLToPath(new URL('../../web/dist/', import.meta.url)),
 }) {
+  env = fouryiEnvironment(env)
   if (!env.APP_ORIGIN) throw new Error('APP_ORIGIN is required')
+  const modelTransport = modelFetch ? null : createModelTransport()
+  modelFetch ??= modelTransport.fetch
   const app = Fastify({
     logger: {
       level: env.LOG_LEVEL || 'info',
       redact: [
         'req.headers.cookie',
         'req.headers.authorization',
+        'req.headers["x-xclaw-identity-signature"]',
         'req.body',
         'res.headers.set-cookie',
       ],
@@ -74,6 +96,10 @@ export async function buildApp({
     bodyLimit: 65536,
     trustProxy: false,
   })
+  if (modelTransport) app.addHook('onClose', () => modelTransport.close())
+  const provisioning = videoProvisioning || await createVideoProvisioning(env, { pool })
+  app.addHook('onReady', async () => { provisioning.start() })
+  app.addHook('onClose', async () => { await provisioning.close() })
   await app.register(cookie)
   const productionMediaOrigins = await loadMediaOrigins(env)
   await app.register(helmet, {
@@ -83,7 +109,7 @@ export async function buildApp({
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", 'data:', 'blob:', ...productionMediaOrigins],
-        mediaSrc: ["'self'", ...productionMediaOrigins],
+        mediaSrc: ["'self'", 'blob:', ...productionMediaOrigins],
         connectSrc: ["'self'"],
         workerSrc: ["'self'", 'blob:'],
         objectSrc: ["'none'"],
@@ -92,15 +118,19 @@ export async function buildApp({
       },
     },
   })
-  const auth = authService({ pool, cache, env })
+  const platformIdentity = env.AUTH_MODE === '4yi' ? createFouryiIdentity({ env, pool, cache }) : null
+  platformIdentity?.register(app)
+  const auth = authService({ pool, cache, env, platformIdentity })
   app.setErrorHandler((err, req, reply) => {
     const { status, data } = responseError(err, req, app)
     reply.code(status).send(data)
   })
   app.addHook('onRequest', async (req, reply) => {
     reply.header('Cache-Control', 'no-store')
+    auth.guardRequest(req)
     if (
       env.ORIGIN_VERIFY_SECRET &&
+      env.AUTH_MODE !== '4yi' &&
       req.url !== '/health/live' &&
       req.url !== '/health/ready' &&
       req.headers['x-origin-verify'] !== env.ORIGIN_VERIFY_SECRET
@@ -114,22 +144,26 @@ export async function buildApp({
       if (!(await throttle(cache, `auth-rate:${hash(ip)}`, 30, 60)))
         throw fail(429, '登录请求过于频繁')
     }
-    if (req.url.startsWith('/api/')) {
+    if (req.url.startsWith('/api/') && env.AUTH_MODE !== '4yi') {
       req.identity = await auth.session(req)
       if (!['GET', 'HEAD'].includes(req.method)) auth.checkCsrf(req, req.identity)
       if (!(await throttle(cache, `api-rate:${req.identity.userId}`, 120, 60)))
         throw fail(429, '操作过于频繁，请稍后再试')
     }
   })
-  auth.register(app)
-  app.get('/health/live', () => ({ ok: true }))
-  app.get('/health/ready', async () => {
-    await pool.query('SELECT 1')
-    await cache.ping()
-    return { ok: true }
+  app.addHook('preValidation', async req => {
+    if (env.AUTH_MODE === '4yi' && req.url.startsWith('/api/')) {
+      req.identity = await auth.session(req)
+      if (!['GET', 'HEAD'].includes(req.method)) auth.checkCsrf(req, req.identity)
+      if (!(await throttle(cache, `api-rate:${req.identity.userId}`, 120, 60))) throw fail(429, '操作过于频繁，请稍后再试')
+    }
   })
+  auth.register(app)
+  registerHealth(app, { pool, cache })
   app.get('/public/config', () => ({
-    authMode: env.AUTH_MODE === 'local' ? 'local' : 'cognito',
+    authMode: ['local', '4yi'].includes(env.AUTH_MODE) ? env.AUTH_MODE : 'cognito',
+    platformOrigin: env.AUTH_MODE === '4yi' ? env.FOURYI_PORTAL_ORIGIN || null : null,
+    privateOrigin: auth.privateOrigin,
     paymentsEnabled: false,
     agentsReady: agents.ready !== false,
     agentRegion: env.AGENT_REGION || 'us-west-2',
@@ -161,7 +195,10 @@ export async function buildApp({
       await db.query("INSERT INTO memberships VALUES($1,$2,'owner')", [id, req.identity.userId])
     })
     reply.code(201)
-    return { id, name, plan: 'personal', role: 'owner' }
+    // Workspace creation remains successful even if the host cannot allocate a video environment.
+    // The owner can inspect/retry provisioning without creating another workspace.
+    const videoRuntime = await provisioning.enqueue(id).catch(() => ({ state: 'failed', message: '视频开通排队失败，请到视频工作台重试', canRetry: true }))
+    return { id, name, plan: 'personal', role: 'owner', videoRuntime }
   })
   const scope = (req) => ({
     tenantId: uuid.parse(req.params.tenantId),
@@ -193,7 +230,20 @@ export async function buildApp({
   registerFilingRoutes(app, { scoped, pool, env, fetcher: modelFetch })
   registerArchiveRecordRoutes(app, { scoped })
   registerEmployeeProfiles(app, { scoped, env })
-  registerEmployeeSkills(app, { scoped })
+  registerEmployeeDiagnostics(app, { scoped, pool, env, fetcher: modelFetch, cache })
+  registerTaskRecovery(app, { scoped })
+  registerResearchReview(app, { scoped })
+  registerBilling(app, { scoped, env })
+  registerReuse(app, { scoped })
+  registerTaskImageAccess(app, { scoped, driver: operationsDriver || createOperationsDriver(env,{pool}) })
+  registerVideoAccess(app, { scoped, driver: operationsDriver || createOperationsDriver(env,{pool}), cache })
+  registerEmployeeDuty(app, { scoped })
+  registerEmployeeRoles(app, { scoped })
+  registerOrganization(app, { scoped })
+  registerCustomEmployees(app, { scoped })
+  registerPersonalKey(app, { scoped, env, fetcher:modelFetch })
+  registerSkillStudio(app, { scoped, pool, env, fetcher: modelFetch })
+  registerEmployeeSkills(app, { scoped, catalogInstaller })
   registerSecretaryExecution(app, { scoped, pool, env, fetcher: modelFetch })
   registerReminders(app, { scoped, pool, env })
   registerSearchSettings(app, { scoped, env })
@@ -204,7 +254,7 @@ export async function buildApp({
   registerDailyBrief(app, { scoped, pool, env, fetcher: modelFetch, cache })
   registerSecretary(app, scoped, { pool, env, fetcher: modelFetch })
   registerModelGateway(app, { scoped, pool, env, driver: operationsDriver, fetcher: modelFetch })
-  registerOperations(app, { scoped, pool, env, driver: operationsDriver, tasks: operationsTasks })
+  registerOperations(app, { scoped, pool, env, driver: operationsDriver, tasks: operationsTasks, provisioning })
   app.get('/api/tenants/:tenantId/skills/catalog', (req) =>
     scoped(req, async (db, tenant, ctx) => {
       const catalog = await skillCatalog()
@@ -402,6 +452,7 @@ export async function buildApp({
       id = randomUUID()
     let replay
     await scoped(req, async (db) => {
+      await blockUnmetered(db, ctx.tenantId)
       const {
         rows: [old],
       } = await db.query(
@@ -611,7 +662,7 @@ export async function buildApp({
         const action = z
           .object({
             type: z.literal('set_state'),
-            rosterNo: z.number().int().min(1).max(9),
+            rosterNo: z.number().int().min(1).max(13),
             state: z.enum(['idle', 'working', 'thinking', 'talking']),
             task: z.string().max(160).optional(),
           })

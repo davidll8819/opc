@@ -20,6 +20,11 @@ export const CHARACTER_LOOKS: Record<string, CharacterLook> = {
   'new-agent-7': { skin: 'erikari' },
   'new-agent-8': { skin: 'mario', outfit: 'nate' },
   'new-agent-9': { skin: 'erikari', outfit: 'misaki' },
+  // Reserve employees use the existing animated wardrobe until dedicated motion sheets are supplied.
+  'xu-zhining': { skin: 'misaki', outfit: 'nate' },
+  'cheng-zhiyao': { skin: 'erikari', outfit: 'soeren' },
+  'su-ying': { skin: 'erikari', outfit: 'harri' },
+  'shen-qinglan': { skin: 'misaki', outfit: 'luke' },
 }
 
 export function getChibiSkinName(agentId: string): ChibiSkinName {

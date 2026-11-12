@@ -1,7 +1,7 @@
 import { OnWorkerEvent, WorkerHost } from '@nestjs/bullmq'
 import { Logger } from '@nestjs/common'
 import { QueueName, QueueProcessor } from '@yikart/aitoearn-queue'
-import { getErrorMessage, getErrorStack, UserType } from '@yikart/common'
+import { getErrorMessage, getErrorStack, UserType, officeUserContext } from '@yikart/common'
 import { AiLogChannel, AiLogRepository, AiLogStatus, AiLogType } from '@yikart/mongodb'
 import { Job } from 'bullmq'
 import { runWithAiGenerationRetry } from '../ai-generation-retry.util'
@@ -68,7 +68,7 @@ export class ImageConsumer extends WorkerHost {
       const result = await runWithAiGenerationRetry(
         async () => {
           attemptCount++
-          return await this.executeTask(taskType, request)
+          return await officeUserContext.run(aiLog.userId, () => this.executeTask(taskType, request))
         },
         retry,
         (error, attempt, maxAttempts) => {

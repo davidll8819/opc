@@ -30,7 +30,6 @@
     "@nestjs/swagger": "11.2.6",
     "@scalar/nestjs-api-reference": "0.5.14",
     "accept-language-parser": "1.5.0",
-    "art-template": "4.13.4",
     "commander": "14.0.3",
     "nanoid": "5.1.7",
     "nest-typed-config": "2.10.1",

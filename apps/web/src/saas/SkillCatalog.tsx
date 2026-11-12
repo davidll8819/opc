@@ -1,9 +1,14 @@
+import './employee-skills.css'
+import { EMPLOYEES } from '../../../../packages/employees/registry.mjs'
+import { recommendedCategories, skillFit } from '../../../../packages/employees/skill-fit.mjs'
 import { useEffect, useRef, useState } from 'react'
 import { t, useLanguage } from '@/i18n'
 import { api } from './api'
 
 type Skill = {
   id: string
+  defaultHidden?: boolean
+  mergedSources?: { id: string; number: number; source: string }[]
   installedId?: string | null
   number: number
   category: string
@@ -28,11 +33,19 @@ export function SkillCatalog({
   base,
   canEdit,
   openInstalled,
+  employeeId = '',
+  onBound,
 }: {
   base: string
   canEdit: boolean
   openInstalled: () => void
+  employeeId?: string
+  onBound?: () => void
 }) {
+  const employee = EMPLOYEES.find((e) => e.id === employeeId)
+  const [recommendedOnly, setRecommendedOnly] = useState(!!employeeId)
+  const [boundIds, setBoundIds] = useState<string[]>([])
+  const [bindingRevision, setBindingRevision] = useState('')
   const language = useLanguage()
   const [installing, setInstalling] = useState<string | null>(null)
   const [installError, setInstallError] = useState<{ id: string; message: string } | null>(null)
@@ -43,6 +56,7 @@ export function SkillCatalog({
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState('')
+  const [showHidden, setShowHidden] = useState(false)
   const [page, setPage] = useState(0)
   const [selected, setSelected] = useState<Skill | null>(null)
   const dialog = useRef<HTMLDialogElement>(null)
@@ -68,17 +82,46 @@ export function SkillCatalog({
     }
   }, [base])
   useEffect(() => {
+    if (!employeeId) return
+    let active = true
+    api<{ skillIds: string[]; revision: string }>(`${base}/employees/${employeeId}/skills`)
+      .then((data) => {
+        if (active) {
+          setBoundIds(data.skillIds)
+          setBindingRevision(data.revision)
+        }
+      })
+      .catch((e) => {
+        if (active) setError(e.message)
+      })
+    return () => {
+      active = false
+    }
+  }, [base, employeeId])
+  useEffect(() => {
     if (selected) dialog.current?.showModal()
   }, [selected])
   async function install(skill: Skill) {
-    if (installing || skill.installedId || !canEdit) return
+    if (
+      installing ||
+      (!employeeId && skill.installedId) ||
+      !canEdit ||
+      (!skill.installedId && skill.download.status !== 'downloaded')
+    )
+      return
     setInstalling(skill.id)
     setInstallError(null)
     setInstalledName('')
     try {
-      const result = await api<{ skill: { id: string } }>(`${base}/skills/install`, {
-        id: skill.id,
-      })
+      const result = await api<{ skill: { id: string }; skillIds?: string[]; revision?: string }>(
+        employeeId ? `${base}/employees/${employeeId}/skills/catalog` : `${base}/skills/install`,
+        employeeId ? { id: skill.id, revision: bindingRevision } : { id: skill.id },
+      )
+      if (employeeId && result.skillIds && result.revision) {
+        setBoundIds(result.skillIds)
+        setBindingRevision(result.revision)
+        onBound?.()
+      }
       setItems((items) =>
         items.map((item) =>
           item.id === skill.id ? { ...item, installedId: result.skill.id } : item,
@@ -98,17 +141,32 @@ export function SkillCatalog({
     }
   }
   function installButton(skill: Skill) {
+    const bound = !!skill.installedId && boundIds.includes(skill.installedId)
+    const label = employee
+      ? bound
+        ? '已绑定'
+        : skill.installedId
+          ? '绑定给'
+          : '安装并绑定给'
+      : skill.installedId
+        ? '已安装'
+        : '安装'
     return (
       <button
         className="catalog-install"
         disabled={
-          !canEdit || !!installing || !!skill.installedId || skill.download.status !== 'downloaded'
+          !canEdit ||
+          !!installing ||
+          (employeeId ? !bindingRevision || bound : !!skill.installedId) ||
+          (!skill.installedId && skill.download.status !== 'downloaded')
         }
         title={!canEdit ? t('仅企业所有者或管理员可以上传安装技能。') : undefined}
-        aria-label={`${skill.name} · ${skill.source} · ${t(skill.installedId ? '已安装' : '安装')}`}
+        aria-label={`${skill.name} · ${skill.source} · ${t(label)} ${employee?.name || ''}`}
         onClick={() => void install(skill)}
       >
-        {t(skill.installedId ? '已安装' : installing === skill.id ? '安装中…' : '安装')}
+        {installing === skill.id
+          ? t('正在处理…')
+          : `${t(label)}${employee && !bound ? ` ${employee.name}` : ''}`}
       </button>
     )
   }
@@ -116,6 +174,8 @@ export function SkillCatalog({
   const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
   const filtered = items.filter(
     (skill) =>
+      (showHidden || !skill.defaultHidden) &&
+      (!recommendedOnly || skillFit(employeeId, skill.category)) &&
       (!category || category === skill.category) &&
       (!status || status === skill.download.status) &&
       words.every((word) =>
@@ -125,6 +185,12 @@ export function SkillCatalog({
           .includes(word),
       ),
   )
+  const priorities = recommendedCategories(employeeId)
+  const rank = (category: string) => {
+    const index = priorities.indexOf(category)
+    return index < 0 ? priorities.length : index
+  }
+  filtered.sort((a, b) => rank(a.category) - rank(b.category))
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const currentPage = Math.min(page, pages - 1)
   const displayed = filtered.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE)
@@ -141,18 +207,53 @@ export function SkillCatalog({
     )
   return (
     <section className="skill-catalog" aria-label={t('技能目录')}>
-      <p className="catalog-note">{t('点击安装，将所选技能加入当前企业；不会自动执行脚本。')}</p>
+      <p className="catalog-note">
+        {employee
+          ? `${employee.name} · ${t('按岗位推荐分类')}：${recommendedCategories(employeeId).map(t).join('、')}`
+          : t('点击安装，将所选技能加入当前企业；不会自动绑定员工。')}
+      </p>
+      {employee && (
+        <label className="catalog-employee-recommendation">
+          <input
+            type="checkbox"
+            checked={recommendedOnly}
+            onChange={(e) => {
+              setRecommendedOnly(e.target.checked)
+              setPage(0)
+            }}
+          />
+          {t('仅看适合当前员工的分类')}
+        </label>
+      )}
+      {items.some((skill) => !skill.installedId && skill.download.status === 'failed') && (
+        <p className="catalog-note" role="status">
+          {t(
+            '部分技能的本机安装包不可用，暂不能安装。请查看详情中的原因和恢复说明；已安装技能不受影响。',
+          )}
+        </p>
+      )}
       {!canEdit && <p className="small muted">{t('仅企业所有者或管理员可以上传安装技能。')}</p>}
       {!!installedName && (
         <div className="catalog-install-success" role="status">
           <span>
-            {t('安装成功：')}
-            {installedName}
+            {t(employeeId ? '已绑定给' : '安装成功：')}
+            {employee?.name} ·{installedName}
           </span>
           <button onClick={openInstalled}>{t('查看我的技能')}</button>
         </div>
       )}
       <div className="catalog-filters">
+        <label className="catalog-visibility">
+          <input
+            type="checkbox"
+            checked={showHidden}
+            onChange={(e) => {
+              setShowHidden(e.target.checked)
+              setPage(0)
+            }}
+          />
+          {t('显示暂不常用的技能')}
+        </label>
         <label>
           {t('搜索技能')}
           <input
@@ -183,7 +284,7 @@ export function SkillCatalog({
           </select>
         </label>
         <label>
-          {t('下载状态')}
+          {t('本机安装包状态')}
           <select
             value={status}
             onChange={(e) => {
@@ -192,7 +293,7 @@ export function SkillCatalog({
             }}
           >
             <option value="">{t('全部状态')}</option>
-            <option value="downloaded">{t('已下载')}</option>
+            <option value="downloaded">{t('本机可用')}</option>
             <option value="failed">{t('待补齐')}</option>
           </select>
         </label>
@@ -220,12 +321,23 @@ export function SkillCatalog({
                 <td>{skill.number}</td>
                 <td>
                   <strong>{skill.name}</strong>
+                  {!!skill.mergedSources?.length && (
+                    <p className="small muted">
+                      {t('已合并重复来源：')}
+                      {skill.mergedSources.map((entry) => entry.source).join('、')}
+                    </p>
+                  )}
                   <p>
                     {language === 'zh'
                       ? skill.descriptionZh
                       : skill.descriptionEn || skill.name.replaceAll('-', ' ')}
                   </p>
-                  <span className="catalog-category">{t(skill.category)}</span>
+                  <span className="catalog-category">
+                    {t(skill.category)}
+                    {employeeId && skillFit(employeeId, skill.category)
+                      ? ` · ${t('岗位推荐')}`
+                      : ''}
+                  </span>
                 </td>
                 <td>
                   <span className="catalog-source">{skill.source}</span>
@@ -241,7 +353,7 @@ export function SkillCatalog({
                       skill.installedId
                         ? '已安装'
                         : skill.download.status === 'downloaded'
-                          ? '已下载 · 未安装'
+                          ? '本机可用 · 未安装'
                           : '待补齐',
                     )}
                   </span>
@@ -271,6 +383,7 @@ export function SkillCatalog({
               setQuery('')
               setCategory('')
               setStatus('')
+              setRecommendedOnly(false)
               setPage(0)
             }}
           >
@@ -320,7 +433,7 @@ export function SkillCatalog({
                 selected.installedId
                   ? '已安装'
                   : selected.download.status === 'downloaded'
-                    ? '已下载 · 未安装'
+                    ? '本机可用 · 未安装'
                     : '待补齐',
               )}
             </dd>
@@ -363,7 +476,7 @@ export function SkillCatalog({
             </p>
           )}
           <p className="small muted">
-            {t('安装后可在我的技能中分配给部门，技能说明会用于对话和文字任务；上传不会执行脚本。')}
+            {t('安装后选择具体员工绑定。绑定只影响该员工后续对话和新任务，上传不会执行脚本。')}
           </p>
         </dialog>
       )}

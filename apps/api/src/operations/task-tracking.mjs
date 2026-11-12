@@ -30,10 +30,16 @@ export function runtimeOutput(value) {
     if (depth > 15 || !v) return
     if (typeof v === 'string') {
       texts.push(v)
-      for (const match of v.matchAll(/\[Resource link: (?:Generated image|Image \d+)\]\s+(https?:\/\/[^\s<>]+)/g))
+      for (const match of v.matchAll(
+        /\[Resource link: (?:Generated image|Image \d+)\]\s+(https?:\/\/[^\s<>]+)/g,
+      ))
         media.push({ type: 'IMAGE', url: match[1] })
       if (v.length < 1024 * 1024 && (v.trim().startsWith('{') || v.trim().startsWith('['))) {
-        try { walk(JSON.parse(v), depth + 1) } catch { /* Tool output may be plain text. */ }
+        try {
+          walk(JSON.parse(v), depth + 1)
+        } catch {
+          /* Tool output may be plain text. */
+        }
       }
       return
     }
@@ -46,7 +52,11 @@ export function runtimeOutput(value) {
       media.push({ type: v.type, url: v.url })
     if (['SUCCESS', 'completed'].includes(v.status) && /^https?:\/\//.test(v.videoUrl || ''))
       media.push({ type: 'VIDEO', url: v.videoUrl })
-    if (v.type === 'resource_link' && /image/i.test(v.name || '') && /^https?:\/\//.test(v.uri || ''))
+    if (
+      v.type === 'resource_link' &&
+      /image/i.test(v.name || '') &&
+      /^https?:\/\//.test(v.uri || '')
+    )
       media.push({ type: 'IMAGE', url: v.uri })
     if (v.text) walk(v.text, depth + 1)
     else if (v.content) walk(v.content, depth + 1)
@@ -58,6 +68,36 @@ export function runtimeOutput(value) {
     text: [...new Set(texts)].join('\n').slice(0, 150000),
     media: [...new Map(media.map((m) => [m.url, m])).values()].slice(0, 30),
   }
+}
+// A runtime may label the agent loop completed even when its final reply is an API error.
+// Keep confirmed media usable, but do not present unfinished post-processing as success.
+export function runtimeCompletionWarning(result) {
+  const messages = Array.isArray(result?.messages) ? result.messages : []
+  const last = messages.findLast((m) => m.type === 'assistant')
+  const blocks = Array.isArray(last?.message?.content) ? last.message.content : []
+  const terminal = messages.findLast((m) => ['assistant', 'result', 'error'].includes(m.type))
+  const structuredFailure = !!last?.error || terminal?.type === 'error' || (terminal?.type === 'result' && terminal.is_error === true)
+  const error = blocks.find((c) => c.type === 'text' && /^API Error:|^There's an issue with the selected model/i.test(c.text || '')) || (structuredFailure ? { text: '' } : null)
+  if (!error) return ''
+  const hasVideo = result.savedVideos?.some(
+    (video) => video.status === 'SUCCESS' && /^https?:\/\//.test(video.videoUrl || ''),
+  )
+  // Saved errors can contain router stack traces and provider content. Surface
+  // only known categories, including historical errors previously wrapped as 502.
+  const parameterFailure = [
+    '模型服务拒绝请求参数', '模型输出额度参数不兼容',
+    '当前模型通道不兼容此工具调用', '模型思考参数或历史思考内容不兼容',
+    '模型上下文超出限制', '模型请求内容过大',
+  ].find(message => error.text.includes(message))
+  if (parameterFailure)
+    return `${parameterFailure}，制作已暂停。${hasVideo ? '已保存的视频仍可使用。' : '尚未确认可用视频。'}请先检查模型兼容性或任务上下文，再手动继续原任务；不要重复提交。`
+  if (!hasVideo)
+    return /今日模型额度不足/.test(error.text)
+      ? '企业今日模型额度不足，本次制作未完成，尚未确认可用视频。请等待次日或由管理员确认额度后，再手动继续原任务。'
+      : '本次模型执行中断，尚未确认可用视频。请核对原任务记录后再继续，不要重复提交。'
+  return /今日模型额度不足/.test(error.text)
+    ? '企业今日模型额度不足，后续文字整理中断；已保存的视频可继续剪辑、下载和归档。请等待次日或由管理员确认额度。'
+    : '后续模型对话中断；已保存的素材可继续使用，请核对记录，不要重复生成。'
 }
 export function applyRuntimeStatus(task, result) {
   const status = result?.status
@@ -72,8 +112,39 @@ export function applyRuntimeStatus(task, result) {
   }[status]
   if (status === 'completed') {
     const output = runtimeOutput(result.messages || result.result)
-    task.summary = output.text || '运营任务已结束，暂无可读取的文字成果，请查看运营工作台。'
+    const replies = Array.isArray(result.messages)
+      ? result.messages
+          .filter((message) => (message.type || message.role) === 'assistant')
+          .flatMap((item) => {
+            const message = item.message || item
+            const content = message.content ?? message.text
+            return (Array.isArray(content) ? content : [content]).flatMap((block) =>
+              typeof block === 'string'
+                ? [block]
+                : block?.type === 'text'
+                  ? [block.text || '']
+                  : [],
+            )
+          })
+          .filter((text) => text && !/^API Error:/i.test(text))
+      : [output.text]
+    task.summary =
+      replies
+        .slice(-3)
+        .map((text) => text.slice(0, 4000))
+        .join('\n\n') || '运营任务已结束，暂无可读取的文字成果，请查看运营工作台。'
     task.media = output.media
+  }
+  const warning = runtimeCompletionWarning(result)
+  if (warning) {
+    task.executionNote = warning
+    const hasVideo = result.savedVideos?.some(
+      (video) => video.status === 'SUCCESS' && /^https?:\/\//.test(video.videoUrl || ''),
+    )
+    if (!hasVideo && status === 'completed') {
+      task.status = 'blocked'
+      task.summary = warning
+    }
   }
   task.runtimePending = false
   task.updatedAt = new Date().toISOString()
@@ -131,4 +202,39 @@ export async function* trackOperationsStream(stream, { pool, ctx, id, submission
       } else t.executionNote = '正在核对运营服务任务状态'
     })
   }
+}
+
+// Workbench submissions appear in the same task list as secretary dispatches.
+// Only the server-observed runtime ID establishes this link.
+export async function linkWorkbenchTask(db, ctx, input, runtimeId) {
+  await db.query(
+    `INSERT INTO secretary_workspaces(tenant_id,user_id,board,revision) VALUES($1,$2,$3,0) ON CONFLICT DO NOTHING`,
+    [ctx.tenantId, ctx.userId, JSON.stringify({ tasks: [], messages: [], batches: [] })],
+  )
+  const { board } = (
+    await db.query(
+      'SELECT board FROM secretary_workspaces WHERE tenant_id=$1 AND user_id=$2 FOR UPDATE',
+      [ctx.tenantId, ctx.userId],
+    )
+  ).rows[0]
+  if (board.tasks.some((t) => t.runtimeTaskId === runtimeId && !t.videoEditId)) return
+  const now = new Date().toISOString()
+  board.tasks.push({
+    id: input.requestId,
+    title: (input.prompt || '叶凡交接制作任务').slice(0, 80),
+    request: input.prompt || '',
+    summary: '',
+    dept: 'app-agent',
+    due: now.slice(0, 10),
+    status: 'working',
+    publishRequired: false,
+    runtimeTaskId: runtimeId,
+    runtimePending: false,
+    startedAt: now,
+    executionNote: '运营服务正在执行；成片需另行确认归档',
+  })
+  await db.query(
+    'UPDATE secretary_workspaces SET board=$3,revision=revision+1,updated_at=now() WHERE tenant_id=$1 AND user_id=$2',
+    [ctx.tenantId, ctx.userId, JSON.stringify(board)],
+  )
 }

@@ -1,23 +1,10 @@
+import { archiveQueryTerms } from './query.mjs'
 import { z } from 'zod'
 import { fail } from '../db.mjs'
 const missingReply = '在本轮提供的文档摘录中未找到答案。你可以换个问法，或查看原文后缩小问题范围。'
 const normalize = (text) => text.normalize('NFC').replace(/\s+/gu, ' ').trim()
-function terms(text) {
-  const latin = text.toLowerCase().match(/[a-z0-9]+/g) || []
-  const chinese = text.match(/[\p{Script=Han}]+/gu) || []
-  return [
-    ...new Set([
-      ...latin,
-      ...chinese.flatMap((word) =>
-        word.length === 1
-          ? [word]
-          : Array.from({ length: word.length - 1 }, (_, i) => word.slice(i, i + 2)),
-      ),
-    ]),
-  ]
-}
 export function buildDocumentContext(documents, { question, history = [] } = {}) {
-  const query = terms(
+  const query = archiveQueryTerms(
     [
       question,
       ...history

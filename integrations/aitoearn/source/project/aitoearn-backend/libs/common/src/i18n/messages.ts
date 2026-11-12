@@ -1,4 +1,4 @@
-import template from 'art-template'
+import { compileMessage } from './message-template'
 import { ResponseCode } from '../enums'
 
 export type Locale = 'en-US' | 'zh-CN'
@@ -88,8 +88,8 @@ export const messages: Record<ResponseCode, Record<Locale, MessageValue>> = {
     'zh-CN': '无效的 AI 模型',
   },
   [ResponseCode.AiCallFailed]: {
-    'en-US': template.compile('AI call failed: {{error}}'),
-    'zh-CN': template.compile('AI 调用失败：{{error}}'),
+    'en-US': compileMessage('AI call failed: {{error}}'),
+    'zh-CN': compileMessage('AI 调用失败：{{error}}'),
   },
   [ResponseCode.InvalidAiTaskId]: {
     'en-US': 'Invalid AI task ID',
@@ -377,8 +377,8 @@ export const messages: Record<ResponseCode, Record<Locale, MessageValue>> = {
     'zh-CN': '该作品不属于此账号',
   },
   [ResponseCode.PublishResourceUnavailable]: {
-    'en-US': template.compile('Publish resource is not accessible: {{url}} (status: {{status}})'),
-    'zh-CN': template.compile('发布资源不可访问：{{url}}（状态：{{status}}）'),
+    'en-US': compileMessage('Publish resource is not accessible: {{url}} (status: {{status}})'),
+    'zh-CN': compileMessage('发布资源不可访问：{{url}}（状态：{{status}}）'),
   },
   [ResponseCode.ChannelAuthSessionInvalid]: {
     'en-US': 'Invalid or expired authorization session',
@@ -445,8 +445,8 @@ export const messages: Record<ResponseCode, Record<Locale, MessageValue>> = {
     'zh-CN': '发布内容校验失败',
   },
   [ResponseCode.ChannelPublishDuplicateItem]: {
-    'en-US': template.compile('Duplicate publish item for {{platform}} account {{accountId}}'),
-    'zh-CN': template.compile('{{platform}} 账号 {{accountId}} 存在重复发布项'),
+    'en-US': compileMessage('Duplicate publish item for {{platform}} account {{accountId}}'),
+    'zh-CN': compileMessage('{{platform}} 账号 {{accountId}} 存在重复发布项'),
   },
   [ResponseCode.ChannelPublishMixedRelayAndLocalAccounts]: {
     'en-US': 'Cannot mix relay and local accounts in one publish flow',
@@ -493,8 +493,8 @@ export const messages: Record<ResponseCode, Record<Locale, MessageValue>> = {
     'zh-CN': '该平台不支持发布',
   },
   [ResponseCode.ChannelPublishPlatformStatusFailed]: {
-    'en-US': template.compile('Platform publish failed with status {{status}}'),
-    'zh-CN': template.compile('平台发布失败，状态码：{{status}}'),
+    'en-US': compileMessage('Platform publish failed with status {{status}}'),
+    'zh-CN': compileMessage('平台发布失败，状态码：{{status}}'),
   },
   [ResponseCode.ChannelPublishRetryNotAllowed]: {
     'en-US': 'This publish task cannot be retried',
@@ -521,72 +521,72 @@ export const messages: Record<ResponseCode, Record<Locale, MessageValue>> = {
     'zh-CN': '缺少 webhook challenge code',
   },
   [ResponseCode.ChannelWebhookPublishFailed]: {
-    'en-US': template.compile('Publish failed by {{platform}} webhook'),
-    'zh-CN': template.compile('{{platform}} webhook 回调发布失败'),
+    'en-US': compileMessage('Publish failed by {{platform}} webhook'),
+    'zh-CN': compileMessage('{{platform}} webhook 回调发布失败'),
   },
   [ResponseCode.ChannelPlatformApiFailed]: {
-    'en-US': template.compile('{{platform}} platform API request failed'),
-    'zh-CN': template.compile('{{platform}} 平台接口请求失败'),
+    'en-US': compileMessage('{{platform}} platform API request failed'),
+    'zh-CN': compileMessage('{{platform}} 平台接口请求失败'),
   },
   [ResponseCode.ChannelPlatformServiceUnavailable]: {
-    'en-US': template.compile('{{platform}} platform service is temporarily unavailable, please try again later'),
-    'zh-CN': template.compile('{{platform}} 平台方服务异常，请稍后再试'),
+    'en-US': compileMessage('{{platform}} platform service is temporarily unavailable, please try again later'),
+    'zh-CN': compileMessage('{{platform}} 平台方服务异常，请稍后再试'),
   },
   [ResponseCode.ChannelPlatformRateLimited]: {
-    'en-US': template.compile('{{platform}} platform API rate limit reached'),
-    'zh-CN': template.compile('{{platform}} 平台接口触发频率限制'),
+    'en-US': compileMessage('{{platform}} platform API rate limit reached'),
+    'zh-CN': compileMessage('{{platform}} 平台接口触发频率限制'),
   },
   [ResponseCode.ChannelPlatformResponseInvalid]: {
-    'en-US': template.compile('{{platform}} platform API returned an invalid response'),
-    'zh-CN': template.compile('{{platform}} 平台接口返回数据无效'),
+    'en-US': compileMessage('{{platform}} platform API returned an invalid response'),
+    'zh-CN': compileMessage('{{platform}} 平台接口返回数据无效'),
   },
   [ResponseCode.ChannelPlatformMediaUnsupported]: {
-    'en-US': template.compile('{{platform}} does not support this media'),
-    'zh-CN': template.compile('{{platform}} 不支持该媒体'),
+    'en-US': compileMessage('{{platform}} does not support this media'),
+    'zh-CN': compileMessage('{{platform}} 不支持该媒体'),
   },
   [ResponseCode.ChannelPlatformMediaProcessingFailed]: {
-    'en-US': template.compile('{{platform}} media processing failed'),
-    'zh-CN': template.compile('{{platform}} 媒体处理失败'),
+    'en-US': compileMessage('{{platform}} media processing failed'),
+    'zh-CN': compileMessage('{{platform}} 媒体处理失败'),
   },
   [ResponseCode.ChannelPlatformMediaProcessingTimeout]: {
-    'en-US': template.compile('{{platform}} media processing timed out'),
-    'zh-CN': template.compile('{{platform}} 媒体处理超时'),
+    'en-US': compileMessage('{{platform}} media processing timed out'),
+    'zh-CN': compileMessage('{{platform}} 媒体处理超时'),
   },
   [ResponseCode.ChannelPlatformAccountMissing]: {
-    'en-US': template.compile('{{platform}} account information is missing'),
-    'zh-CN': template.compile('缺少 {{platform}} 账号信息'),
+    'en-US': compileMessage('{{platform}} account information is missing'),
+    'zh-CN': compileMessage('缺少 {{platform}} 账号信息'),
   },
   [ResponseCode.ChannelPlatformPublishOptionMissing]: {
-    'en-US': template.compile('{{platform}} publish option is missing'),
-    'zh-CN': template.compile('缺少 {{platform}} 发布选项'),
+    'en-US': compileMessage('{{platform}} publish option is missing'),
+    'zh-CN': compileMessage('缺少 {{platform}} 发布选项'),
   },
   [ResponseCode.ChannelPlatformPermissionMissing]: {
-    'en-US': template.compile('{{platform}} account permission is missing'),
-    'zh-CN': template.compile('{{platform}} 账号缺少所需权限'),
+    'en-US': compileMessage('{{platform}} account permission is missing'),
+    'zh-CN': compileMessage('{{platform}} 账号缺少所需权限'),
   },
   [ResponseCode.ChannelPlatformWorkNotFound]: {
-    'en-US': template.compile('{{platform}} work was not found'),
-    'zh-CN': template.compile('未找到 {{platform}} 作品'),
+    'en-US': compileMessage('{{platform}} work was not found'),
+    'zh-CN': compileMessage('未找到 {{platform}} 作品'),
   },
   [ResponseCode.ChannelPlatformOperationNotSupported]: {
-    'en-US': template.compile('{{platform}} does not support this operation'),
-    'zh-CN': template.compile('{{platform}} 不支持该操作'),
+    'en-US': compileMessage('{{platform}} does not support this operation'),
+    'zh-CN': compileMessage('{{platform}} 不支持该操作'),
   },
   [ResponseCode.ChannelPaginationModeNotSupported]: {
-    'en-US': template.compile('{{platform}} does not support this pagination mode'),
-    'zh-CN': template.compile('{{platform}} 不支持该分页模式'),
+    'en-US': compileMessage('{{platform}} does not support this pagination mode'),
+    'zh-CN': compileMessage('{{platform}} 不支持该分页模式'),
   },
   [ResponseCode.ChannelPaginationLimitExceeded]: {
-    'en-US': template.compile('{{platform}} pagination limit exceeds the maximum'),
-    'zh-CN': template.compile('{{platform}} 分页数量超过上限'),
+    'en-US': compileMessage('{{platform}} pagination limit exceeds the maximum'),
+    'zh-CN': compileMessage('{{platform}} 分页数量超过上限'),
   },
   [ResponseCode.ChannelPaginationPageSizeExceeded]: {
-    'en-US': template.compile('{{platform}} pagination page size exceeds the maximum'),
-    'zh-CN': template.compile('{{platform}} 分页页大小超过上限'),
+    'en-US': compileMessage('{{platform}} pagination page size exceeds the maximum'),
+    'zh-CN': compileMessage('{{platform}} 分页页大小超过上限'),
   },
   [ResponseCode.ChannelPaginationDirectionNotSupported]: {
-    'en-US': template.compile('{{platform}} does not support this pagination direction'),
-    'zh-CN': template.compile('{{platform}} 不支持该分页方向'),
+    'en-US': compileMessage('{{platform}} does not support this pagination direction'),
+    'zh-CN': compileMessage('{{platform}} 不支持该分页方向'),
   },
   [ResponseCode.ChannelPublishPermalinkMissing]: {
     'en-US': 'Published work permalink is missing',

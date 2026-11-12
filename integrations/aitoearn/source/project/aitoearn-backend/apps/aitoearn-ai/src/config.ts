@@ -183,6 +183,7 @@ const agentModelNameSchema = z.string().min(1).regex(/^[^,]+$/)
 
 // Agent 配置
 export const agentConfigSchema = z.object({
+  routerPort: z.number().int().min(1024).max(65535).default(3456).describe('Local router port, unique per runtime'),
   baseUrl: z.string(),
   apiKey: z.string(),
   models: z.array(agentModelNameSchema).min(1).default(defaultAgentModels).describe('Agent 可用模型列表'),
@@ -247,3 +248,5 @@ if (config.officeBridge) {
 applyFourYiRouting(config)
 
 if (config.officeBridge) config.enableConfigLogging = false
+
+export { routerApiKey } from './router-security.config'

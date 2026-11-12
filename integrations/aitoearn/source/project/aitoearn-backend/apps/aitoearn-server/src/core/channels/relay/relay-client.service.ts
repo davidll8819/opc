@@ -59,7 +59,7 @@ export class RelayClientService {
     })
 
     if (!signResult?.uploadUrl) {
-      throw new Error('Relay uploadSign returned no uploadUrl')
+      throw new AppException(ResponseCode.RelayServerUnavailable)
     }
 
     await axios.put(signResult.uploadUrl, fileResponse.data, {

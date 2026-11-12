@@ -12,7 +12,7 @@ function checked<T>(status: number, data: T & { error?: string }): T {
   }
   return data
 }
-export async function readApiResponse<T>(response: Response): Promise<T> {
+export async function readApiResponse<T>(response: Response, onProgress?: () => void): Promise<T> {
   if (!response.headers.get('content-type')?.startsWith(slowResponseType))
     return checked(response.status, await response.json())
   if (!response.ok || !response.body) throw interrupted()
@@ -40,7 +40,10 @@ export async function readApiResponse<T>(response: Response): Promise<T> {
         } catch {
           throw interrupted()
         }
-        if (frame?.type === 'heartbeat') continue
+        if (frame?.type === 'heartbeat') {
+          onProgress?.()
+          continue
+        }
         if (
           frame?.type !== 'result' ||
           !Number.isInteger(frame.status) ||
@@ -61,6 +64,7 @@ export async function api<T>(
   path: string,
   body?: unknown,
   method = body === undefined ? 'GET' : 'POST',
+  onProgress?: () => void,
 ): Promise<T> {
   let response: Response
   try {
@@ -77,7 +81,7 @@ export async function api<T>(
   } catch {
     throw interrupted()
   }
-  return readApiResponse<T>(response)
+  return readApiResponse<T>(response, onProgress)
 }
 export type Tenant = { id: string; name: string; plan: string; role: string }
 export type Me = { user: { id: string; email: string }; csrf: string; tenants: Tenant[] }

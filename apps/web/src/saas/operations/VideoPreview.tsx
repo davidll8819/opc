@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import type { ResultMedia } from './models'
+import { PrivateVideo } from './PrivateVideo'
 
-export function VideoPreview({ item }: { item: ResultMedia }) {
+export function VideoPreview({ item, accessContext }: { item: ResultMedia; accessContext?: { root: string; taskId: string } }) {
   const [actual, setActual] = useState(item.specification?.actual)
   const spec = item.specification
   const differs =
@@ -10,7 +11,7 @@ export function VideoPreview({ item }: { item: ResultMedia }) {
     (actual.width !== spec.actual?.width || actual.height !== spec.actual?.height)
   return (
     <>
-      <video
+      <PrivateVideo accessContext={accessContext}
         controls
         preload="metadata"
         src={item.url}

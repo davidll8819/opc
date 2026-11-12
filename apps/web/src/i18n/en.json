@@ -1168,5 +1168,17 @@
   "本次检索正式档案": "Formal archives searched",
   "关键词匹配": "Keyword matches",
   "本轮使用": "Sources used",
-  "正式档案名称": "Formal archive filename"
+  "正式档案名称": "Formal archive filename",
+  "本机可用 · 未安装": "Available locally · not installed",
+  "本机可用": "Available locally",
+  "本机安装包状态": "Local package status",
+  "部分技能的本机安装包不可用，暂不能安装。请查看详情中的原因和恢复说明；已安装技能不受影响。": "Some local skill packages are unavailable and cannot be installed. See details for recovery instructions. Installed skills are unaffected.",
+  "本机缺少技能安装包，请管理员恢复对应 ZIP 后刷新页面；也可上传自己的技能文件。": "The local package is missing. Ask an administrator to restore the ZIP and refresh, or upload your own skill file.",
+  "技能包路径无效，请管理员核对目录。": "Invalid package path. Ask an administrator to check the catalog.",
+  "技能包大小或格式无效，请管理员恢复原始安装包。": "Invalid package size or format. Ask an administrator to restore the original package.",
+  "无法读取本机技能包，请管理员检查文件权限。": "Cannot read the local package. Ask an administrator to check file permissions.",
+  "本机技能包校验失败，请管理员恢复原始安装包后刷新页面。": "Local package checksum failed. Ask an administrator to restore the original package and refresh.",
+  "显示暂不常用的技能": "Show less frequently used skills",
+  "已合并重复来源：": "Merged duplicate sources: ",
+  "下载视频": "Download video"
 }

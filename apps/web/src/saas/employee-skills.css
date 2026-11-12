@@ -1,0 +1,21 @@
+/* Scoped to the employee skill catalogue; office scene styles stay untouched. */
+.catalog-employee-recommendation,
+.workspace-skills .catalog-filters .catalog-visibility {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.workspace-skills .catalog-filters .catalog-visibility {
+  grid-column: 1 / -1;
+}
+.catalog-employee-recommendation input[type='checkbox'],
+.catalog-filters .catalog-visibility input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.employee-library-bindings > summary { cursor: pointer; font-size: 14px; }

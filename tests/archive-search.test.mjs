@@ -53,6 +53,18 @@ function answer(body) {
     notFound: false,
   })
 }
+test('refund synonym retrieves the formal source and ranks its matching excerpt without exposing other users', async () => {
+  const h = await setup()
+  try {
+    const r = await archive(h, { name: '售后说明.docx', paragraphs: [...Array.from({length:40},(_,i)=>`一般说明第${i+1}项。`), '退款须提供购买凭证。'] })
+    const ctx = { tenantId:h.tenant,userId:h.alice }
+    const result = await search.searchArchivedDocuments(h.pool,ctx,{question:'退费'})
+    assert.equal(result.reference.records[0].id,r.id)
+    const context = search.buildArchivedContext(result)
+    assert.equal(context.sources[0].text,'退款须提供购买凭证。')
+    assert.equal((await search.searchArchivedDocuments(h.pool,{...ctx,userId:h.bob},{question:'退费'})).documents.length,0)
+  } finally {await h.close()}
+})
 test('archived context has bounded keywords and server archival citation identity, partial/OCR scope', () => {
   assert.equal(typeof search.archiveQueryTerms, 'function')
   assert.ok(

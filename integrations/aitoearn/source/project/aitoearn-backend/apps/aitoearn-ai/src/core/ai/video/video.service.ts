@@ -20,6 +20,7 @@ import { GrokVideoService } from './grok'
 import { OpenAIVideoService } from './openai'
 import { RelayVideoService } from './relay/relay-video.service'
 import { VideoAiLog } from './video-ai-log.interface'
+import { VideoPreflightException } from './video-preflight.exception'
 import {
   UserListVideoTasksQueryDto,
   UserVideoGenerationRequestDto,
@@ -65,16 +66,24 @@ export class VideoService {
     if (groupId) {
       const group = await this.materialGroupRepository.getInfo(groupId)
       if (!group || group.userId !== userId) {
-        throw new AppException(ResponseCode.MaterialGroupNotFound)
+        throw new VideoPreflightException(ResponseCode.MaterialGroupNotFound)
       }
     }
 
     const modelConfig = (await this.getVideoGenerationModelParams({})).find(m => m.name === model)
     if (!modelConfig) {
-      throw new AppException(ResponseCode.InvalidModel)
+      throw new VideoPreflightException(ResponseCode.InvalidModel, 'The selected video model is unavailable. Refresh the company model configuration before continuing.')
+    }
+    // The 4YI adapter sends both modes as reference_images. A single reference
+    // is valid even when discovery names the capability multi-image2video.
+    const imageCount = (typeof request.image === 'string' ? 1 : request.image?.length ?? 0) + (request.images?.length ?? 0)
+    if (modelConfig.channel === AiLogChannel.FourYi && request.mode === 'image2video'
+      && !modelConfig.modes.includes('image2video') && modelConfig.modes.includes('multi-image2video')
+      && imageCount === 1 && modelConfig.maxInputImages >= 1) {
+      request = { ...request, mode: 'multi-image2video' }
     }
     if (request.mode && !(modelConfig.modes as readonly string[]).includes(request.mode)) {
-      throw new AppException(ResponseCode.InvalidModel)
+      throw new VideoPreflightException(ResponseCode.InvalidModel, 'The selected video model does not support this generation mode. Check its image input capabilities before continuing.')
     }
 
     let response: { id: string }
@@ -93,13 +102,15 @@ export class VideoService {
         response = await this.dashscopeVideoService.createFromRequest(request)
         break
       case AiLogChannel.Relay:
-        response = await this.requireChannel(this.relayVideoService).createFromRequest(request)
+        if (!this.relayVideoService)
+          throw new VideoPreflightException(ResponseCode.InvalidModel, 'The selected video channel is unavailable.')
+        response = await this.relayVideoService.createFromRequest(request)
         break
       case AiLogChannel.FourYi:
         response = await this.fourYiVideoService.createFromRequest(request)
         break
       default:
-        throw new AppException(ResponseCode.InvalidModel)
+        throw new VideoPreflightException(ResponseCode.InvalidModel, 'The selected video channel is unsupported.')
     }
 
     if (groupId) {
@@ -254,7 +265,7 @@ export class VideoService {
 
     const aiLog = await this.aiLogRepo.getById(taskId)
 
-    if (aiLog == null || aiLog.type !== AiLogType.Video) {
+    if (aiLog == null || aiLog.type !== AiLogType.Video || aiLog.userId !== request.userId) {
       throw new AppException(ResponseCode.InvalidAiTaskId)
     }
 
@@ -307,7 +318,7 @@ export class VideoService {
    * 获取视频生成模型参数
    */
   async getVideoGenerationModelParams(_data: VideoGenerationModelsQueryDto) {
-    return this.modelsConfigService.config.video.generation
+    return (await this.modelsConfigService.forUser()).video.generation
   }
 
   private async ensureSavedVideoMedia(aiLog: VideoAiLog): Promise<{ mediaId?: string, coverUrl?: string, groupId?: string }> {

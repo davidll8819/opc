@@ -42,7 +42,15 @@ import { InternalModule } from './core/internal'
         }
         return {
           ...config.auth,
-          getTokenInfo: (payload: TokenPayload) => getOpenUser(payload.id),
+          getTokenInfo: async (payload: TokenPayload) => {
+            if (config.officeBridge) {
+              if (payload.officeTenantId !== config.officeBridge.tenantId || !/^[a-f0-9]{24}$/.test(payload.id))
+                throw new UnauthorizedException()
+              if (!payload.officeLegacyRead)
+                await userRepository.createOfficeIdentity(payload.id, config.officeBridge.tenantId)
+            }
+            return getOpenUser(payload.id)
+          },
           getTokenInfoByApiKey: async (apiKey: string) => {
             const keyHash = createHash('sha1').update(apiKey).digest('hex')
             const record = await apiKeyRepository.getByKeyHash(keyHash)

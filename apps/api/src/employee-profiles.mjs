@@ -1,16 +1,18 @@
-import { EMPLOYEES, departmentChatInstructions } from '../../../packages/employees/registry.mjs'
+import {employeeDirectory} from './employee-directory.mjs'
+import { readDuty, employeeRoleInstructions } from './employee-duty.mjs'
+import { EMPLOYEES, EMPLOYEE_BY_DEPARTMENT, departmentChatInstructions, modelDepartment } from '../../../packages/employees/registry.mjs'
 import { loadPolicy } from './operations/gateway.mjs'
 import { loadSecrets } from './operations/credentials.mjs'
 import { defaultCapabilities, resolveCapability } from './operations/policy.mjs'
 
 export function employeeModels(policy, department, credentialConfigured) {
-  const configuration = policy?.departments[department]
+  const configuration = policy?.departments[department] || policy?.departments[modelDepartment(department)]
   return Object.fromEntries(
     ['text', 'search', 'image', 'video'].map((kind) => {
       const slot =
         kind === 'text'
           ? configuration
-          : (configuration?.capabilities || defaultCapabilities(department))[kind]
+          : (configuration?.capabilities || defaultCapabilities(modelDepartment(department)))[kind]
       const enabled = Boolean(configuration?.enabled && slot?.enabled)
       let model = '',
         fallback = ''
@@ -28,7 +30,7 @@ export function employeeModels(policy, department, credentialConfigured) {
           configured: Boolean(enabled && model && credentialConfigured),
           model,
           fallback,
-          source: slot?.model ? 'department' : 'company',
+          source: policy?.employeeProfiles?.[(EMPLOYEE_BY_DEPARTMENT[department]?.id || department)]?.modelOverrides?.[kind] ? 'employee' : slot?.model ? 'department' : 'company',
         },
       ]
     }),
@@ -42,7 +44,7 @@ export function registerEmployeeProfiles(app, { scoped, env }) {
         credentialConfigured = false
       try {
         policy = (await loadPolicy(db, ctx.tenantId, env)).policy
-        credentialConfigured = Boolean((await loadSecrets(db, env, ctx.tenantId)).ai)
+        credentialConfigured = Boolean((await loadSecrets(db, env, ctx.tenantId, ctx.userId)).ai)
       } catch (error) {
         if (error.statusCode !== 409) throw error
       }
@@ -52,10 +54,14 @@ export function registerEmployeeProfiles(app, { scoped, env }) {
           [ctx.tenantId],
         )
       ).rows
+      const duty = await readDuty(db,ctx.tenantId)
       return {
-        employees: EMPLOYEES.map((employee) => ({
+        employees: (await employeeDirectory(db,ctx.tenantId)).map((employee) => ({
           ...employee,
-          chatInstructions: departmentChatInstructions(employee.departmentKey),
+          department: duty.find(e=>e.employeeId===employee.id)?.jobTitle || employee.department,
+          organizationDepartment: duty.find(e=>e.employeeId===employee.id)?.departmentName,
+          responsibility: duty.find(e=>e.employeeId===employee.id)?.capabilities || employee.responsibility,
+          chatInstructions: departmentChatInstructions(employee.departmentKey) + employeeRoleInstructions(duty.find(e=>e.employeeId===employee.id)),
           models: employeeModels(policy, employee.departmentKey, credentialConfigured),
           skills: assignments
             .filter((a) => a.department === employee.departmentKey)

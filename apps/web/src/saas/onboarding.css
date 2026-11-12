@@ -1,0 +1,25 @@
+.onboarding-page { padding: 24px; color: #302a3a; max-width: 1200px; margin: 0 auto; font-size: 15px; line-height: 1.65; }
+.onboarding-page h1 { font-size: 26px; margin: 0 0 12px; }
+.onboarding-page h2 { font-size: 18px; margin: 0 0 12px; }
+.onboarding-page section, .onboarding-page > h2 { margin-top: 24px; }
+.onboarding-status { padding: 12px 0; border-bottom: 1px solid #ddd7e4; margin-bottom: 16px; }
+.starter-scenes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0; }
+.starter-scenes article { display: flex; flex-direction: column; padding: 20px; background: #fff; border: 1px solid #ddd7e4; border-radius: 8px; }
+.starter-scenes button { margin-top: auto; }
+.task-brief-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 16px 0; }
+.task-brief-fields p { grid-column: 1 / -1; margin: 0; }
+.task-brief-fields label { display: grid; gap: 8px; color: #302a3a; font-size: 14px; }
+.task-brief-fields textarea { width: 100%; min-width: 0; min-height: 64px; border: 1px solid #bbb4c4; border-radius: 6px; padding: 10px; font: inherit; color: inherit; background: white; resize: vertical; box-sizing: border-box; }
+.task-brief-summary { margin: 16px 0; }
+.task-brief-summary dl > div { display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: 16px; padding: 8px 0; border-bottom: 1px solid #ddd7e4; }
+.task-brief-summary dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.task-brief-summary dt { font-weight: 600; }
+.task-filter-label { display: grid; gap: 4px; }
+.task-brief-toggle { margin-bottom: 12px; }
+.sec-composer:has(.task-brief-fields) { max-height: 70dvh; overflow-y: auto; }
+.sec-composer .task-brief-fields textarea { height: auto; }
+@media (max-width: 1100px) { .starter-scenes { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .onboarding-page { padding: 16px; } .task-brief-fields { grid-template-columns: 1fr; } .task-brief-summary dl > div { grid-template-columns: 1fr; gap: 4px; } .onboarding-page button { min-height: 44px; } }
+.workspace.workspace-onboarding { font-family: 'Noto Sans SC Variable', 'PingFang SC', sans-serif; }
+.workspace.workspace-onboarding button, .workspace.workspace-onboarding .workspace-nav button.selected { box-shadow: none; }
+.workspace.workspace-onboarding .workspace-nav button, .workspace.workspace-onboarding .workspace-note p, .workspace.workspace-onboarding .eyebrow { color: #455347; }

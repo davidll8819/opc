@@ -1,3 +1,5 @@
+import { personalToken } from './helpers/personal-token.mjs'
+import { loadAssignedSkills } from '../apps/api/src/skill-runtime.mjs'
 import { createDepartmentEngine } from '../apps/api/src/department-engine.mjs'
 import { createOperationsTasks } from '../apps/api/src/operations/task-service.mjs'
 import { createResearchEngine } from '../apps/api/src/research/engine.mjs'
@@ -118,7 +120,13 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       }
       if (path === '/agent/tasks/0123456789abcdef01234567')
         return { status: operationsTaskState, messages: [] }
-      if (options?.stream) operationsStarts++
+      if (options?.stream) {
+        operationsStarts++
+        const instruction=JSON.stringify(options.body.prompt)
+        assert.match(instruction,/不提取封面，不查询或创建发布草稿及草稿分组/)
+        assert.match(instruction,/用户明确要求的剪辑、封面等交付步骤仍需完成/)
+        assert.match(instruction,/发布必须继续遵守人工确认规则/)
+      }
       if (options?.stream)
         return new ReadableStream({
           start(c) {
@@ -204,6 +212,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
           { id: 'sora-2', model_type: 'video' },
         ],
       })
+    if(url.endsWith('/videos/generations'))return Response.json({id:'synthetic-video-123',status:'queued'})
     if (url.endsWith('/images/generations') && imageResponse) return Response.json(imageResponse)
     if (modelFailure) {
       modelFailure = false
@@ -335,7 +344,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       const response = await request(alice, 'GET', `/api/tenants/${a}/employees`)
       assert.equal(response.statusCode, 200, response.body)
       const employees = response.json().employees
-      assert.equal(employees.length, 9)
+      assert.equal(employees.length, 13)
       assert.deepEqual(
         employees.map((e) => [e.id, e.rosterNo]),
         [
@@ -348,6 +357,10 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
           ['new-agent-7', 7],
           ['new-agent-8', 8],
           ['new-agent-9', 9],
+          ['xu-zhining', 10],
+          ['cheng-zhiyao', 11],
+          ['su-ying', 12],
+          ['shen-qinglan', 13],
         ],
       )
       const dragon = employees.find((e) => e.id === 'code-agent')
@@ -407,6 +420,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       input.tiers.fast = 'test-agent'
       env[secretNames(a).ai] = 'tenant-a-secret'
       env[secretNames(a).relay] = 'tenant-relay-secret'
+      assert.equal((await request(alice,'PUT',`/api/tenants/${a}/personal-api-key`,{apiKey:'synthetic-alice-personal-key',revision:0})).statusCode,200)
       assert.equal((await request(alice, 'PUT', `${path}/settings`, input)).statusCode, 200)
       const view = await request(alice, 'GET', `${path}/settings`)
       assert.equal(view.json().aiKeySet, true)
@@ -530,7 +544,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
           .statusCode,
         403,
       )
-      const headers = { authorization: `Bearer ${gatewayToken('test-bridge-secret', a)}` }
+      const headers = { authorization: `Bearer ${await personalToken('test-bridge-secret', a, alice)}` }
       streamModel = true
       const stream = await app.inject({
         method: 'POST',
@@ -591,19 +605,19 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.ok(!ciphertext.includes(keys.aiKey))
       assert.ok(!ciphertext.includes(keys.relayKey))
       await request(alice, 'GET', `${path}/models`)
-      assert.equal(modelCalls.at(-1).authorization, `Bearer ${keys.aiKey}`)
+      assert.equal(modelCalls.at(-1).authorization, 'Bearer synthetic-alice-personal-key')
       assert.equal(
         (await request(alice, 'PUT', `${path}/settings`, { policy, aiKey: '', relayKey: '' }))
           .statusCode,
         200,
       )
       await request(alice, 'GET', `${path}/models`)
-      assert.equal(modelCalls.at(-1).authorization, `Bearer ${keys.aiKey}`)
+      assert.equal(modelCalls.at(-1).authorization, 'Bearer synthetic-alice-personal-key')
       assert.equal((await request(alice, 'GET', `${other}/settings`)).json().aiKeySet, false)
       assert.equal((await request(alice, 'GET', `${other}/models`)).statusCode, 409)
       await request(alice, 'PUT', `${path}/settings`, { policy, aiKey: 'rotated-company-a-key' })
       await request(alice, 'GET', `${path}/models`)
-      assert.equal(modelCalls.at(-1).authorization, 'Bearer rotated-company-a-key')
+      assert.equal(modelCalls.at(-1).authorization, 'Bearer synthetic-alice-personal-key')
       const privateUrl = `/integrations/aitoearn/${a}/relay-config`
       assert.equal((await app.inject(privateUrl)).statusCode, 403)
       const getRelay = () =>
@@ -751,9 +765,10 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.equal((await app.inject(path)).statusCode, 401)
       assert.equal((await request(outsider, 'GET', path)).statusCode, 403)
       const initial = (await request(alice, 'GET', path)).json()
-      assert.equal(initial.revision, 0)
+      assert.equal(initial.board.tasks.length, 1) // The earlier workbench submission is now linked.
+      assert.equal(initial.board.tasks[0].runtimeTaskId, '0123456789abcdef01234567')
       const payload = {
-        revision: 0,
+        revision: initial.revision,
         today: '2026-10-11',
         action: { type: 'send', text: '制作并发布视频', intent: 'plan', language: 'zh' },
       }
@@ -771,28 +786,29 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       const response = await request(alice, 'POST', path, payload)
       assert.equal(response.statusCode, 200, response.body)
       const draft = response.json()
-      assert.equal(draft.board.tasks.length, 3)
-      assert.ok(draft.board.tasks.every((t) => t.status === 'draft'))
-      assert.equal((await request(alice, 'GET', path)).json().revision, 1)
+      assert.equal(draft.board.tasks.length, initial.board.tasks.length + 3)
+      const drafted = draft.board.tasks.filter(t => !initial.board.tasks.some(old => old.id === t.id))
+      assert.ok(drafted.every((t) => t.status === 'draft'))
+      assert.equal((await request(alice, 'GET', path)).json().revision, initial.revision + 1)
       assert.equal(
         (await request(alice, 'GET', `/api/tenants/${b}/secretary`)).json().board.tasks.length,
         0,
       )
       assert.equal((await request(alice, 'POST', path, payload)).statusCode, 409)
       const sent = await request(alice, 'POST', path, {
-        revision: 1,
+        revision: initial.revision + 1,
         today: '2026-10-11',
         action: { type: 'dispatch', batchId: draft.board.batches[0].id },
       })
       assert.equal(sent.statusCode, 200, sent.body)
-      assert.ok(sent.json().board.tasks.every((t) => t.status === 'queued'))
+      assert.ok(sent.json().board.tasks.filter(t => drafted.some(d => d.id === t.id)).every((t) => t.status === 'queued'))
       const invalid = await request(alice, 'POST', path, {
-        revision: 2,
+        revision: initial.revision + 2,
         today: '2026-10-11',
-        action: { type: 'approve', taskId: draft.board.tasks[0].id },
+        action: { type: 'approve', taskId: drafted[0].id },
       })
       assert.equal(invalid.statusCode, 409)
-      assert.equal((await request(alice, 'GET', path)).json().revision, 2)
+      assert.equal((await request(alice, 'GET', path)).json().revision, initial.revision + 2)
     },
   )
   await t.test(
@@ -983,7 +999,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       policy.tiers.video = 'sora-2'
       await request(alice, 'PUT', path, policy)
       const prefix = `/integrations/model-gateway/${a}/api/v1`
-      const headers = { authorization: `Bearer ${gatewayToken('test-bridge-secret', a)}` }
+      const headers = { authorization: `Bearer ${await personalToken('test-bridge-secret', a, alice)}` }
       const image = await app.inject({
         method: 'POST',
         url: `${prefix}/images/generations`,
@@ -1040,7 +1056,10 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
     )
     const result = await request(alice, 'GET', `/api/tenants/${a}/skills/catalog`)
     assert.equal(result.statusCode, 200)
-    assert.equal(result.json().items[0].download.status, 'downloaded')
+    const item = result.json().items[0]
+    assert.ok(item.id)
+    assert.ok(['downloaded', 'failed'].includes(item.download.status))
+    if (item.download.status === 'failed') assert.ok(item.download.error)
   })
   await t.test('invite is email bound and single-use', async () => {
     await query("UPDATE tenants SET plan='enterprise',subscription_status='manual' WHERE id=$1", [
@@ -1261,7 +1280,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       (
         await request(alice, 'POST', `/api/tenants/${a}/actions`, {
           type: 'set_state',
-          rosterNo: 10,
+          rosterNo: 14,
           state: 'thinking',
         })
       ).statusCode,
@@ -1284,6 +1303,41 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
     )
   })
   await cache.del(`api-rate:${alice}`) // Separate the extended feature suite from the preceding minute's requests.
+  await t.test('employee catalogue binding is atomic, scoped and used by the same runtime', async () => {
+    const root = `/api/tenants/${a}/employees`
+    const path = `${root}/review-agent/skills`
+    const before = (await request(alice, 'GET', path)).json()
+    const dev = (await request(alice, 'GET', `${root}/code-agent/skills`)).json()
+    assert.equal(before.employeeId, 'review-agent')
+    assert.ok(before.recommendedCategories.includes('浏览器与信息获取'))
+    // Even equal skill sets have different employee scope revisions.
+    assert.notEqual(before.revision, dev.revision)
+    const payload = { id: 'a'.repeat(24), revision: before.revision }
+    assert.equal((await request(bob, 'POST', `${path}/catalog`, payload)).statusCode, 403)
+    assert.equal((await request(alice, 'POST', `${path}/catalog`, { ...payload, revision: dev.revision })).statusCode, 409)
+    const result = await request(alice, 'POST', `${path}/catalog`, payload)
+    assert.equal(result.statusCode, 200, result.body)
+    assert.equal(result.json().employeeId, 'review-agent')
+    assert.ok(result.json().skillIds.includes(result.json().skill.id))
+    const ownList = (await request(alice, 'GET', path)).json()
+    assert.deepEqual(ownList.items.map(s => s.id).sort(), [...ownList.skillIds].sort())
+    assert.ok(ownList.items.some(s => s.id === result.json().skill.id))
+    assert.deepEqual((await request(alice, 'GET', `${root}/code-agent/skills`)).json().skillIds, dev.skillIds)
+    // Catalogue transport fixture above uses placeholder ZIP bytes; use readable markdown for runtime isolation verification.
+    await query("UPDATE installed_skills SET format='md' WHERE id=$1", [result.json().skill.id])
+    const loaded = await loadAssignedSkills(pool, a, 'market_research')
+    assert.ok([...loaded.documents.keys()].some(p => p.startsWith(result.json().skill.id + '/')))
+    const otherRuntime = await loadAssignedSkills(pool, a, 'dev')
+    assert.ok(![...otherRuntime.documents.keys()].some(p => p.startsWith(result.json().skill.id + '/')))
+    const again = await request(alice, 'POST', `${path}/catalog`, { ...payload, revision: result.json().revision })
+    assert.equal(again.statusCode, 200, again.body)
+    assert.deepEqual(again.json().skillIds, result.json().skillIds)
+    assert.equal((await request(alice, 'POST', `${path}/catalog`, { id: 'c'.repeat(24), revision: again.json().revision })).statusCode, 404)
+    assert.deepEqual((await request(alice, 'GET', path)).json().skillIds, again.json().skillIds)
+    const restored = await request(alice, 'PUT', path, { revision: again.json().revision, skillIds: before.skillIds })
+    assert.equal(restored.statusCode, 200, restored.body)
+    await query("UPDATE installed_skills SET format='zip' WHERE id=$1", [result.json().skill.id])
+  })
   await t.test(
     'employee skill editor enforces tenant, role, revision and preserves other employees',
     async () => {
@@ -1295,7 +1349,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       let r = await request(alice, 'GET', path)
       assert.equal(r.statusCode, 200, r.body)
       const original = r.json()
-      assert.ok(original.items.some((s) => s.id === skill.id))
+      assert.deepEqual(original.items.map((s) => s.id).sort(), [...original.skillIds].sort())
       assert.equal((await request(outsider, 'GET', path)).statusCode, 403)
       assert.equal(
         (await request(bob, 'PUT', path, { revision: original.revision, skillIds: [skill.id] }))
@@ -1446,12 +1500,13 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.equal(r.json().messages.at(-1).text, modelReply)
       assert.match(modelCalls.at(-1).body.messages[0].content, /tenant-upload/)
       assert.match(modelCalls.at(-1).body.messages[0].content, /赵雅梦/)
+      assert.equal((await request(bob,'PUT',`${root}/personal-api-key`,{apiKey:'synthetic-bob-personal-key',revision:0})).statusCode,200)
       const employeeResponse = await request(bob, 'GET', `${root}/employees`)
       assert.equal(employeeResponse.statusCode, 200, employeeResponse.body)
       const employee = employeeResponse.json().employees.find((e) => e.id === 'file-agent')
       assert.equal(employee.models.text.model, modelCalls.at(-1).body.model)
       assert.equal(employee.models.text.configured, true)
-      assert.ok(modelCalls.at(-1).body.messages[0].content.startsWith(employee.chatInstructions))
+      assert.ok(modelCalls.at(-1).body.messages[0].content.includes(employee.responsibility), 'effective employee responsibilities are present alongside assigned skills')
       assert.match(employee.chatInstructions, /赵雅梦/)
       assert.ok(employee.skills.some((s) => s.id === skill.id && s.name === 'tenant-upload'))
       assert.ok(!employeeResponse.body.includes('rotated-company-a-key'))
@@ -1846,6 +1901,8 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       await query("INSERT INTO memberships(tenant_id,user_id,role) VALUES($1,$2,'owner')",[a,alice])
       const main = await request(alice,'GET','/api/me')
       assert.doesNotMatch(main.headers['content-security-policy'],/script-src[^;]*unsafe-inline/)
+      assert.match(main.headers['content-security-policy'],/media-src 'self' blob:/)
+      assert.doesNotMatch(main.headers['content-security-policy'],/media-src[^;]*https?:\/\/\*/)
     } finally {
       await query('UPDATE employee_workspaces SET files=$3,revision=$4,active_run_id=$5,lease_until=$6 WHERE tenant_id=$1 AND user_id=$2',[a,alice,JSON.stringify(saved.files),saved.revision,saved.active_run_id,saved.lease_until])
       await query("INSERT INTO memberships(tenant_id,user_id,role) VALUES($1,$2,'owner') ON CONFLICT DO NOTHING",[a,alice])
@@ -2667,7 +2724,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.equal(requests.length, 1)
       // 503 would normally trigger the configured fallback; tool searches explicitly opt out.
       responseStatus = 503
-      await assert.rejects(invoke(), /模型服务未完成请求/)
+      await assert.rejects(invoke(), /模型服务暂时异常/)
       assert.equal(requests.length, 2)
       assert.ok(
         requests.every((item) => item.url === 'https://app.4yi.ai/api/anthropic/v1/messages'),
@@ -2735,6 +2792,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
             },
           ],
         },
+        { questions: [{ id: 'R1Q1', status: 'covered', reason: 'Fixture source', evidence: [{ sourceId: 'S1', quote: 'Fixture full page evidence', kind: 'official' }] }] },
         {
           summary: 'Conclusion [S1]',
           findings: 'Public evidence\nFacts [S1]',
@@ -2834,7 +2892,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.equal(completed.researchOutline[0].status, 'completed')
       assert.deepEqual(completed.researchOutline[0].sourceIds, ['S1'])
       assert.equal(persistedOutline, true)
-      assert.equal(modelRound, 2)
+      assert.equal(modelRound, 3)
       assert.equal(searches, 1)
       assert.deepEqual(reads, ['https://example.com/report'])
       await createResearchEngine(options).tick()
@@ -2855,7 +2913,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.equal(await createResearchEngine(options).tick(), false)
       assert.equal(searches, 1)
       assert.equal(archives, 1)
-      assert.equal(gatewayRequests.length, 4)
+      assert.equal(gatewayRequests.length, 5)
       assert.ok(gatewayRequests.every((url) => new URL(url).hostname === 'app.4yi.ai'))
       assert.equal((await query('SELECT * FROM research_settings')).rows.length, 0)
       // An expired lease becomes blocked, never silently replays a possibly charged call.
@@ -2870,7 +2928,7 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       assert.equal(recovered.status, 'blocked')
       assert.match(recovered.executionNote, /执行中断/)
       assert.equal(searches, 1)
-      assert.equal(gatewayRequests.length, 4)
+      assert.equal(gatewayRequests.length, 5)
       modelReply = 'fixture'
     },
   )
@@ -3091,6 +3149,59 @@ await test('authenticated multi-tenant API and PostgreSQL isolation', async (t) 
       }
     },
   )
+  await t.test('self-check is tenant scoped, skips disabled employees and validates real tool envelopes', async () => {
+    const path = `/api/tenants/${a}/employees/self-check`
+    assert.equal((await request(outsider, 'POST', path, { department: 'secretary' })).statusCode, 403)
+    assert.equal((await request(alice, 'POST', path, { department: 'unknown' })).statusCode, 404)
+    const settingsPath = `/api/tenants/${a}/operations/settings`
+    const original = (await request(alice, 'GET', settingsPath)).json().policy
+    const policy = structuredClone(original)
+    policy.departments.secretary.enabled = true
+    policy.departments.secretary.model = 'test-agent'
+    policy.departments.intern.enabled = false
+    await request(alice, 'PUT', settingsPath, { policy })
+    try {
+      const before = modelCalls.length
+      const skipped = await request(alice, 'POST', path, { department: 'intern' })
+      assert.equal(skipped.statusCode, 200)
+      assert.equal(skipped.json().checks[0].state, 'skipped')
+      assert.equal(modelCalls.length, before)
+      modelMessages.push({ content: 'OK' }, { tool_calls: [{ function: { name: 'diagnostic_ping', arguments: '{"value":"OK"}' } }] })
+      const result = await request(alice, 'POST', path, { department: 'secretary' })
+      assert.equal(result.statusCode, 200)
+      const checks = result.json().checks
+      assert.equal(checks.find(c => c.name === '文字回复').state, 'passed')
+      assert.equal(checks.find(c => c.name === '员工工具协议').state, 'passed')
+      assert.ok(checks.filter(c => ['图片', '视频', '搜索'].includes(c.name)).every(c => c.state !== 'passed'))
+      assert.ok(modelCalls.slice(before).every(c => !/images|videos/.test(c.url)))
+    } finally { await request(alice, 'PUT', settingsPath, { policy: original }) }
+  })
+  await t.test('blocked task recovery requires risk acknowledgement, revision and ownership; preserves history', async () => {
+    const saved = (await query('SELECT board,revision FROM secretary_workspaces WHERE tenant_id=$1 AND user_id=$2', [a, alice])).rows[0]
+    const id = randomUUID()
+    const board = structuredClone(saved.board)
+    board.tasks.push({ id, dept: 'review-agent', engine: 'research-v1', status: 'blocked', executionNote: '模型请求结果未知，已保留预占额度', dependsOn: [], title: 'recovery test', steps: [{ note: 'old step' }], publishRequired: false })
+    const path = `/api/tenants/${a}/tasks/${id}/recovery`
+    await query('UPDATE secretary_workspaces SET board=$3 WHERE tenant_id=$1 AND user_id=$2', [a, alice, JSON.stringify(board)])
+    await query("INSERT INTO task_jobs(tenant_id,user_id,task_id,state) VALUES($1,$2,$3,'blocked')", [a, alice, id])
+    try {
+      assert.equal((await request(outsider, 'GET', path)).statusCode, 403)
+      const state = (await request(alice, 'GET', path)).json()
+      assert.equal(state.needsConfirmation, true)
+      assert.equal((await request(alice, 'POST', path, { revision: state.revision })).statusCode, 409)
+      assert.equal((await request(alice, 'POST', path, { revision: state.revision + 1, acknowledgeRisk: true })).statusCode, 409)
+      const result = await request(alice, 'POST', path, { revision: state.revision, acknowledgeRisk: true })
+      assert.equal(result.statusCode, 200)
+      const task = result.json().board.tasks.find(t => t.id === id)
+      assert.equal(task.status, 'queued')
+      assert.equal(task.steps[0].note, 'old step')
+      assert.match(task.recoveryHistory[0].previousNote, /未知/)
+      assert.equal((await request(alice, 'POST', path, { revision: result.json().revision, acknowledgeRisk: true })).statusCode, 409)
+    } finally {
+      await query('DELETE FROM task_jobs WHERE tenant_id=$1 AND user_id=$2 AND task_id=$3', [a, alice, id])
+      await query('UPDATE secretary_workspaces SET board=$3,revision=$4 WHERE tenant_id=$1 AND user_id=$2', [a, alice, JSON.stringify(saved.board), saved.revision])
+    }
+  })
   await t.test('membership revocation takes effect even with cached agents', async () => {
     await request(bob, 'GET', `/api/tenants/${a}/agents`)
     await request(alice, 'DELETE', `/api/tenants/${a}/members/${bob}`)

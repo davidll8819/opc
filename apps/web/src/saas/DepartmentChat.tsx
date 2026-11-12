@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState, type ComponentProps } from 'react'
-import { t } from '@/i18n'
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentProps } from 'react'
+import { ChatRequestStatus } from './ChatRequestStatus'
+import { t, useLanguage } from '@/i18n'
 import { api } from './api'
 import { ArchiveDocuments } from './ArchiveDocuments'
 import { ArchiveSources } from './ArchiveSources'
@@ -10,6 +11,7 @@ import type {
   ArchiveSearchReference,
 } from './archive-documents'
 import './archive-search.css'
+import './reuse.css'
 import type { OperationsBrief } from './operations/models'
 
 export type Conversation = {
@@ -19,6 +21,7 @@ export type Conversation = {
     role: string
     text: string
     skillReads?: { name: string; path: string }[]
+    knowledgeSources?: { id: string; title: string; version: number; project: string; source: string }[]
     runId?: string
     files?: ArchiveFileReference[]
     citations?: ArchiveCitation[]
@@ -78,9 +81,13 @@ function DepartmentChatSession({
     [busy, setBusy] = useState(false),
     [loading, setLoading] = useState(true),
     [error, setError] = useState('')
+  const language = useLanguage()
+  const [submitted, setSubmitted] = useState('')
+  const [received, setReceived] = useState(false)
   const [execute, setExecute] = useState(true)
   const [handing, setHanding] = useState('')
   const [archiveSearch, setArchiveSearch] = useState(false)
+  const [knowledgeProject, setKnowledgeProject] = useState('')
   const [comparisonEpoch, setComparisonEpoch] = useState(0)
   const archiveAnswerPending = useRef(false)
   const [archiveSelection, setArchiveSelection] = useState<{ ids: string[]; ready: boolean }>({
@@ -94,6 +101,7 @@ function DepartmentChatSession({
   const activeComparisonRef = useRef<ComparisonReference | null>(null)
   const chatScope = useRef(0)
   const sending = useRef(false)
+  const messagesRef = useRef<HTMLDivElement>(null)
   const changeComparison = useCallback((value: ComparisonReference | null) => {
     if (archiveAnswerPending.current) return
     if (value) setArchiveSearch(false)
@@ -115,6 +123,10 @@ function DepartmentChatSession({
   const activeRunId = execution?.activeRunId
   const projectReadOnly = Boolean(projectId && !execution?.canEdit)
   const canExecute = Boolean(execution?.canEdit && execution.ready && execution.available)
+  useEffect(() => {
+    const log = messagesRef.current
+    if (log) log.scrollTop = log.scrollHeight
+  }, [conversation.revision, pending])
   useEffect(() => {
     mounted.current = true
     return () => {
@@ -159,6 +171,8 @@ function DepartmentChatSession({
     )
       return
     sending.current = true
+    setSubmitted(submittedText)
+    setReceived(false)
     const scope = chatScope.current
     setBusy(true)
     setError('')
@@ -170,16 +184,24 @@ function DepartmentChatSession({
     const executeRequest = execute && canExecute
     execution?.onPendingChange(true)
     try {
-      const response = await api<Conversation>(`${base}/departments/${department}/chat`, {
-        text: submittedText,
-        revision: conversation.revision,
-        ...(projectId ? { projectId } : {}),
-        ...(image ? { image } : {}),
-        ...(submittedFiles.length ? { fileIds: submittedFiles } : {}),
-        ...(selectedComparison ? { comparisonId: selectedComparison.id } : {}),
-        ...(submittedSearch ? { archiveSearch: true } : {}),
-        ...(executeRequest ? { execute: true } : {}),
-      })
+      const response = await api<Conversation>(
+        `${base}/departments/${department}/chat`,
+        {
+          text: submittedText,
+          revision: conversation.revision,
+          ...(projectId ? { projectId } : {}),
+          ...(image ? { image } : {}),
+          ...(submittedFiles.length ? { fileIds: submittedFiles } : {}),
+          ...(selectedComparison ? { comparisonId: selectedComparison.id } : {}),
+          ...(submittedSearch ? { archiveSearch: true } : {}),
+          ...(executeRequest ? { execute: true } : {}),
+          ...(!executeRequest && knowledgeProject.trim() ? { knowledgeProject: knowledgeProject.trim() } : {}),
+        },
+        'POST',
+        () => {
+          if (mounted.current) setReceived(true)
+        },
+      )
       if (mounted.current) {
         conversationRequest.current += 1
         if (scope === chatScope.current) {
@@ -216,6 +238,120 @@ function DepartmentChatSession({
       if (mounted.current) setBusy(false)
     }
   }
+  const hasExecution = !!execution
+  const onOpenExecution = execution?.onOpen
+  const onDeliverables = execution?.onDeliverables
+  const messageItems = useMemo(
+    () =>
+      conversation.messages.map((m) => (
+        <article key={m.id} className={m.role}>
+          <strong>{m.role === 'user' ? t('我') : employeeName || t('部门回复')}</strong>
+          <p>{m.text}</p>
+          {!!m.knowledgeSources?.length && <details><summary>本次带入的工作知识 · {m.knowledgeSources.length} 条</summary>{m.knowledgeSources.map(s => <p key={s.id}>{s.title} · v{s.version} · {s.project || '全项目'}<br />来源：{s.source}</p>)}<p>以上记录说明已发送给模型，不代表每条都被引用或正确采用。</p></details>}
+          {department === 'content_ops' && onOperations && m.role === 'assistant' && (
+            <button
+              type="button"
+              disabled={!!pending || loading || !!handing}
+              onClick={async () => {
+                if (sending.current || handing) return
+                setHanding(m.id)
+                setError('')
+                try {
+                  const data = await api<{ brief: OperationsBrief }>(`${base}/operations/briefs`, {
+                    messageId: m.id,
+                    revision: conversation.revision,
+                  })
+                  if (mounted.current) onOperations(data.brief)
+                } catch (e) {
+                  if (mounted.current) setError((e as Error).message)
+                } finally {
+                  if (mounted.current) setHanding('')
+                }
+              }}
+            >
+              {t(handing === m.id ? '正在保存交接…' : '带入运营工作台')}
+            </button>
+          )}
+          {!!m.files?.length && (
+            <p className="archive-message-files">
+              {t('本次使用的文档')}：{m.files.map((file) => file.name).join('、')}
+            </p>
+          )}
+          {m.archiveSearch && (
+            <p className="archive-message-files">
+              {t('本次检索正式档案')} · {t('关键词匹配')} {m.archiveSearch.matchedCount} ·{' '}
+              {t('本轮使用')} {m.archiveSearch.records.length}
+              {!!m.archiveSearch.records.length &&
+                `：${m.archiveSearch.records.map((r) => `${r.archiveNumber} ${r.filename}`).join('、')}`}
+            </p>
+          )}
+          {withDocuments && m.comparison && (
+            <button
+              type="button"
+              className="department-run-link"
+              disabled={!!pending && archiveSearch}
+              onClick={() => {
+                if (archiveAnswerPending.current) return
+                chatScope.current++
+                changeComparison(null)
+                setArchiveSearch(false)
+                setComparisonOpen((request) => ({
+                  id: m.comparison!.id,
+                  sequence: (request?.sequence || 0) + 1,
+                }))
+              }}
+            >
+              {t('查看本次比对')}
+            </button>
+          )}
+          <ArchiveSources base={base} citations={m.citations} coverage={m.documentCoverage} />
+          {m.runId && hasExecution && (
+            <div className="department-chat-actions">
+              {onDeliverables && (
+                <button className="department-run-link" onClick={onDeliverables}>
+                  {t('查看成果')}
+                </button>
+              )}
+              <button className="department-run-link" onClick={() => onOpenExecution!(m.runId)}>
+                {t('查看项目与执行记录')} ↗
+              </button>
+            </div>
+          )}
+          {!!m.skillReads?.length && (
+            <details className="department-skill-reads">
+              <summary>
+                {t('本次读取的技能')} · {m.skillReads.length}
+              </summary>
+              <ul>
+                {m.skillReads.map((read) => (
+                  <li key={read.path}>
+                    {read.name} · {read.path.split('/').slice(1).join('/')}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </article>
+      )),
+    [
+      conversation.messages,
+      conversation.revision,
+      language,
+      employeeName,
+      department,
+      onOperations,
+      pending,
+      loading,
+      handing,
+      base,
+      withDocuments,
+      archiveSearch,
+      changeComparison,
+      hasExecution,
+      onOpenExecution,
+      onDeliverables,
+    ],
+  )
   const chat = (
     <>
       <div className="heading-row">
@@ -241,6 +377,7 @@ function DepartmentChatSession({
         )}
         <button onClick={openSettings}>{t('模型设置')}</button>
       </div>
+      {!hasExecution && !activeComparison && !archiveSearch && !archiveSelection.ids.length && <details className="department-knowledge-scope"><summary>工作知识范围</summary><label>知识项目名称（留空仅使用全项目知识）<input aria-label="知识项目名称" maxLength={80} value={knowledgeProject} disabled={!!pending} onChange={e => setKnowledgeProject(e.target.value)} /></label><p>按项目名称精确匹配，发送时带入启用的相关知识与记忆。文档问答和项目执行使用各自资料范围。</p></details>}
       {withDocuments && activeComparison && (
         <div className="archive-active-comparison" role="status">
           {t('比对问答')} · {activeComparison.oldVersion.name} → {activeComparison.newVersion.name}
@@ -249,7 +386,7 @@ function DepartmentChatSession({
           </button>
         </div>
       )}
-      <div role="log" className="department-messages">
+      <div ref={messagesRef} role="log" className="department-messages">
         {loading && <p role="status">{t('正在读取对话…')}</p>}
         {!conversation.messages.length && (
           <p>
@@ -260,95 +397,10 @@ function DepartmentChatSession({
             )}
           </p>
         )}
-        {conversation.messages.map((m) => (
-          <article key={m.id} className={m.role}>
-            <strong>{m.role === 'user' ? t('我') : employeeName || t('部门回复')}</strong>
-            <p>{m.text}</p>
-            {department === 'content_ops' && onOperations && m.role === 'assistant' && (
-              <button
-                type="button"
-                disabled={!!pending || loading || !!handing}
-                onClick={async () => {
-                  if (sending.current || handing) return
-                  setHanding(m.id)
-                  setError('')
-                  try {
-                    const data = await api<{ brief: OperationsBrief }>(
-                      `${base}/operations/briefs`,
-                      { messageId: m.id, revision: conversation.revision },
-                    )
-                    if (mounted.current) onOperations(data.brief)
-                  } catch (e) {
-                    if (mounted.current) setError((e as Error).message)
-                  } finally {
-                    if (mounted.current) setHanding('')
-                  }
-                }}
-              >
-                {t(handing === m.id ? '正在保存交接…' : '带入运营工作台')}
-              </button>
-            )}
-            {!!m.files?.length && (
-              <p className="archive-message-files">
-                {t('本次使用的文档')}：{m.files.map((file) => file.name).join('、')}
-              </p>
-            )}
-            {m.archiveSearch && (
-              <p className="archive-message-files">
-                {t('本次检索正式档案')} · {t('关键词匹配')} {m.archiveSearch.matchedCount} ·{' '}
-                {t('本轮使用')} {m.archiveSearch.records.length}
-                {!!m.archiveSearch.records.length &&
-                  `：${m.archiveSearch.records.map((r) => `${r.archiveNumber} ${r.filename}`).join('、')}`}
-              </p>
-            )}
-            {withDocuments && m.comparison && (
-              <button
-                type="button"
-                className="department-run-link"
-                disabled={!!pending && archiveSearch}
-                onClick={() => {
-                  if (archiveAnswerPending.current) return
-                  chatScope.current++
-                  changeComparison(null)
-                  setArchiveSearch(false)
-                  setComparisonOpen((request) => ({
-                    id: m.comparison!.id,
-                    sequence: (request?.sequence || 0) + 1,
-                  }))
-                }}
-              >
-                {t('查看本次比对')}
-              </button>
-            )}
-            <ArchiveSources base={base} citations={m.citations} coverage={m.documentCoverage} />
-            {m.runId && execution && (
-              <div className="department-chat-actions">
-                {execution.onDeliverables && (
-                  <button className="department-run-link" onClick={execution.onDeliverables}>
-                    {t('查看成果')}
-                  </button>
-                )}
-                <button className="department-run-link" onClick={() => execution.onOpen(m.runId)}>
-                  {t('查看项目与执行记录')} ↗
-                </button>
-              </div>
-            )}
-            {!!m.skillReads?.length && (
-              <details className="department-skill-reads">
-                <summary>
-                  {t('本次读取的技能')} · {m.skillReads.length}
-                </summary>
-                <ul>
-                  {m.skillReads.map((read) => (
-                    <li key={read.path}>
-                      {read.name} · {read.path.split('/').slice(1).join('/')}
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </article>
-        ))}
+        {messageItems}
+        {!!pending && (
+          <ChatRequestStatus key={submitted || 'execution'} text={submitted} received={received} />
+        )}
       </div>
       <form
         onSubmit={(event) => {

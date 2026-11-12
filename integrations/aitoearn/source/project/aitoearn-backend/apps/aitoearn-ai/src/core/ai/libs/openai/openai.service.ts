@@ -1,3 +1,5 @@
+import { officeModelToken } from '@yikart/common'
+import { config as appConfig } from '../../../../config'
 import { randomUUID } from 'node:crypto'
 import { AIMessageChunk, BaseMessage } from '@langchain/core/messages'
 import { ChatOpenAI, OpenAIChatInput } from '@langchain/openai'
@@ -35,17 +37,28 @@ export class OpenaiService {
       apiKey: this.config.apiKey,
       baseURL: this.config.baseUrl,
       timeout: this.config.timeout,
+      maxRetries: appConfig.officeBridge ? 0 : 2,
+      fetch: appConfig.officeBridge ? async (input, init) => {
+        const headers = new Headers(init?.headers)
+        headers.set('authorization', `Bearer ${officeModelToken(appConfig.officeBridge!)}`)
+        return fetch(input, { ...init, headers, redirect: 'error' })
+      } : undefined,
     })
   }
 
   private _createChatModel(options: Partial<OpenAIChatInput>): ChatOpenAI {
     return new ChatOpenAI({
       ...options,
-      maxRetries: 1,
+      maxRetries: appConfig.officeBridge ? 0 : 1,
       timeout: options.timeout ?? this.config.timeout,
       apiKey: options.apiKey ?? this.config.apiKey,
       configuration: {
         baseURL: this.config.baseUrl,
+        fetch: appConfig.officeBridge ? async (input, init) => {
+          const headers = new Headers(init?.headers)
+          headers.set('authorization', `Bearer ${officeModelToken(appConfig.officeBridge!)}`)
+          return fetch(input, { ...init, headers, redirect: 'error' })
+        } : undefined,
       },
       streaming: true,
     })

@@ -1,13 +1,13 @@
 import type { TokenPayload } from '@yikart/aitoearn-auth'
 import { createHash } from 'node:crypto'
-import { Module, UnauthorizedException } from '@nestjs/common'
+import { Module, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common'
 import { ScheduleModule } from '@nestjs/schedule'
 import { AitoearnAiClientModule } from '@yikart/aitoearn-ai-client'
 import { AitoearnAuthModule } from '@yikart/aitoearn-auth'
 import { AitoearnQueueModule } from '@yikart/aitoearn-queue'
 import { ChannelDbModule } from '@yikart/channel-db'
 import { ConfigEditorModule } from '@yikart/config-editor'
-import { ApiKeyRepository, MongodbModule, UserRepository, UserStatus } from '@yikart/mongodb'
+import { ApiKeyRepository, MediaGroupRepository, MongodbModule, UserRepository, UserStatus } from '@yikart/mongodb'
 import { RedlockModule } from '@yikart/redlock'
 import { ServerRedisModule } from './common/redis'
 import { AppConfig, config } from './config'
@@ -39,8 +39,8 @@ import { UserModule } from './core/user/user.module'
     }),
     ServerRedisModule,
     AitoearnAuthModule.forRootAsync({
-      inject: [UserRepository, ApiKeyRepository],
-      useFactory: (userRepository: UserRepository, apiKeyRepository: ApiKeyRepository) => {
+      inject: [UserRepository, ApiKeyRepository, MediaGroupRepository],
+      useFactory: (userRepository: UserRepository, apiKeyRepository: ApiKeyRepository, mediaGroupRepository: MediaGroupRepository) => {
         const getOpenUser = async (userId: string) => {
           const user = await userRepository.getById(userId)
           if (!user || user.isDelete || user.status !== UserStatus.OPEN) {
@@ -50,7 +50,18 @@ import { UserModule } from './core/user/user.module'
         }
         return {
           ...config.auth,
-          getTokenInfo: (payload: TokenPayload) => getOpenUser(payload.id),
+          getTokenInfo: async (payload: TokenPayload) => {
+            if (config.officeBridge) {
+              if (payload.officeTenantId !== config.officeBridge.tenantId || !/^[a-f0-9]{24}$/.test(payload.id))
+                throw new UnauthorizedException()
+              if (!payload.officeLegacyRead)
+                await userRepository.createOfficeIdentity(payload.id, config.officeBridge.tenantId)
+            }
+            const user = await getOpenUser(payload.id)
+            if (config.officeBridge && !payload.officeLegacyRead && !await mediaGroupRepository.createDefault(user.id))
+              throw new ServiceUnavailableException('Personal media library initialization failed')
+            return user
+          },
           getTokenInfoByApiKey: async (apiKey: string) => {
             const keyHash = createHash('sha1').update(apiKey).digest('hex')
             const record = await apiKeyRepository.getByKeyHash(keyHash)

@@ -45,5 +45,6 @@ export function useLanguage() {
       }
     },
     () => language,
+    () => language,
   )
 }

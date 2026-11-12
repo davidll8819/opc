@@ -3,6 +3,8 @@ import { z } from 'zod'
 export const SLOW_RESPONSE_TYPE = 'application/x-office-response+ndjson'
 // JSON-returning long operations use this transport. Existing upstream SSE stays untouched.
 export const slowResponseRoutes = new Set([
+  '/api/tenants/:tenantId/skills/studio/:id/run',
+  '/api/tenants/:tenantId/employees/self-check',
   '/api/tenants/:tenantId/secretary/chat',
   '/api/tenants/:tenantId/secretary/brief',
   '/api/tenants/:tenantId/secretary/tasks/:id/run',
@@ -17,7 +19,9 @@ export const slowResponseRoutes = new Set([
 export function responseError(err, req, app) {
   const validation = err instanceof z.ZodError
   const status = validation ? 400 : err.statusCode || 500
-  if (status >= 500)
+  if (err.modelDiagnostic)
+    app.log.warn({ requestId: req.id, modelFailure: err.modelDiagnostic }, 'Model request rejected')
+  else if (status >= 500)
     app.log.error({ code: err.code || err.name, requestId: req.id }, 'Request failed')
   return {
     status,

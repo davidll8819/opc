@@ -8,6 +8,7 @@ import { config } from '../../../config'
 import { AiAvailabilityService } from '../../ai-availability'
 import { ImageService } from '../../ai/image'
 import { GrokVideoService, OpenAIVideoService, VideoService } from '../../ai/video'
+import { VideoPreflightException } from '../../ai/video/video-preflight.exception'
 import { McpServerName } from '../agent.constants'
 import { errorResult, successResult, wrapTool } from './mcp.utils'
 
@@ -93,7 +94,7 @@ export class MediaMcp {
         : await this.imageService.userGeneration(params)
       await this.taskRepository.updateMediaRequestByIdAndUserId(taskId, userId, AiLogType.Image, false)
       return successResult(result.list.flatMap(image => image.url ? [{ type: 'resource_link', uri: FileUtil.buildUrl(image.url), name: 'Generated image' }] : []))
-    }, this.aiAvailability)
+    }, this.aiAvailability, userId)
   }
 
   createFourYiVideoTool(userId: string, userType: UserType, taskId: string) {
@@ -111,14 +112,23 @@ export class MediaMcp {
         return errorResult('The production task is unavailable. Do not submit a video.')
       if (!await this.taskRepository.updateMediaRequestByIdAndUserId(taskId, userId, AiLogType.Video, true))
         return errorResult('The previous video request is unresolved. Query its status or ask the user to review it; do not resubmit.')
-      const result = await this.videoService.userVideoGeneration({ userId, userType, ...params, ...task.videoFormat, metadata: { officeTaskId: taskId } })
-      await this.taskRepository.updateMediaRequestByIdAndUserId(taskId, userId, AiLogType.Video, false)
-      return successResult(result)
-    }, this.aiAvailability)
+      try {
+        const result = await this.videoService.userVideoGeneration({ userId, userType, ...params, ...task.videoFormat, metadata: { officeTaskId: taskId } })
+        await this.taskRepository.updateMediaRequestByIdAndUserId(taskId, userId, AiLogType.Video, false)
+        return successResult(result)
+      }
+      catch (error) {
+        // Release only a proven local rejection. A timeout or provider error may
+        // have created a paid job and must retain the duplicate-submission guard.
+        if (error instanceof VideoPreflightException)
+          await this.taskRepository.updateMediaRequestByIdAndUserId(taskId, userId, AiLogType.Video, false)
+        throw error
+      }
+    }, this.aiAvailability, userId)
   }
 
   createFourYiVideoStatusTool(userId: string, userType: UserType) {
-    return wrapTool(this.logger, MediaToolName.GetVideoStatus, 'Get a company video task status and its saved video URL using the task id.', getMediaStatusSchema.shape, async ({ taskId }) => successResult(await this.videoService.getVideoTaskStatus({ userId, userType, taskId })), this.aiAvailability)
+    return wrapTool(this.logger, MediaToolName.GetVideoStatus, 'Get a company video task status and its saved video URL using the task id.', getMediaStatusSchema.shape, async ({ taskId }) => successResult(await this.videoService.getVideoTaskStatus({ userId, userType, taskId })), this.aiAvailability, userId)
   }
 
   createGenerateImageTool(userId: string, userType: UserType) {

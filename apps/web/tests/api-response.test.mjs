@@ -133,3 +133,14 @@ test('API negotiates explicitly, keeps CSRF, and never repeats a failed paid req
     setCsrf('')
   }
 })
+
+test('heartbeat updates request progress before the final result without resolving or resending', async () => {
+  const seen=[]
+  const data=await readApiResponse(response([
+    {type:'heartbeat'},
+    {type:'heartbeat'},
+    {type:'result',status:200,data:{answer:'done'}},
+  ]),()=>seen.push('received'))
+  assert.deepEqual(seen,['received','received'])
+  assert.deepEqual(data,{answer:'done'})
+})

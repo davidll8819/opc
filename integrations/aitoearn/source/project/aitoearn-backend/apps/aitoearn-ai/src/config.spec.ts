@@ -13,6 +13,7 @@ describe('agentConfigSchema', () => {
   it('applies the existing Claude model defaults', () => {
     const agentConfig = agentConfigSchema.parse(baseAgentConfig)
 
+    expect(agentConfig.routerPort).toBe(3456)
     expect(agentConfig.defaultModel).toBe('claude-opus-4-6')
     expect(agentConfig.backgroundModel).toBe('claude-haiku-4-5-20251001')
     expect(agentConfig.thinkModel).toBe('claude-opus-4-6')

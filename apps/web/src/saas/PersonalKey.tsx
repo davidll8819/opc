@@ -1,0 +1,17 @@
+import {useEffect,useState} from 'react'
+import {api} from './api'
+type State={configured:boolean;revision:number;updatedAt:string|null;legacyAvailable?:boolean}
+export function PersonalKey({base}:{base:string}) {
+ const [state,setState]=useState<State|null>(null),[key,setKey]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[removing,setRemoving]=useState(false)
+ const load=()=>api<State>(`${base}/personal-api-key`).then(setState).catch(e=>setError(e.message))
+ useEffect(()=>{let active=true;api<State>(`${base}/personal-api-key`).then(v=>{if(active)setState(v)}).catch(e=>{if(active)setError(e.message)});return()=>{active=false}},[base])
+ async function save(){if(!state)return;setBusy(true);setError('');setNotice('');try{setState(await api<State>(`${base}/personal-api-key`,{apiKey:key,revision:state.revision},'PUT'));setKey('');setNotice('你的个人 Key 已加密保存。请验证连接；其他人的 Key 未改变。')}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ async function verify(){setBusy(true);setError('');setNotice('');try{const result=await api<{models:number}>(`${base}/personal-api-key/verify`,{});setNotice(`连接验证通过，可读取 ${result.models} 个模型。没有发起付费生成。`)}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ async function importLegacy(){if(!state)return;setBusy(true);setError('');setNotice('');try{setState(await api<State>(`${base}/personal-api-key/import-legacy`,{revision:state.revision,confirmed:true}));setKey('');setNotice('你以前保存的 Key 已安全接入个人配置，原企业配置仍保留。请验证连接。')}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ async function remove(){if(!state)return;setBusy(true);setError('');try{setState(await api<State>(`${base}/personal-api-key`,{revision:state.revision},'DELETE'));setKey('');setRemoving(false);setNotice('个人 Key 已移除，后续模型调用会停止，不会改用其他人的 Key。')}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ return <section className="personal-key" aria-label="个人 4yi API Key"><h2>我的 4yi API Key</h2><p>当前工作空间内，由你发起的对话、任务、图片和视频使用你自己的 Key。没有 Key 或授权失效时停止调用，不回退到其他用户或工作空间的 Key。</p>
+ {error&&<p role="alert" className="error">{error}</p>}{notice&&<p role="status">{notice}</p>}
+ {state?.legacyAvailable&&<div className="ops-notice"><p>找到了你以前保存的企业 Key，原文仍加密保留。可以接入你自己的个人配置，其他员工和用户不会获得这份 Key。</p><button disabled={busy} onClick={()=>void importLegacy()}>接入我以前保存的 Key</button></div>}
+ {!state?<button onClick={()=>void load()}>重新读取个人 Key 状态</button>:<><p>状态：{state.configured?'已保存（不回显原文）':'尚未配置'}{state.updatedAt&&` · 更新于 ${new Date(state.updatedAt).toLocaleString()}`}</p><label>个人 4yi API Key<input type="password" value={key} onChange={e=>setKey(e.target.value)} disabled={busy} autoComplete="new-password" spellCheck={false} maxLength={4096} placeholder={state.configured?'填写新 Key 才会替换':'在这里粘贴你自己的 Key'}/></label><p className="muted">保存在服务器的加密存储中，不放入浏览器本地存储。更换 Key 后，旧视频任务需核对原账号，系统不会用新 Key 冒充旧任务身份。</p><div className="personal-key-actions"><button className="primary" disabled={busy||key.trim().length<8} onClick={()=>void save()}>保存个人 Key</button><button disabled={busy||!state.configured||!!key} onClick={()=>void verify()}>验证连接（不生成）</button><button disabled={busy||!state.configured} onClick={()=>setRemoving(true)}>移除个人 Key</button></div>{removing&&<div role="alert"><p>移除后，你的后续模型和视频调用将无法继续。确定移除吗？</p><button disabled={busy} onClick={()=>void remove()}>确认移除</button><button onClick={()=>setRemoving(false)}>保留 Key</button></div>}{error&&<button disabled={busy} onClick={()=>void load()}>重新载入状态</button>}</>}
+ </section>
+}

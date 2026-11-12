@@ -1,3 +1,4 @@
+import { officeUserContext } from './office-user-context'
 import type { NextFunction, Request, Response } from 'express'
 import { createHmac, timingSafeEqual } from 'node:crypto'
 
@@ -53,7 +54,7 @@ export function officeBridge(config: OfficeBridgeConfig | undefined, jwtSecret: 
     if (!config) return next()
     if (req.path === '/office-bridge/status') {
       if (!signed(config, req)) return res.status(403).json({ error: 'Office signature required' })
-      return res.json({ version: 4, tenantId: config.tenantId, revision: config.revision, publishMode: 'manual', draining })
+      return res.json({ version: 5, tenantId: config.tenantId, revision: config.revision, publishMode: 'manual', draining })
     }
     if (req.path === '/office-bridge/drain') {
       if (req.method !== 'POST' || !signed(config, req)) return res.status(403).json({ error: 'Office signature required' })
@@ -65,6 +66,13 @@ export function officeBridge(config: OfficeBridgeConfig | undefined, jwtSecret: 
       return res.status(503).json({ error: 'Runtime is draining; new production requests are paused' })
     if (/config[-/]?manager|config[-/]?editor|public-share|(?:register|signup|login|auto-login)(?:\/|$)/i.test(req.path))
       return res.status(403).json({ error: 'Use the Office workspace' })
+    if (/\/assets\/(?:public\/|oss\/callback)/i.test(req.path)) return res.status(403).json({error:'Shared asset entry points are disabled in Office mode'})
+    if (!isOfficeUser(req, config.tenantId, jwtSecret)) return res.status(403).json({ error: 'Personal Office identity required' })
+    const payload = JSON.parse(Buffer.from(String(req.headers.authorization).replace(/^Bearer /, '').split('.')[1], 'base64url').toString())
+    if (payload.officeLegacyRead) {
+      if (req.method !== 'GET' || req.path !== payload.officeLegacyRead || !/^\/agent\/tasks\/[a-f0-9]{24}$/.test(req.path)) return res.status(403).json({error:'Historical identity is read-only and bound to one task'})
+      return next()
+    }
     const publishing = /publish|engagement/i.test(req.path)
     if (publishing && !['GET', 'HEAD'].includes(req.method)) {
       if (req.method !== 'POST' || req.path.replace(/\/$/, '') !== '/v2/channels/publish/flows' || !signed(config, req))
@@ -99,7 +107,7 @@ export function officeBridge(config: OfficeBridgeConfig | undefined, jwtSecret: 
           return res.json({ jsonrpc: '2.0', id: rpc.id, result: { isError: true, content: [{ type: 'text', text: 'This action is not connected to the Office workflow.' }] } })
       }
     }
-    return next()
+    return officeUserContext.run(payload.id, () => next())
   }
 }
 

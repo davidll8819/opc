@@ -6,6 +6,9 @@ import {
   viewFacingToLR,
 } from '@/scene/systems/movementFacing'
 import { SpineCharacter } from '@/scene/characters/SpineCharacter'
+import { LiWanerCharacter, liWanerReady } from '@/scene/characters/LiWanerCharacter'
+import { officeCharacterFor, readOfficeLibrary } from '@/scene/characters/officeCharacterLibrary'
+import { isHomeDeskSeat } from '@/scene/systems/MovementSystem'
 import { isSpineReady } from '@/scene/assets/loadSpineAssets'
 import { Bubble } from '@/scene/ui/Bubble'
 import { StatusLabel } from '@/scene/ui/StatusLabel'
@@ -20,6 +23,8 @@ export class AgentEntity extends Container {
   private bubble: Bubble
   private walkPhase = 0
   private useSpine = false
+  private libraryCharacter: LiWanerCharacter | null = null
+  private lastMotionPosition: { x: number; y: number } | null = null
 
   constructor(agent: Agent) {
     super()
@@ -30,7 +35,7 @@ export class AgentEntity extends Container {
     this.bubble = new Bubble()
 
     if (isSpineReady()) {
-      this.spineChar = new SpineCharacter(agent.id, agent.color)
+      this.spineChar = new SpineCharacter(agent.avatarId || agent.id, agent.color)
       if (this.spineChar.isReady) {
         this.useSpine = true
         this.spineChar.setAgentColor(agent.color)
@@ -47,6 +52,12 @@ export class AgentEntity extends Container {
       this.initFallbackGraphics()
     }
 
+    const character = officeCharacterFor(agent.avatarId || agent.id)
+    if (character && this.useSpine && liWanerReady(character.variant)) {
+      this.libraryCharacter = new LiWanerCharacter(isHomeDeskSeat(agent.assignedDeskId, agent.x, agent.y), character.variant)
+      this.addChildAt(this.libraryCharacter, 1)
+      this.setLibraryCharacter(readOfficeLibrary())
+    }
     this.eventMode = 'static'
     this.cursor = 'pointer'
     this.hitArea = new Rectangle(-34, -92, 68, 124)
@@ -59,6 +70,26 @@ export class AgentEntity extends Container {
     this.statusLabel.setWorkStatus(status)
   }
 
+  setLibraryCharacter(enabled: boolean) {
+    if (!this.libraryCharacter || !this.spineChar) return
+    this.libraryCharacter.visible = enabled
+    this.spineChar.visible = !this.libraryCharacter.visible
+    this.lastMotionPosition = { x: this.agent.x, y: this.agent.y }
+    this.syncLibraryCharacter()
+    this.updateOverlayPositions()
+  }
+
+  private syncLibraryCharacter() {
+    if (!this.libraryCharacter) return
+    const atHome = isHomeDeskSeat(this.agent.assignedDeskId, this.agent.x, this.agent.y)
+    const seated = atHome && this.agent.state !== 'walking' && this.agent.state !== 'talking' && !this.agent.customAnimation
+    const dx = (this.agent.targetX ?? this.agent.x) - this.agent.x
+    const left = this.agent.state === 'walking' && Math.abs(dx) > 1 ? dx < 0 : this.agent.facing < 0
+    this.libraryCharacter.motion.sync(seated, this.agent.state === 'walking', left)
+  }
+
+  get holdsMovement() { return Boolean(this.libraryCharacter?.visible && this.libraryCharacter.motion.holdsMovement) }
+
   get data(): Agent {
     return this.agent
   }
@@ -70,6 +101,7 @@ export class AgentEntity extends Container {
     const prevColor = this.agent.color
     const prevCustomAnimation = this.agent.customAnimation
     this.agent = { ...this.agent, ...patch }
+    this.syncLibraryCharacter()
 
     if (this.useSpine && this.spineChar) {
       if (patch.viewFacing != null && patch.viewFacing !== prevViewFacing) {
@@ -111,6 +143,8 @@ export class AgentEntity extends Container {
   }
 
   playCustomAnimation(animation: string, task?: string) {
+    // Unauthored facial clips remain available through the intact original rig.
+    if (this.libraryCharacter) this.setLibraryCharacter(false)
     this.agent = {
       ...this.agent,
       state: 'talking',
@@ -165,6 +199,13 @@ export class AgentEntity extends Container {
     }
 
     this.spineChar?.update(dt)
+    if (this.libraryCharacter) {
+      const last = this.lastMotionPosition
+      const distance = last ? Math.hypot(this.agent.x - last.x, this.agent.y - last.y) : 0
+      this.lastMotionPosition = { x: this.agent.x, y: this.agent.y }
+      this.syncLibraryCharacter()
+      this.libraryCharacter.update(dt, distance)
+    }
     this.bubble.update(dt)
     this.statusLabel.setTask(
       state === 'working' || state === 'thinking' ? this.agent.currentTask : undefined,
@@ -173,7 +214,7 @@ export class AgentEntity extends Container {
   }
 
   private updateOverlayPositions() {
-    const crownTopY = this.useSpine && this.spineChar
+    const crownTopY = this.libraryCharacter?.visible ? this.libraryCharacter.getHeadOffsetY() : this.useSpine && this.spineChar
       ? this.spineChar.getHeadOffsetY()
       : -58
     this.statusLabel.layout(crownTopY)

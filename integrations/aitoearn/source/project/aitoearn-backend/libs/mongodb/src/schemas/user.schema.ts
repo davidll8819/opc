@@ -89,6 +89,9 @@ export class UserStorage {
 
 @Schema({ ...DEFAULT_SCHEMA_OPTIONS, collection: 'user' })
 export class User extends WithTimestampSchema {
+  @Prop({ type: String, required: false })
+  officeTenantId?: string
+
   id: string
 
   @Prop({

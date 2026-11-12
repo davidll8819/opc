@@ -1,9 +1,9 @@
 import type { FSWatcher } from 'node:fs'
 import { ChildProcess, spawn } from 'node:child_process'
-import { existsSync, mkdirSync, unlinkSync, watch, writeFileSync } from 'node:fs'
+import { chmodSync, existsSync, mkdirSync, unlinkSync, watch, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { Injectable, Logger, OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common'
-import { config } from '../../../config'
+import { config, routerApiKey } from '../../../config'
 import { CLAUDE_CODE_ROUTER_PROVIDER_NAME } from '../agent.constants'
 
 interface TransformerConfig {
@@ -53,6 +53,7 @@ export class ClaudeCodeRouterService implements OnApplicationBootstrap, OnModule
   private readonly pidFilePath = join(this.sessionDir, '.claude-code-router.pid')
 
   async onApplicationBootstrap() {
+    routerApiKey() // Fail closed before starting any proxy.
     const routerConfig = config.agent
     if (!routerConfig.models.length) {
       this.logger.warn('Agent has no available models; configure the company gateway and restart')
@@ -91,15 +92,19 @@ export class ClaudeCodeRouterService implements OnApplicationBootstrap, OnModule
 
     const routerConfigFile = this.buildConfigFile(routerConfig)
 
-    writeFileSync(this.configPath, JSON.stringify(routerConfigFile, null, 2), 'utf-8')
+    chmodSync(this.sessionDir, 0o700)
+    chmodSync(this.configDir, 0o700)
+    writeFileSync(this.configPath, JSON.stringify(routerConfigFile, null, 2), { encoding: 'utf-8', mode: 0o600 })
+    chmodSync(this.configPath, 0o600)
     this.logger.debug(`配置文件已生成: ${this.configPath}`)
   }
 
   private buildConfigFile(routerConfig: typeof config.agent): ClaudeCodeRouterConfig {
     return {
-      PORT: 3456,
-      HOST: config.host,
-      APIKEY: 'ccr',
+      PORT: routerConfig.routerPort,
+      HOST: '127.0.0.1',
+      APIKEY: routerApiKey(),
+      LOG: false,
       NON_INTERACTIVE_MODE: true,
       Providers: [
         {
@@ -125,7 +130,7 @@ export class ClaudeCodeRouterService implements OnApplicationBootstrap, OnModule
   private startChildProcess(cliPath: string) {
     this.logger.debug('正在启动 Claude Code Router 子进程...')
 
-    this.childProcess = spawn('node', [cliPath, 'start'], {
+    this.childProcess = spawn('node', ['--require', join(__dirname, 'router-preload.js'), cliPath, 'start'], {
       cwd: this.sessionDir,
       windowsHide: true,
       stdio: ['ignore', 'pipe', 'pipe'],

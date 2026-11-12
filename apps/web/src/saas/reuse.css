@@ -1,0 +1,222 @@
+/* Reuses the existing framed sheet. One fluid column; all rows share both edges. */
+.reuse-workspace {
+  color: #26372e;
+  padding: 24px;
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  background: #fff;
+  border: 1px solid #e5eae6;
+  border-radius: 12px;
+}
+.reuse-workspace > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.reuse-workspace .reuse-privacy, .reuse-list-count { font-size: 13px; color: #536257; }
+.reuse-workspace .reuse-privacy { text-align: left; line-height: 1.8; margin-bottom: 0; }
+.reuse-workspace .reuse-tabs { border-bottom: 1px solid #dde4df; gap: 20px; margin: 12px 0 24px; }
+.reuse-workspace .reuse-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; padding: 10px 2px; }
+.reuse-workspace .reuse-tabs button[aria-pressed='true'] { border-bottom-color: #365f47; background: transparent; font-weight: 650; }
+.reuse-section-heading h2 { margin: 0 0 8px; }
+.reuse-section-heading p { color: #536257; }
+.reuse-toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; margin: 16px 0; }
+.reuse-workspace .reuse-toolbar .reuse-actions { margin: 0; }
+.reuse-toolbar .reuse-transfer { display: contents; }
+.reuse-toolbar .reuse-import-body, .reuse-toolbar [role='status'], .reuse-toolbar [role='alert'] { flex-basis: 100%; }
+.reuse-filters { display: grid; grid-template-columns: minmax(0, 1fr) 150px 180px; gap: 16px; padding: 4px 0 16px; border-bottom: 1px solid #dde4df; }
+.reuse-workspace .reuse-filters label { font-size: 13px; margin: 4px 0; }
+.reuse-library-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); gap: 28px; margin-top: 20px; align-items: start; }
+.reuse-library-layout.has-detail { grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr); }
+.reuse-library, .reuse-workbench { min-width: 0; }
+.reuse-library .reuse-list { margin-top: 0; }
+.reuse-library .reuse-list > li { display: block; padding: 20px 12px; }
+.reuse-library .reuse-list > li.is-selected { background: #f1f5f2; border-left: 2px solid #365f47; padding-left: 10px; }
+.reuse-library .reuse-actions { margin-bottom: 0; gap: 8px; }
+.reuse-library .reuse-list .reuse-use-note { font-size: 13px; }
+.reuse-workbench .reuse-editor { margin: 0 0 20px; }
+.reuse-guide { padding: 20px; background: #f4f7f4; border-radius: 8px; }
+.reuse-guide h3 { margin-top: 0; }
+.reuse-import-body { padding: 20px; background: #f4f7f4; border-radius: 8px; margin-bottom: 20px; }
+.reuse-workspace button.reuse-primary { background: #365f47; color: #fff; }
+.reuse-workspace button { min-height: 44px; }
+.department-knowledge-scope { margin: 8px 16px; font-size: 13px; }
+.department-knowledge-scope summary { cursor: pointer; padding: 8px 0; }
+.department-knowledge-scope label { display: grid; gap: 6px; }
+.department-knowledge-scope input { min-width: 0; max-width: 100%; padding: 8px; }
+@media (max-width: 920px) {
+  .reuse-library-layout, .reuse-library-layout.has-detail { grid-template-columns: 1fr; }
+  .reuse-library-layout.has-detail .reuse-workbench { order: -1; }
+}
+@media (max-width: 640px) {
+  .reuse-workspace > header { gap: 12px; }
+  .reuse-workspace .reuse-privacy { text-align: left; }
+  .reuse-filters { grid-template-columns: 1fr 1fr; }
+  .reuse-filters label:first-child { grid-column: 1 / -1; }
+  .reuse-workspace .reuse-tabs { gap: 14px; }
+}
+.reuse-task { padding: 16px 24px; }
+.reuse-list p.reuse-excerpt { color: #26372e; max-width: 70ch; }
+.reuse-workspace h1 {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+.reuse-workspace h2 {
+  font-size: 20px;
+}
+.reuse-workspace h3,
+.reuse-task h3 {
+  font-size: 16px;
+}
+.reuse-workspace p {
+  margin: 8px 0 16px;
+}
+.reuse-tabs,
+.reuse-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.reuse-tabs button[aria-pressed='true'] {
+  background: #e7ece8;
+  color: #26372e;
+}
+.reuse-workspace button,
+.reuse-task button {
+  min-height: 40px;
+  border: 1px solid #cbd4cd;
+  border-radius: 6px;
+  color: #26372e;
+  background: #fff;
+  padding: 8px 12px;
+  box-shadow: none;
+}
+.reuse-workspace button:hover,
+.reuse-task button:hover {
+  border-color: #547760;
+}
+.reuse-workspace button:focus-visible,
+.reuse-task button:focus-visible {
+  outline: 2px solid #365f47;
+  outline-offset: 2px;
+}
+.reuse-workspace button:disabled,
+.reuse-task button:disabled {
+  color: #626963;
+  background: #f2f4f2;
+  cursor: not-allowed;
+}
+.reuse-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+.reuse-list > li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5eae6;
+}
+.reuse-list > li > div {
+  min-width: 0;
+}
+.reuse-list p {
+  color: #536257;
+  margin: 6px 0 0;
+}
+.reuse-list .reuse-actions {
+  flex-shrink: 0;
+}
+.reuse-workspace label,
+.reuse-task label {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.reuse-workspace input:not([type='checkbox']),
+.reuse-workspace select,
+.reuse-workspace textarea,
+.reuse-task select,
+.reuse-task textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #bcc9bf;
+  border-radius: 6px;
+  color: #26372e;
+  padding: 10px;
+  font: inherit;
+}
+.reuse-workspace .reuse-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.reuse-workspace .reuse-check input {
+  width: 18px;
+  height: 18px;
+}
+.reuse-editor {
+  padding: 20px;
+  background: #f4f7f4;
+  margin: 24px 0;
+  border-radius: 8px;
+}
+.reuse-workspace fieldset {
+  margin: 16px 0;
+  padding: 16px;
+  min-width: 0;
+  border: 1px solid #d4ddd6;
+  border-radius: 6px;
+}
+.reuse-workspace summary,
+.reuse-task summary {
+  cursor: pointer;
+  padding: 12px 0;
+}
+.reuse-workspace details,
+.reuse-task details {
+  margin: 16px 0;
+}
+.reuse-workspace dd {
+  margin: 4px 0 12px;
+  white-space: pre-wrap;
+}
+.reuse-workspace dt {
+  font-weight: 600;
+}
+.reuse-text {
+  white-space: pre-wrap;
+}
+.reuse-workspace,
+.reuse-task {
+  overflow-wrap: anywhere;
+}
+.reuse-workspace [role='alert'],
+.reuse-task [role='alert'] {
+  color: #942b2b;
+}
+@media (max-width: 1100px) {
+  .reuse-list > li {
+    display: block;
+  }
+  .reuse-list .reuse-actions {
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 640px) {
+  .reuse-workspace {
+    padding: 16px;
+  }
+  .reuse-editor {
+    padding: 12px;
+  }
+  .reuse-workspace button,
+  .reuse-task button {
+    min-height: 44px;
+  }
+}

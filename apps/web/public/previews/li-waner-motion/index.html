@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>李婉儿 · 动作样板 | Wishtaday</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main>
+    <header><a href="/">◈ Wishtaday</a><span>角色动作试作 · 01</span></header>
+    <section class="intro"><div><h1>李婉儿 · 从坐下到迈步</h1><p>先检查一个角色的完整动作，再决定是否应用到办公室。</p></div><span class="scope">独立样板 · 未替换办公室</span></section>
+    <div id="error" role="alert" hidden></div>
+    <section class="stage" aria-label="李婉儿动作预览">
+      <div class="stage-heading"><strong id="phase" role="status">正在加载动作素材…</strong><span id="frame">—</span></div>
+      <canvas id="stage" width="960" height="320" aria-label="李婉儿坐姿、起身、行走和转身动画"></canvas>
+      <ol id="steps" aria-label="动作流程"></ol>
+    </section>
+    <section class="controls" aria-label="播放控制">
+      <div class="buttons"><button id="play" disabled>暂停</button><button id="restart" disabled>从头播放</button><button id="next" disabled>下一帧</button></div>
+      <label>查看动作<select id="mode" aria-label="查看动作"><option value="cycle">完整流程</option><option value="walk">只看迈腿（原地）</option><option value="turn">只看转身</option><option value="sit">只看坐姿</option></select></label>
+      <label>速度<select id="speed" aria-label="速度"><option value="0.5">0.5 倍 · 慢看</option><option value="1" selected>1 倍</option><option value="1.5">1.5 倍</option></select></label>
+      <label class="timeline">逐段查看<input id="seek" type="range" min="0" max="13.59" step="0.025" value="0" aria-label="动作进度"><output id="time">0.0 秒</output></label>
+    </section>
+    <section class="comparison" aria-label="关键姿势对照">
+      <figure><canvas id="pose-standing" width="300" height="240" aria-label="站立姿势"></canvas><figcaption>站立<span>双腿伸直，重心抬高</span></figcaption></figure>
+      <figure><canvas id="pose-seated" width="300" height="240" aria-label="坐姿"></canvas><figcaption>坐姿<span>髋部降低，膝盖弯曲</span></figcaption></figure>
+      <figure><canvas id="pose-walking" width="300" height="240" aria-label="抬腿姿势"></canvas><figcaption>迈步<span>一脚支撑，另一脚离地</span></figcaption></figure>
+    </section>
+    <footer><p>这是逐帧动画样板，尚未接入工位遮挡、寻路或员工任务。素材仍需评估步幅、帧间稳定性和与原办公室视角的匹配。</p><p>本页无模型调用，不读写员工配置和任务数据。原版人物、动画和备份均保留。</p></footer>
+  </main>
+  <script type="module" src="./preview.mjs"></script>
+</body>
+</html>

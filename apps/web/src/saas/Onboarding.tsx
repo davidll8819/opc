@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { t } from '@/i18n'
 import { api } from './api'
-export function CreateTenant({ onCreated }: { onCreated: () => Promise<void> }) {
+export function CreateTenant({ onCreated }: { onCreated: (id: string) => Promise<void> }) {
+  const submitting = useRef(false)
   const [name, setName] = useState(''),
-    [error, setError] = useState('')
+    [error, setError] = useState(''),
+    [busy, setBusy] = useState(false)
   return (
     <section className="empty-card">
       <p className="eyebrow">{t('开始协作')}</p>
@@ -12,11 +14,18 @@ export function CreateTenant({ onCreated }: { onCreated: () => Promise<void> }) 
       <form
         onSubmit={async (e) => {
           e.preventDefault()
+          if (submitting.current) return
+          submitting.current = true
+          setBusy(true)
+          setError('')
           try {
-            await api('/api/tenants', { name })
-            await onCreated()
+            const created = await api<{id:string}>('/api/tenants', { name })
+            await onCreated(created.id)
           } catch (e) {
             setError((e as Error).message)
+          } finally {
+            submitting.current = false
+            setBusy(false)
           }
         }}
       >
@@ -24,7 +33,7 @@ export function CreateTenant({ onCreated }: { onCreated: () => Promise<void> }) 
           {t('工作空间名称')}
           <input value={name} onChange={(e) => setName(e.target.value)} required minLength={2} />
         </label>
-        <button className="primary">{t('创建工作空间')}</button>
+        <button className="primary" disabled={busy}>{busy ? t('正在创建…') : t('创建工作空间')}</button>
       </form>
       {error && <p className="error">{t(error)}</p>}
     </section>

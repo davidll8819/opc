@@ -1,4 +1,11 @@
+import {employeeDirectory,findEmployee} from './employee-directory.mjs'
+import { readDuty, assertOnDuty } from './employee-duty.mjs'
+import { EMPLOYEE_BY_DEPARTMENT } from '../../../packages/employees/registry.mjs'
+import { resolveCapability } from './operations/policy.mjs'
+import { productContext } from './product-context.mjs'
+import { knowledgeContext } from './reuse.mjs'
 import { z } from 'zod'
+import { registerFileRecycle } from './archive/recycle.mjs'
 import { randomUUID, createHash } from 'node:crypto'
 import { fail } from './db.mjs'
 import { createModelGateway, loadPolicy } from './operations/gateway.mjs'
@@ -21,7 +28,7 @@ import {
   departmentChatInstructions,
 } from '../../../packages/employees/registry.mjs'
 export const departmentNames = DEPARTMENT_NAMES
-export const departmentKey = z.enum(Object.keys(departmentNames))
+export const departmentKey = z.union([z.enum(Object.keys(departmentNames)),z.string().regex(/^custom_[a-f0-9]{32}$/)])
 const archiveDocumentGuidance =
   '\n当前弹窗已支持上传、选择和预览 DOCX、PDF、XLSX 文档及 PNG、JPG/JPEG、WebP 图片，扫描 PDF 与图片支持本地 OCR。用户要阅读文件时，可提示使用文档面板上传并选择已解析文件后提问；不重复旧对话中“无法读取上传文档”的过时限制。未选中文件且未启用正式档案检索，或本轮未提供来源摘录时，不得声称已阅读文件内容。OCR 识别可能出错，尤其数字、手写和模糊内容，请核对原件。旧版已就绪 PDF 如需增加 OCR，请重新上传。旧版 DOC/XLS 请先转换格式。可在比对面板选择旧版和新版查看已提取文字的差异，并总结实际改动；此功能不比较排版、图片或未提取信息。也可在“归档建议”面板勾选一至四份已就绪资料，点击生成分类、标签、建议文件名和档案号，并复制或下载归档目录。建议带来源依据，需要用户核对；系统不会自动改名或移动原文件。归档建议可通过“修改并归档”编辑并保存草稿，再点击“确认归档”登记正式档案；在“档案检索”按资料类型、标签和名称/编号查找。正式归档需用户点击确认，不得仅凭对话声称已完成登记。输入区可开启“检索已归档资料”，按当前问题检索当前企业的个人正式档案并带出处回答，无需重新上传或勾选文件。没有命中或无法核对原件时应如实说明，不得从旧回复编造来源。'
 export async function skillContent(row) {
@@ -50,6 +57,7 @@ export async function assignedInstructions(db, tenantId, department) {
     : ''
 }
 export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, execution }) {
+  registerFileRecycle(app, { scoped })
   const root = '/api/tenants/:tenantId',
     call = createModelGateway({ pool, env, fetcher })
   app.get(`${root}/workspace/status`, (req) =>
@@ -58,7 +66,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
         configured = false
       try {
         policy = (await loadPolicy(db, ctx.tenantId, env)).policy
-        configured = !!(await loadSecrets(db, env, ctx.tenantId)).ai
+        configured = !!(await loadSecrets(db, env, ctx.tenantId, ctx.userId)).ai
       } catch (e) {
         if (e.statusCode !== 409) throw e
       }
@@ -70,18 +78,22 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
           )
         ).rows.map((r) => r.department),
       )
+      const duty = await readDuty(db, ctx.tenantId)
+      const busy = new Set((await db.query('SELECT employee_id FROM employee_work_leases WHERE tenant_id=$1 AND expires_at>now()', [ctx.tenantId])).rows.map(r=>r.employee_id))
+      const boards = (await db.query('SELECT board FROM secretary_workspaces WHERE tenant_id=$1', [ctx.tenantId])).rows
+      for (const row of boards) for (const task of row.board.tasks || []) if (task.status === 'working') busy.add(task.dept)
       return {
-        departments: Object.entries(departmentNames).map(([id, name]) => ({
-          id,
-          name,
+        departments: duty.map(profile => {const id=profile.departmentKey,name=profile.departmentName;return ({
+          id, employeeId:profile.employeeId, employeeName:profile.name, avatarId:profile.avatarId, custom:profile.custom,
+          name: profile?.departmentName || name,
           active: active.has(id),
-          ready: !!(
-            configured &&
-            policy?.departments[id]?.enabled &&
-            policy?.tiers[policy.departments[id].tier]
-          ),
+          busy: busy.has(profile.employeeId),
+          jobTitle: profile?.jobTitle,
+          responsibility: profile?.capabilities,
+          seat: profile?.seat ?? null,
+          ready: (()=>{try{return configured && !!resolveCapability(policy,id,'text').model}catch{return false}})(),
           enabled: !!policy?.departments[id]?.enabled,
-        })),
+        })}),
         memoryMb: Math.round(process.memoryUsage().rss / 1048576),
         uptime: Math.round(process.uptime()),
       }
@@ -90,6 +102,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
   app.get(`${root}/departments/:department/conversation`, (req) =>
     scoped(req, async (db, tenant, ctx) => {
       const department = departmentKey.parse(req.params.department)
+      await findEmployee(db,ctx.tenantId,department)
       const { projectId } = z
         .object({ projectId: z.string().uuid().optional() })
         .strict()
@@ -119,6 +132,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
         text: z.string().trim().min(1).max(20000),
         revision: z.number().int().nonnegative(),
         execute: z.boolean().optional(),
+        knowledgeProject: z.string().trim().max(80).optional(),
         projectId: z.string().uuid().optional(),
         comparisonId: z.string().uuid().optional(),
         archiveSearch: z.boolean().optional(),
@@ -161,9 +175,10 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
       const ctx = await scoped(req, async (db, tenant, ctx) => ctx, ['owner', 'admin'])
       return execution.chat({ ...ctx, projectId: input.projectId }, input)
     }
-    const { ctx, policy, row, skills, documents, comparison, archiveRetrieval } = await scoped(
+    const { ctx, policy, row, skills, documents, comparison, archiveRetrieval, knowledge } = await scoped(
       req,
       async (db, tenant, requestCtx) => {
+        await assertOnDuty(db, requestCtx.tenantId, department)
         const current =
           department === 'dev'
             ? await execution.conversation(
@@ -197,12 +212,16 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
           ctx,
           ...(noModel ? { policy: null } : await loadPolicy(db, ctx.tenantId, env)),
           row,
-          skills: noModel ? null : await loadAssignedSkills(db, ctx.tenantId, department),
+          skills: noModel ? null : await loadAssignedSkills(db, ctx.tenantId, department, { discoveryOnly: true }),
           documents:
             archiveRetrieval?.documents ||
             (input.fileIds?.length ? await selectedDocuments(db, ctx, input.fileIds) : []),
           comparison,
           archiveRetrieval,
+          // Grounded document answers and execution runtimes keep their own source rules.
+          knowledge: noModel || input.fileIds?.length || input.comparisonId || input.archiveSearch
+            ? { records: [], text: '' }
+            : await knowledgeContext(db, ctx, { project: input.knowledgeProject || '', question: input.text }),
         }
       },
     )
@@ -248,7 +267,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
               messages: [
                 {
                   role: 'system',
-                  content: `${departmentChatInstructions(department)}${row.instructions || ''}${skills.instructions}${department === 'archive' ? archiveDocumentGuidance : ''}`,
+                  content: `${departmentChatInstructions(department)}${row.instructions || ''}${skills.instructions}${productContext(policy)}${department === 'archive' ? archiveDocumentGuidance : ''}${knowledge.text}`,
                 },
                 ...(grounding ? [{ role: 'system', content: grounding.instructions }] : []),
                 ...row.messages.slice(-20).map((m) => ({ role: m.role, content: m.text })),
@@ -316,6 +335,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
           text,
           time: new Date().toISOString(),
           skillReads: result.skillReads || [],
+          ...(knowledge.records.length ? { knowledgeSources: knowledge.records.map(({ id, title, version, project, source }) => ({ id, title, version, project, source })) } : {}),
           ...(comparison ? { comparison: comparisonReference(comparison) } : {}),
           ...(archiveRetrieval ? { archiveSearch: archiveRetrieval.reference } : {}),
           ...(groundedAnswer
@@ -345,7 +365,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
     scoped(req, async (db, tenant, ctx) => ({
       items: (
         await db.query(
-          'SELECT id,name,mime,octet_length(data) size,created_at FROM workspace_files WHERE tenant_id=$1 AND user_id=$2 ORDER BY created_at DESC',
+          'SELECT id,name,mime,octet_length(data) size,created_at FROM workspace_files WHERE deleted_at IS NULL AND tenant_id=$1 AND user_id=$2 ORDER BY created_at DESC',
           [ctx.tenantId, ctx.userId],
         )
       ).rows,
@@ -402,7 +422,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
       async (db, tenant, ctx) =>
         (
           await db.query(
-            'SELECT name,data FROM workspace_files WHERE id=$1 AND tenant_id=$2 AND user_id=$3',
+            'SELECT name,data FROM workspace_files WHERE deleted_at IS NULL AND id=$1 AND tenant_id=$2 AND user_id=$3',
             [z.uuid().parse(req.params.id), ctx.tenantId, ctx.userId],
           )
         ).rows[0],
@@ -413,13 +433,34 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
       .header('content-disposition', `attachment; filename*=UTF-8''${encodeURIComponent(row.name)}`)
       .send(row.data)
   })
+  app.get(`${root}/files/:id/video`, async (req, reply) => {
+    const row = await scoped(req, async (db, tenant, ctx) =>
+      (await db.query("SELECT data FROM workspace_files WHERE deleted_at IS NULL AND id=$1 AND tenant_id=$2 AND user_id=$3 AND mime='video/mp4'",
+        [z.uuid().parse(req.params.id), ctx.tenantId, ctx.userId])).rows[0])
+    if (!row) throw fail(404, '归档视频不存在')
+    const bytes = Buffer.from(row.data), range = req.headers.range
+    let start = 0, end = bytes.length - 1
+    if (range) {
+      const match = /^bytes=(\d*)-(\d*)$/.exec(range)
+      if (!match || (!match[1] && !match[2])) return reply.code(416).header('content-range', `bytes */${bytes.length}`).send()
+      if (!match[1]) start = Math.max(0, bytes.length - Number(match[2]))
+      else { start = Number(match[1]); if (match[2]) end = Math.min(end, Number(match[2])) }
+      if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start > end || start >= bytes.length)
+        return reply.code(416).header('content-range', `bytes */${bytes.length}`).send()
+      reply.code(206).header('content-range', `bytes ${start}-${end}/${bytes.length}`)
+    }
+    return reply.header('content-type', 'video/mp4').header('content-disposition', 'inline')
+      .header('accept-ranges', 'bytes').header('content-length', end-start+1)
+      .header('cache-control', 'private, no-store').header('x-content-type-options', 'nosniff')
+      .send(bytes.subarray(start, end+1))
+  })
   app.get(`${root}/files/:id/preview`, async (req, reply) => {
     const row = await scoped(
       req,
       async (db, tenant, ctx) =>
         (
           await db.query(
-            "SELECT f.name,f.mime,f.data,d.sha256 extraction_sha256 FROM workspace_files f LEFT JOIN archive_documents d ON d.file_id=f.id AND d.tenant_id=f.tenant_id AND d.user_id=f.user_id AND d.state='ready' AND d.kind='image' WHERE f.id=$1 AND f.tenant_id=$2 AND f.user_id=$3",
+            "SELECT f.name,f.mime,f.data,d.sha256 extraction_sha256 FROM workspace_files f LEFT JOIN archive_documents d ON d.file_id=f.id AND d.tenant_id=f.tenant_id AND d.user_id=f.user_id AND d.state='ready' AND d.kind='image' WHERE f.deleted_at IS NULL AND f.id=$1 AND f.tenant_id=$2 AND f.user_id=$3",
             [z.uuid().parse(req.params.id), ctx.tenantId, ctx.userId],
           )
         ).rows[0],
@@ -478,7 +519,7 @@ export function registerWorkspaceServices(app, { scoped, pool, env, fetcher, exe
       req,
       async (db, tenant, ctx) => {
         const { departments } = z
-            .object({ departments: z.array(departmentKey).max(9) })
+            .object({ departments: z.array(departmentKey).max(13) })
             .strict()
             .parse(req.body),
           id = z.uuid().parse(req.params.id)

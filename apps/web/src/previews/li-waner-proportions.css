@@ -1,0 +1,24 @@
+body:has(.proportion-review) { background: #f5f2ed; overflow: auto; }
+.proportion-review { max-width: 1120px; margin: auto; padding: 28px 32px; color: #3b353b; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+.proportion-review header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 22px; border-bottom: 1px solid #dcd5cc; gap: 16px; }
+.proportion-review header a { color: #3b353b; font-size: 22px; font-weight: 650; text-decoration: none; }
+.proportion-review header span, .proportion-review p, .proportion-scope { color: #6b6268; font-size: 14px; line-height: 1.7; }
+.proportion-intro { margin: 30px 0 24px; }
+.proportion-intro h1 { font-size: 27px; font-weight: 650; margin: 0 0 8px; }
+.proportion-intro p { margin: 0; }
+.proportion-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; font-size: 14px; }
+.proportion-controls button { font: inherit; color: #55484e; padding: 8px 14px; min-height: 40px; border-radius: 6px; background: #fffdf9; border: 1px solid #bfb3ae; cursor: pointer; }
+.proportion-controls button[aria-pressed=true] { background: #76564c; border-color: #76564c; color: white; }
+.proportion-controls button:focus-visible { outline: 2px solid #76564c; outline-offset: 3px; }
+.proportion-scope { margin-left: auto; font-size: 12px; }
+.proportion-comparison { border: 1px solid #dcd5cc; border-radius: 10px; overflow: hidden; background: #fffdf9; }
+.proportion-canvas { width: 100%; aspect-ratio: 960/300; }
+.proportion-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+.proportion-labels { display: grid; grid-template-columns: repeat(3, 1fr); padding: 18px 0; text-align: center; border-top: 1px solid #ded7cf; }
+.proportion-labels > div + div { border-left: 1px solid #e6ded6; }
+.proportion-review h2 { font-size: 16px; font-weight: 600; margin: 0 0 6px; }
+.proportion-labels p { margin: 0; font-size: 12px; }
+.proportion-notes { padding-top: 26px; }
+.proportion-notes ul { padding-left: 20px; color: #5d535a; font-size: 14px; line-height: 1.9; }
+.proportion-notes p { font-size: 12px; }
+@media(max-width:650px) { .proportion-review { padding: 18px 14px; } .proportion-intro h1 { font-size: 22px; } .proportion-review header span { font-size: 12px; } .proportion-scope { width: 100%; margin: 0; } .proportion-labels h2 { font-size: 13px; } .proportion-labels p { font-size: 11px; padding: 0 4px; } }

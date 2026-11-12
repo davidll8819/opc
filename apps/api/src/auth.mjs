@@ -1,32 +1,46 @@
+import { privateAccessPolicy } from './private-access.mjs'
 import { readFile } from 'node:fs/promises'
 import { randomBytes, randomUUID, createHash, timingSafeEqual, scryptSync } from 'node:crypto'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { fail } from './db.mjs'
 export const hash = (value) => createHash('sha256').update(value).digest('hex')
 const token = () => randomBytes(32).toString('base64url')
-export function authService({ pool, cache, env }) {
+export function authService({ pool, cache, env, platformIdentity }) {
   const secure = env.NODE_ENV === 'production'
   const cookieName = secure ? '__Host-office' : 'office_session'
   const opts = { httpOnly: true, secure, sameSite: 'lax', path: '/' }
   const origin = env.APP_ORIGIN
+  const privateAccess = privateAccessPolicy(env)
+  const privateCookie = '__Host-office_private'
+  const privateOpts = { httpOnly: true, secure: true, sameSite: 'strict', path: '/' }
+  const requestContext = req => {
+    const remote = privateAccess.context(req)
+    return remote ? { ...remote, cookieName: privateCookie, opts: privateOpts } : { origin, cookieName, opts }
+  }
   const issuer = env.COGNITO_ISSUER
   const jwks = issuer ? createRemoteJWKSet(new URL(`${issuer}/.well-known/jwks.json`)) : null
   async function session(req) {
-    const id = req.cookies[cookieName]
+    if (platformIdentity) return platformIdentity.session(req)
+    const context = requestContext(req)
+    const id = req.cookies[context.cookieName]
     if (!id) throw fail(401, '请先登录')
     const raw = await cache.get(`session:${hash(id)}`)
     if (!raw) throw fail(401, '登录已过期')
-    return { ...JSON.parse(raw), sessionId: id }
+    const saved = JSON.parse(raw)
+    if ((saved.origin || origin) !== context.origin || (saved.privateLogin || undefined) !== context.login)
+      throw fail(401, '请在当前设备重新登录')
+    return { ...saved, sessionId: id }
   }
-  async function issue(reply, user) {
+  async function issue(reply, user, req) {
+    const context = req ? requestContext(req) : { origin, cookieName, opts }
     const id = token(),
       csrf = token()
     await cache.set(
       `session:${hash(id)}`,
-      JSON.stringify({ userId: user.id, email: user.email, csrf }),
+      JSON.stringify({ userId: user.id, email: user.email, csrf, origin: context.origin, ...(context.login ? { privateLogin: context.login } : {}) }),
       { EX: 3600 },
     )
-    reply.setCookie(cookieName, id, { ...opts, maxAge: 3600 })
+    reply.setCookie(context.cookieName, id, { ...context.opts, maxAge: 3600 })
     return { user: { id: user.id, email: user.email }, csrf }
   }
   async function userFromClaims({ sub, email, email_verified }) {
@@ -106,18 +120,24 @@ export function authService({ pool, cache, env }) {
     app.post('/auth/logout', async (req, reply) => {
       const s = await session(req)
       checkCsrf(req, s)
+      if (platformIdentity) {
+        if (!env.FOURYI_PORTAL_ORIGIN) throw fail(409, '请在 4yi 平台退出账号')
+        return { redirect: env.FOURYI_PORTAL_ORIGIN }
+      }
       await cache.del(`session:${hash(s.sessionId)}`)
-      reply.clearCookie(cookieName, opts)
+      const context = requestContext(req)
+      reply.clearCookie(context.cookieName, context.opts)
       const url = env.COGNITO_DOMAIN
         ? `${env.COGNITO_DOMAIN}/logout?${new URLSearchParams({ client_id: env.COGNITO_CLIENT_ID, logout_uri: origin })}`
-        : origin
+        : context.origin
       return { redirect: url }
     })
     if (env.AUTH_MODE === 'local') {
       if (secure || !['http://localhost:3000', 'http://127.0.0.1:3000'].includes(origin))
         throw new Error('Local authentication is only allowed on loopback in development')
       app.post('/auth/local', async (req, reply) => {
-        if (req.headers.origin !== origin) throw fail(403, '请求来源无效')
+        const context = requestContext(req)
+        if (req.headers.origin !== context.origin) throw fail(403, '请求来源无效')
         const { email, password } = req.body || {}
         let accounts = [
           {
@@ -128,7 +148,8 @@ export function authService({ pool, cache, env }) {
         ]
         if (env.LOCAL_ACCOUNTS_FILE)
           accounts.push(...JSON.parse(await readFile(env.LOCAL_ACCOUNTS_FILE, 'utf8')))
-        const account = accounts.find((a) => a.email === String(email || '').toLowerCase())
+        const normalizedEmail = String(email || '').toLowerCase()
+        const account = accounts.find((a) => a.email === normalizedEmail && (!context.login || a.email === env.LOCAL_EMAIL))
         const expected = account?.passwordHash || ''
         const actual = scryptSync(
           String(password || ''),
@@ -148,13 +169,15 @@ export function authService({ pool, cache, env }) {
             email,
             email_verified: true,
           }),
+          req,
         )
       })
     }
   }
   function checkCsrf(req, s) {
-    if (req.headers.origin !== origin || req.headers['x-csrf-token'] !== s.csrf)
+    const context = requestContext(req)
+    if (req.headers.origin !== context.origin || (s.origin || origin) !== context.origin || req.headers['x-csrf-token'] !== s.csrf)
       throw fail(403, '请求验证失败，请刷新页面')
   }
-  return { register, session, checkCsrf }
+  return { register, session, checkCsrf, guardRequest: privateAccess.context, privateOrigin: privateAccess.config?.origin || null }
 }

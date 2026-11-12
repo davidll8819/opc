@@ -7,6 +7,7 @@ import { hash } from '../../apps/api/src/auth.mjs'
 import { defaultPolicy } from '../../apps/api/src/operations/policy.mjs'
 import { encryptConfig } from '../../apps/api/src/operations/security.mjs'
 import { makeDocx } from './archive-fixtures.mjs'
+import { runtimeUserId } from '../../apps/api/src/personal-key.mjs'
 class Cache {
   values = new Map()
   async get(k) {
@@ -79,6 +80,10 @@ export async function setup(documentParser, options = {}) {
   policy.tiers.fast = 'archive-test-model'
   policy.departments.archive.tier = 'fast'
   policy.departments.archive.enabled = true
+  if(options.personalKeys!==false)for(const workspace of [tenant,other])for(const user of [alice,bob]){
+    await query('INSERT INTO personal_model_keys(tenant_id,user_id,encrypted_key) VALUES($1,$2,$3)',[workspace,user,encryptConfig({apiKey:`synthetic-personal-${user}`},key,`${workspace}:${user}`)])
+    await query('INSERT INTO runtime_identities(tenant_id,user_id,runtime_user_id) VALUES($1,$2,$3)',[workspace,user,runtimeUserId(workspace,user)])
+  }
   await query(
     'INSERT INTO operations_settings(tenant_id,encrypted_config,updated_by) VALUES($1,$2,$3)',
     [
@@ -96,14 +101,17 @@ export async function setup(documentParser, options = {}) {
     staticRoot: null,
     documentParser,
     operationsDriver: options.operationsDriver,
+    videoProvisioning: options.videoProvisioning,
     env: {
       APP_ORIGIN: 'https://archive.test',
       NODE_ENV: 'test',
       LOG_LEVEL: 'silent',
       OPERATIONS_CONFIG_KEY: key.toString('base64'),
+      ...options.env,
     },
-    modelFetch: async (_url, options) => {
+    modelFetch: options.modelFetch || (async (_url, options) => {
       assert.equal(leased, false, 'model transport must run outside a database transaction')
+      if(!options.body)return Response.json({data:[{id:'archive-test-model',type:'text'}]})
       const body = JSON.parse(options.body)
       requests.push(body)
       const content = await answer(body)
@@ -115,7 +123,7 @@ export async function setup(documentParser, options = {}) {
         }),
         { status: 200, headers: { 'content-type': 'application/json' } },
       )
-    },
+    }),
   })
   const base = `/api/tenants/${tenant}`,
     request = (method, path, payload, user = alice) =>
@@ -124,7 +132,7 @@ export async function setup(documentParser, options = {}) {
         url: path.startsWith('/api/') ? path : `${base}${path}`,
         payload,
         headers: {
-          cookie: `office_session=${user}`,
+          cookie: `${options.env?.NODE_ENV === 'production' ? '__Host-office' : 'office_session'}=${user}`,
           origin: 'https://archive.test',
           'x-csrf-token': user,
         },
@@ -140,6 +148,7 @@ export async function setup(documentParser, options = {}) {
     return response.json().id
   }
   return {
+    cache,
     pg,
     query,
     pool,

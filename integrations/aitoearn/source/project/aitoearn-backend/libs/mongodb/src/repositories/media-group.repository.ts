@@ -5,6 +5,7 @@
  * @LastEditors: nevin
  * @Description: Material material
  */
+import { createHash } from 'node:crypto'
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { UserType } from '@yikart/common'
@@ -38,12 +39,14 @@ export class MediaGroupRepository extends BaseRepository<MediaGroup> {
       }
 
       // 创建默认组
-      const newGroup = await this.mediaGroupModel.create({
-        userId,
-        title: 'Default',
-        type,
-        isDefault: true,
-      })
+      // A deterministic ID makes concurrent first-use requests converge on one
+      // group. Existing groups (including renamed defaults) are retained above.
+      const id = createHash('sha256').update(`default-media-group:${userId}:${type}`).digest('hex').slice(0, 24)
+      const newGroup = await this.mediaGroupModel.findOneAndUpdate(
+        { _id: id, userId, type, isDefault: true },
+        { $setOnInsert: { title: 'Default', createdAt: new Date(), updatedAt: new Date() } },
+        { upsert: true, new: true, setDefaultsOnInsert: true, timestamps: false },
+      ).exec()
 
       return !!newGroup
     }

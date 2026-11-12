@@ -15,3 +15,5 @@ export * from './utils'
 export * from './vos'
 
 export * from './office-bridge'
+
+export * from './office-user-context'

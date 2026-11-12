@@ -5,7 +5,7 @@ import { buildFilingResult } from './filing.mjs'
 export async function loadFilingDocument(db, ctx, fileId, { lock = false } = {}) {
   const file = (
     await db.query(
-      `SELECT id,name,data FROM workspace_files WHERE id=$1 AND tenant_id=$2 AND user_id=$3${lock ? ' FOR SHARE' : ''}`,
+      `SELECT id,name,data FROM workspace_files WHERE deleted_at IS NULL AND id=$1 AND tenant_id=$2 AND user_id=$3${lock ? ' FOR SHARE' : ''}`,
       [fileId, ctx.tenantId, ctx.userId],
     )
   ).rows[0]

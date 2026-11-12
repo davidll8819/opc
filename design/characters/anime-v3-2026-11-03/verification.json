@@ -1,0 +1,159 @@
+[
+  {
+    "file": "concepts/01-li-waner.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "d7f6311723c096c2db28e51578ffd6c8cfdf3d8587936de801d1e528d24fea3c"
+  },
+  {
+    "file": "li-waner/portrait-hd-transparent.png",
+    "width": 1083,
+    "height": 1452,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "0b03b5c281ea71554a84cdb2d5f3d8fcaf73e831a47edee27b99dc59547c174c",
+    "alphaVerified": true,
+    "alphaVerificationMethod": "PNG IDAT decompression and PNG filter reconstruction; observed alpha histogram",
+    "transparentPercent": 35.68,
+    "fullyTransparentPixels": 561102,
+    "nearOpaquePixelsAt253": 799844,
+    "cornerAlpha": [
+      0,
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "file": "li-waner/compact-slim-transparent.png",
+    "width": 1774,
+    "height": 887,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "c08603f96cdbf48f7af3c4a6b80b4ad2524b156b084a22cfc36283fd867bd4e2",
+    "alphaVerified": true,
+    "alphaVerificationMethod": "PNG IDAT decompression and PNG filter reconstruction; observed alpha histogram",
+    "transparentPercent": 64.62,
+    "fullyTransparentPixels": 1016805,
+    "nearOpaquePixelsAt253": 384380,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "file": "concepts/02-xu-zhining.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "9ea6b7883ff0b0b97c28efc7ebbdb48e26564b880eba9defe2685906fd4ec4ff"
+  },
+  {
+    "file": "concepts/03-cheng-zhiyao.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "7089bc3fb96f872459b28c45b252ff34155a1751135a64ddef97876dba84b3b4"
+  },
+  {
+    "file": "concepts/04-zhao-yameng.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "5da808ba66320f3bc8dfe071f2c9c8a608dafe2f29d9f55c20da0bf27ca7d105"
+  },
+  {
+    "file": "concepts/05-su-ying.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "efc090148cf3a313699ae373dba2fa84a94daabbb922773648488433505ac65d"
+  },
+  {
+    "file": "concepts/06-lin-youwei.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "e299605d25f0e031d9e369d9799c9870141778c74744f8e564f556a6e9ca3a3c"
+  },
+  {
+    "file": "concepts/07-pai-aqi.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "a8f8c64f72e198dd9eb4889706029f0408c3195168a50ce08eea0202878ccd76"
+  },
+  {
+    "file": "concepts/08-shen-qinglan.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 6,
+    "interlace": 0,
+    "sha256": "c0640eb6bc771eb680ac190ffe01ae8889ab246f846b6b97495c325f5320d2cb"
+  },
+  {
+    "file": "concepts/09-long-aotian.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 2,
+    "interlace": 0,
+    "sha256": "6a508f736caf572bbf91109bdadb5fd1119078594161123a386c326101a74463"
+  },
+  {
+    "file": "concepts/10-ye-fan.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 2,
+    "interlace": 0,
+    "sha256": "99a8f0478ee229860b606e3d8e2880a24f31f1751db158aa74abbb2f9ee50db2"
+  },
+  {
+    "file": "concepts/11-liu-shi.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 2,
+    "interlace": 0,
+    "sha256": "eb69385a1f4b63bfdf3ceed99ceb838bb97cbc0a65e5a5ae3a7a57280e321014"
+  },
+  {
+    "file": "concepts/12-xi-luo.png",
+    "width": 1536,
+    "height": 1024,
+    "bitDepth": 8,
+    "colorType": 2,
+    "interlace": 0,
+    "sha256": "af15ce8a93df3c7d3cc7b59f453a5d13b345e69a4a702d54f24d9395489070bd"
+  },
+  {
+    "file": "li-waner/history/compact-warm-background.png",
+    "width": 1774,
+    "height": 887,
+    "bitDepth": 8,
+    "colorType": 2,
+    "interlace": 0,
+    "sha256": "dad9ee048daee3089d6888a201385f54c79c9041c6d7608b4c326a133690a6ab"
+  }
+]

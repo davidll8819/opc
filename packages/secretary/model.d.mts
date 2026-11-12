@@ -1,4 +1,14 @@
 export type Task = {
+  executionSettings?: { maxOutputTokens: 4096 | 8192 | 16384; deliveryNote: string }
+  problem?: { code: string; limit?: number }
+  partialResult?: { text: string; savedAt: string; limit: number }
+  templateSource?: { id: string; version: number; title: string }
+  knowledgeSnapshot?: { capturedAt: string; matched: number; records: { id: string; version: number; title: string; kind: string; project: string; source: string; content: string }[] }
+  briefSnapshot?: import('./task-brief.mjs').BriefSnapshot
+  quality?: import('./research-quality.mjs').ResearchQuality
+  reportSections?: { summary: string; findings: string; analysis: string; recommendations: string; limitations: string }
+  followUpOf?: string
+  followUpRequestId?: string
   id: string
   batchId?: string
   title: string
@@ -42,11 +52,13 @@ export type Task = {
     title: string
     questions: string[]
     query: string
-    status: 'pending' | 'searching' | 'completed' | 'blocked'
+    status: 'pending' | 'searching' | 'completed' | 'blocked' | 'partial'
     sourceIds?: string[]
     limitation?: string
   }[]
   sources?: { id: string; url: string; title: string; retrievedAt: string; read: boolean }[]
+  videoEditId?: string
+  archiveVideoFileId?: string
   archiveFileId?: string
   request?: string
   archivedAt?: string
@@ -61,6 +73,7 @@ export type Task = {
   feedback?: string
 }
 export type Message = {
+  briefSnapshot?: import('./task-brief.mjs').BriefSnapshot
   attachments?: { id: string; name: string; mime: string }[]
   id: string
   role: 'user' | 'assistant'

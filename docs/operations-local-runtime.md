@@ -1,8 +1,34 @@
 # 叶凡本机制作服务
 
-已接入现有 Wishtaday 运营弹窗。访问 http://localhost:3000/，进入叶凡的运营工作台，在历史制作任务中打开“清晨的一杯咖啡”或“清晨的一杯咖啡 - 图片生成”，可查看保存的素材和执行记录。
+制作服务接入现有 Wishtaday 运营弹窗。当前 Mac 部署与启停方式见下节；后文的咖啡素材和 Windows 验收属于历史环境，不能据此判断当前 Mac 的历史任务或数据已迁移。
 
-## 本机运行与重启
+## macOS 本机运行（2026-10-20）
+
+当前 Mac 使用原 AiToEarn 源码构建后的支持服务与 AI 服务，并为本地企业新建独立 MongoDB、Redis、RustFS 素材存储。没有导入 Windows 业务数据库，也没有替换现有企业模型密钥。
+
+双击仓库内 `Start-Local.command` 可同时启动办公室及已配置的制作服务；`Stop-Local.command` 先检查并停止制作服务，再停止办公室。有制作任务时停止会被拒绝，任务与素材不会删除。
+
+单独检查或启停（在仓库根目录执行）：
+
+```sh
+.local/bin/node scripts/operations-mac.mjs status
+.local/bin/node scripts/operations-mac.mjs start
+.local/bin/node scripts/operations-mac.mjs stop
+```
+
+所有入口仅监听本机：支持服务 3302、AI 服务 3310、模型路由 3456、MongoDB 27018、专用 Redis 57379、RustFS 19000。视频探测使用项目私有 `.local/media-tools/bin/ffprobe`。素材链接供本机预览，不是外部平台可访问的发布地址。
+
+私有凭据、数据库与日志位于 `.local/production-runtime/`，企业服务配置位于 `.local/operations/<企业编号>/`，绑定记录为 `.local/operations-runtimes.json`。保留这些目录；不要上传整个 `.local/`。目录本身及凭据文件限制为当前用户可读写。
+
+制作代理使用 Anthropic 消息协议时，统一网关会从企业已配置档位中选择兼容的 Claude 文字模型；普通聊天及图片、视频模型选择保持不变。首次调用在产生回复前失败、没有可恢复会话时，继续原任务会保留原任务编号、历史和媒体预约状态，初始化新的文字会话；已有助手回复的任务仍恢复原会话。
+
+平台中转密钥已保存但没有经核验的发布回调地址时，制作服务可以运行，账号绑定保持关闭。对外发布还需要账号授权、可达的素材地址与单独确认，不能将制作可用视为发布已接通。
+
+重新构建原服务后，运行 `scripts/link-operations-build.mjs` 连接编译产物依赖；原生启动器也会执行该步骤，不改源码包链接。
+
+当前 `wan3.*` 视频模型的服务商分辨率枚举为 `1080P` / `720P` / `480P`。界面仍使用 `1080p` / `720p`，适配层在提交时转换，并在实际成品验收时忽略枚举大小写。服务商异步失败的 `failure_message` 会保留到任务错误，不能只显示通用失败后重复生成。
+
+## Windows 本机运行与重启（历史环境）
 
 在本仓库根目录使用 PowerShell 和 Node.js 24，先启动 Docker Desktop，再执行：
 

@@ -1,8 +1,10 @@
+import { researchExecutionLabel, researchQualityLabel } from '../../../../packages/secretary/research-quality.mjs'
 import { useState } from 'react'
 import { TaskImages } from './TaskImages'
 import { unfinishedImage } from './task-image-state'
 import { TaskDependencies } from './TaskDependencies'
 import { taskRunState } from './task-dependencies'
+import { workspaceHash } from './workspace-route'
 import { t, useLanguage } from '@/i18n'
 import { departments, type Task } from '../../../../packages/secretary/model.mjs'
 export function TaskProgress({
@@ -55,7 +57,7 @@ export function TaskProgress({
         const run = taskRunState(task, tasks)
         const phase = done ? 3 : working || task.startedAt ? 2 : task.status === 'draft' ? 0 : 1
         const state = done
-          ? '已完成'
+          ? (researchExecutionLabel(task) || '已完成')
           : working
             ? '正在执行'
             : blocked
@@ -95,7 +97,7 @@ export function TaskProgress({
                 {person ? (language === 'en' ? person.en : person.name) : task.dept} · {task.due}
               </span>
               <ol className="execution-stages" aria-label={t('任务阶段')}>
-                {['待分工', '已派发', '执行中', '已完成'].map((step, i) => (
+                {['待分工', '已派发', '执行中', task.engine === 'research-v1' ? '执行已结束' : '已完成'].map((step, i) => (
                   <li
                     key={step}
                     className={i <= phase ? 'reached' : ''}
@@ -118,6 +120,7 @@ export function TaskProgress({
                           : '等待部门开始执行'),
                 )}
               </p>
+              {done && task.engine === 'research-v1' && <p>{researchQualityLabel(task.quality)}</p>}
               <span className="execution-expand">{t('查看详情')} ⌄</span>
             </summary>
             <div className="execution-detail">
@@ -126,7 +129,7 @@ export function TaskProgress({
                 <>
                   <p>{t(task.executionNote || state)}</p>
                   <button onClick={() => onOpen?.(task)}>
-                    {t(done ? '查看成品' : '查看任务详情')} ↗
+                    {t(done ? '查看成品' : blocked || !run.prerequisitesReady ? '处理任务问题' : '查看任务详情')} ↗
                   </button>
                 </>
               ) : (
@@ -141,6 +144,7 @@ export function TaskProgress({
                       {t('结束时间')}：{new Date(task.finishedAt).toLocaleString()}
                     </p>
                   )}
+                  {done && task.engine === 'research-v1' && <p>{researchQualityLabel(task.quality)}</p>}
                   {task.researchOutline?.length ? (
                     <section>
                       <h3>{t('调研目录')}</h3>
@@ -153,7 +157,8 @@ export function TaskProgress({
                               {
                                 pending: '等待查询',
                                 searching: '正在查询',
-                                completed: '已核对来源',
+                                completed: '证据检查通过，待验收',
+                                partial: '仍有证据缺口',
                                 blocked: '资料不足',
                               }[section.status],
                             )}
@@ -218,7 +223,8 @@ export function TaskProgress({
                       {t(task.runtimeTaskId ? '查看运营任务' : '打开运营工作台')}
                     </button>
                   )}
-                  {run.available && !unfinishedImage(task) && (
+                  {blocked && <button onClick={() => onOpen ? onOpen(task) : location.assign(workspaceHash(base.split('/').at(-1) || '', { tab: 'tasks', filter: 'all', task: task.id }))}>处理任务问题</button>}
+                  {run.available && !blocked && !unfinishedImage(task) && (
                     <button
                       disabled={!canEdit || !!busyId || !run.canRun}
                       onClick={() => {

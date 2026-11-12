@@ -2,7 +2,7 @@ import type { FourYiVideoAiLog } from '../video-ai-log.interface'
 import type { UserVideoGenerationRequestDto } from '../video.dto'
 import { Injectable, Logger } from '@nestjs/common'
 import { AssetsService, StorageProvider, VideoMetadataService } from '@yikart/assets'
-import { AppException, FileUtil, ResponseCode } from '@yikart/common'
+import { AppException, FileUtil, ResponseCode, officeModelToken } from '@yikart/common'
 import { AiLogChannel, AiLogRepository, AiLogStatus, AiLogType, AssetType } from '@yikart/mongodb'
 import { TaskStatus } from '../../../../common'
 import { config } from '../../../../config'
@@ -48,7 +48,7 @@ export class FourYiVideoService {
     return path.startsWith('http') || url.startsWith('data:') ? url : this.storageProvider.toPresignedUrl(path)
   }
 
-  private async request(path: string, init: RequestInit = {}) {
+  private async request(path: string, init: RequestInit = {}, userId?: string) {
     if (!config.ai.fouryi.apiKey)
       throw new AppException(ResponseCode.AiCallFailed, { error: '4yi API key is not configured' })
     const response = await fetch(`${this.baseUrl}${path}`, {
@@ -56,7 +56,7 @@ export class FourYiVideoService {
       redirect: 'error',
       signal: AbortSignal.timeout(config.ai.fouryi.timeout),
       headers: {
-        Authorization: `Bearer ${config.ai.fouryi.apiKey}`,
+        Authorization: `Bearer ${config.officeBridge ? officeModelToken(config.officeBridge, userId) : config.ai.fouryi.apiKey}`,
         ...(init.body ? { 'Content-Type': 'application/json' } : {}),
         ...init.headers,
       },
@@ -78,22 +78,23 @@ export class FourYiVideoService {
     if (!referenceImages.length && (request.model.endsWith('-r2v') || request.model.endsWith('-i2v') || request.mode === 'multi-image2video' || request.mode === 'image2video'))
       throw new AppException(ResponseCode.AiCallFailed, { error: '4YI image and reference video modes require an input image' })
     const mode = referenceImages.length ? 'image_to_video' : 'text_to_video'
+    const resolution = request.model.startsWith('wan3.') ? request.resolution?.toUpperCase() : request.resolution
     const body = {
       model: request.model,
       prompt: request.prompt,
       mode,
       duration_seconds: request.duration,
       aspect_ratio: request.ratio,
-      resolution: request.resolution,
+      resolution,
       response_format: 'url',
       extra_body: {
         aspect_ratio: request.ratio,
-        resolution: request.resolution,
+        resolution,
         ...(referenceImages.length ? { reference_images: referenceImages } : {}),
       },
     }
     const startedAt = new Date()
-    const result = asRecord(unwrap(await (await this.request('/videos/generations', { method: 'POST', body: JSON.stringify(body) })).json())) ?? {}
+    const result = asRecord(unwrap(await (await this.request('/videos/generations', { method: 'POST', body: JSON.stringify(body) }, request.userId)).json())) ?? {}
     const remoteTaskId = getString(result, 'id', 'generation_id', 'task_id')
     if (!remoteTaskId)
       throw new AppException(ResponseCode.AiCallFailed, { error: '4yi response is missing generation id' })
@@ -128,7 +129,7 @@ export class FourYiVideoService {
   getTaskResult(result: FourYiTask) {
     const rawError = result['error']
     const nestedError = rawError && typeof rawError === 'object' ? getString(rawError as Record<string, unknown>, 'message', 'detail') : undefined
-    const errorMessage = getString(result, 'error_message', 'message') ?? nestedError ?? (typeof rawError === 'string' ? rawError : undefined)
+    const errorMessage = getString(result, 'failure_message', 'error_message', 'message') ?? nestedError ?? (typeof rawError === 'string' ? rawError : undefined)
     return {
       status: this.normalizeStatus(getString(result, 'status', 'state')),
       videoUrl: getString(result, 'videoUrl', 'video_url', 'url', 'artifact_url'),
@@ -150,7 +151,7 @@ export class FourYiVideoService {
       return
     let remote: FourYiTask
     try {
-      remote = asRecord(unwrap(await (await this.request(`/videos/generations/${encodeURIComponent(task.taskId)}`)).json())) ?? {}
+      remote = asRecord(unwrap(await (await this.request(`/videos/generations/${encodeURIComponent(task.taskId)}`, {}, task.userId)).json())) ?? {}
       const status = this.normalizeStatus(getString(remote, 'status', 'state'))
       if (status === TaskStatus.InProgress)
         return
@@ -168,7 +169,7 @@ export class FourYiVideoService {
           videoUrl = uploaded.asset.path
         }
         else {
-          const artifact = await this.request(`/videos/generations/${encodeURIComponent(task.taskId)}/artifact`)
+          const artifact = await this.request(`/videos/generations/${encodeURIComponent(task.taskId)}/artifact`, {}, task.userId)
           const contentType = artifact.headers.get('content-type') ?? 'video/mp4'
           if (contentType.includes('json')) {
             const artifactJson = asRecord(unwrap(await artifact.json())) ?? {}

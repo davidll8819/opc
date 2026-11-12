@@ -1,0 +1,68 @@
+[
+  {
+    "file": "li-waner/motion/walk.png",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "sha256": "87c2f82d2c4a1d99a6ab40d2928782d3d3acaefd6e85f268fcc5f8135c37dee7",
+    "fullyTransparentPercent": 73.91,
+    "nearOpaquePercent": 21.57,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "opaquePixelsInThirds": [
+      90434,
+      160407,
+      88613
+    ],
+    "alphaVerified": true,
+    "pngCrcVerified": true
+  },
+  {
+    "file": "li-waner/motion/sit-back.png",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "sha256": "91e6d56793ab8d5b22bde563bf6ddbd437ad9e841a5476adbb98daa0081d5e35",
+    "fullyTransparentPercent": 74.32,
+    "nearOpaquePercent": 18.6,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "opaquePixelsInThirds": [
+      75205,
+      145166,
+      72294
+    ],
+    "alphaVerified": true,
+    "pngCrcVerified": true
+  },
+  {
+    "file": "li-waner/motion/turn.png",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "sha256": "25e36a0d46b370c87747a80f9e1e88d63c9faef4f516d540731ea0fa88426b8b",
+    "fullyTransparentPercent": 70.36,
+    "nearOpaquePercent": 23.16,
+    "cornerAlpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "opaquePixelsInThirds": [
+      84895,
+      182575,
+      96886
+    ],
+    "alphaVerified": true,
+    "pngCrcVerified": true
+  }
+]

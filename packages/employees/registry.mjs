@@ -90,6 +90,14 @@ export const EMPLOYEES = [
     responsibility: '协助各部门日常工作',
     role: 'intern',
   },
+  ...[
+    ['xu-zhining','许知宁','outreach','客户发展','Outreach','客户画像、线索筛选、开发信和跟进方案',0xc084a2],
+    ['cheng-zhiyao','程知遥','dev','技术方案','Engineering','需求分析、代码编写、代码审查与技术方案',0x4a90d9],
+    ['su-ying','苏映','content_ops','内容策划','Creative','内容策划、文案、视频脚本和分镜制作方案',0xf5c542],
+    ['shen-qinglan','沈清岚','market_research','研究分析','Research','基于提供的资料做市场分析、证据整理和调研方案',0x78946a],
+  ].map(([id,name,modelDepartment,department,departmentEn,responsibility,color]) => ({
+    id,name,modelDepartment,departmentKey:id.replaceAll('-','_'),department,departmentEn,responsibility,color,role:'employee',
+  })),
 ].map((employee, index) => Object.freeze({ ...employee, rosterNo: index + 1 }))
 Object.freeze(EMPLOYEES)
 
@@ -104,6 +112,7 @@ export const DEPARTMENT_KEYS = [
   'compliance',
   'outreach',
   'intern',
+  'xu_zhining','cheng_zhiyao','su_ying','shen_qinglan',
 ]
 export const EMPLOYEE_BY_DEPARTMENT = Object.freeze(
   Object.fromEntries(EMPLOYEES.map((e) => [e.departmentKey, e])),
@@ -125,11 +134,15 @@ export const TASK_DEPARTMENTS = DEPARTMENT_KEYS.filter((key) => key !== 'secreta
 })
 export function employeeIntroduction(department) {
   const employee = EMPLOYEE_BY_DEPARTMENT[department]
+  if (!employee && /^custom_[a-f0-9]{32}$/.test(department)) return '你是当前工作空间的自建员工。按随后提供的姓名、岗位、职责与独立技能完成工作，不虚构外部工具能力。'
   if (!employee) throw new Error('Unknown department')
   return `你是${employee.department}的${employee.name}，工作职责是${employee.responsibility}。`
 }
 export function departmentChatInstructions(department) {
-  if (department === 'content_ops')
+  if (modelDepartment(department) === 'content_ops')
     return `${employeeIntroduction(department)}你负责内容策划、平台文案、视频脚本分镜和素材制作方案。根据用户本轮修改结合上下文保留产品、受众、平台、时长、风格、预算和“不发布”等约束；缺少关键事实明确标记待确认，不编造品牌事实或数据。输出便于执行的交付物：策划给出目标、受众、核心卖点和选题；文案给出可直接使用的标题、正文及行动引导；视频按镜头列时间、画面、口播/字幕、素材及提示词，镜头时长合计符合要求；最后给出素材清单、待补信息和验收标准。简单问题直接回答，避免每次重复长模板。文字对话只完成方案，不声称生成了图片/视频、访问了链接或发布成功。用户可点击回复下“带入运营工作台”保存方案和原始要求，核对并点击开始制作；实际生成依赖企业制作服务，发布必须在工作台单独点击确认。无需为了交接再调用一次模型。`
   return `${employeeIntroduction(department)}根据用户要求完成文字分析、方案和文档。没有浏览器、终端、发布或定时工具，不得声称已执行这些动作。需要生成媒体或发布时建议进入运营工作台。`
 }
+
+// Runtime inheritance only: never writes or duplicates the saved model configuration.
+export function modelDepartment(department) { return EMPLOYEE_BY_DEPARTMENT[department]?.modelDepartment || department }

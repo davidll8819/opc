@@ -1,0 +1,196 @@
+.video-editor {
+  margin: 24px 0;
+  padding: 20px;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 16px;
+}
+/* A preview and the editor fill the same frame: 1fr + 24px + 1.6fr. */
+.video-editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 24px;
+  align-items: start;
+}
+.video-editor h4 {
+  margin: 20px 0 12px;
+  font-size: 16px;
+}
+.video-editor video {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  background: #111;
+  border-radius: 8px;
+}
+.video-editor fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.video-editor label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+.video-editor input,
+.video-editor select,
+.video-editor textarea {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.video-editor input[type='range'] {
+  padding: 0;
+}
+.video-editor input[type='file'] {
+  max-width: 100%;
+}
+.video-edit-format {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.video-edit-format label:last-child {
+  grid-column: 1 / -1;
+}
+.video-edit-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border, #ddd);
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.video-edit-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.video-edit-subtitle label:first-child {
+  grid-column: 1 / -1;
+}
+.video-editor-result {
+  margin-top: 24px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border, #ddd);
+}
+.video-edit-history {
+  margin-top: 24px;
+}
+.video-edit-history button {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.video-edit-history button[aria-pressed='true'] {
+  font-weight: 600;
+  border-color: currentColor;
+}
+.video-editor .error {
+  overflow-wrap: anywhere;
+}
+.video-shot-replacement {
+  border: 1px solid var(--border, #ddd);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.video-shot-replacement video,
+.video-shot-replacement label,
+.video-shot-replacement button {
+  margin-top: 12px;
+}
+.video-shot-replacement button {
+  margin-right: 8px;
+}
+@media (max-width: 800px) {
+  .video-editor-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .video-editor-preview video {
+    max-height: 260px;
+  }
+}
+@media (max-width: 600px) {
+  .video-editor {
+    padding: 12px;
+  }
+  .video-editor button,
+  .video-editor select,
+  .video-editor input {
+    min-height: 44px;
+  }
+  .video-edit-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .video-edit-row label:first-child {
+    grid-column: 1 / -1;
+  }
+}
+.video-draft-stage {
+  position: relative;
+  overflow: hidden;
+  background: #111;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+.video-draft-stage video {
+  height: 100%;
+}
+.video-draft-caption {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 95%;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  text-align: center;
+  line-height: 1.15;
+  font-family: 'Arial Unicode MS', Arial, sans-serif;
+  font-weight: 400;
+  color: #fff;
+  background: rgb(0 0 0 / 50%);
+  paint-order: stroke fill;
+  pointer-events: none;
+}
+.video-draft-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 12px 0;
+  font-variant-numeric: tabular-nums;
+}
+.video-draft-preview audio {
+  display: none;
+}
+.video-editor-grid:has(.video-draft-preview[data-expanded='true']) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.video-draft-preview[data-expanded='true'] .video-draft-stage {
+  margin-inline: auto;
+}
+/* Keep export text readable when shared workspace hover styles overlap. */
+.ops-workspace .video-editor button.primary {
+  background: #214e3b;
+  color: #fff;
+  border-color: #214e3b;
+}
+.ops-workspace .video-editor button.primary:hover {
+  background: #173d2d;
+}
+
+.video-version-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.video-version-compare video { width: 100%; max-height: 360px; }
+@media (max-width: 640px) { .video-version-compare { grid-template-columns: 1fr; } }
+
+.video-editor input[type="checkbox"] { width: 20px; min-height: 32px; vertical-align: middle; margin-right: 8px; }

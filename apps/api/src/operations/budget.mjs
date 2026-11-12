@@ -7,8 +7,8 @@ export async function budgetSnapshot(db, tenantId, limit) {
   const used = Number(row?.used_tokens || 0), reserved = Number(row?.reserved_tokens || 0)
   return { day: budgetDay(), timezone: 'Asia/Shanghai', limit, used, reserved, available: Math.max(0,limit-used-reserved) }
 }
-export async function reserveTokens(pool, ctx, { department, model, limit, tokens }) {
-  const id = randomUUID(), day = budgetDay()
+export async function reserveTokens(pool, ctx, { department, model, limit, tokens, id = randomUUID() }) {
+  const day = budgetDay()
   return transaction(pool, async db => {
     await db.query('INSERT INTO model_daily_usage(tenant_id,day) VALUES($1,$2) ON CONFLICT DO NOTHING', [ctx.tenantId,day])
     const result = await db.query('UPDATE model_daily_usage SET reserved_tokens=reserved_tokens+$3 WHERE tenant_id=$1 AND day=$2 AND used_tokens+reserved_tokens+$3 <= $4 RETURNING day', [ctx.tenantId,day,tokens,limit])

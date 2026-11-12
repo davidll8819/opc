@@ -39,7 +39,7 @@ const task = (status, extras = {}) => ({
 
 test('all nine ready colleagues, including intern and records, are idle green without tasks', () => {
   const actual = deriveOfficeWorkStatuses({ tasks: [] }, ready())
-  assert.equal(Object.keys(actual).length, 9)
+  assert.equal(Object.keys(actual).length, 13)
   for (const member of roster) {
     assert.equal(actual[member.id].status, 'idle', member.id)
     assert.equal(actual[member.id].label, '空闲')
@@ -149,4 +149,14 @@ test('derivation does not mutate the board or configuration', () => {
   const before = structuredClone({ board, config })
   deriveOfficeWorkStatuses(board, config)
   assert.deepEqual({ board, config }, before)
+})
+
+
+test('custom office role labels stay bounded without changing saved capability instructions', async () => {
+  const { officeRoleLabel } = await server.ssrLoadModule('/src/saas/office-work-status.ts')
+  const profile={jobTitle:'客户成功顾问',responsibility:'完整能力说明'.repeat(600)}
+  const before=JSON.stringify(profile)
+  assert.ok(Array.from(officeRoleLabel(profile)).length<=37)
+  assert.equal(JSON.stringify(profile),before)
+  assert.equal(officeRoleLabel({jobTitle:'设计',responsibility:'排版'}),'设计：排版')
 })
